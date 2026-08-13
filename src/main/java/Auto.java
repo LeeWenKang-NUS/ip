@@ -28,10 +28,9 @@ public class Auto {
                 break;
             } else if (userInput.equals("list")) {
                 System.out.println("=======================================================");
-                int counter = 1;
-                stringList.forEach((string) -> {
-                    System.out.println(String.format("%d. %s", counter, string));
-                });
+                for (int i = 0; i < stringList.size(); i++) {
+                    System.out.println(String.format("%d. %s", i + 1, stringList.get(i)));
+                }
                 System.out.println("=======================================================");
             } else {
                 stringList.add(userInput);
