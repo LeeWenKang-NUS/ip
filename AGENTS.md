@@ -27,6 +27,25 @@ Unless the user says otherwise, assume that you are assisting a student working 
 
 Ensure that Java 25 is used when running the application or build tasks. On macOS, use `sdk use java 25.0.3.fx-zulu` to switch to Java 25 if needed.
 
+## Testing after code changes
+
+After every change to the code under `src/`, before reporting the work as done:
+
+1. **Update `test/ui-test-plan.md` if the change affects the console UI.** Add a
+   test case for new behaviour (new command, new output format), and revise the
+   expected output of existing cases whose output the change deliberately alters.
+   The plan is the single source of truth for expected UI behaviour, so it is
+   updated *before* the tests are run, not after seeing what the program prints.
+   Never rewrite an expected output just to make a failing case pass — a
+   mismatch is a result to report, and the expected output only changes when the
+   new behaviour is the intended one.
+2. **Invoke the `test-ui` skill** to run the whole plan against the changed code,
+   and report the outcome. If a case fails, say which behaviour is wrong and
+   where in the source it comes from rather than silently moving on.
+
+Skip both steps only for changes that cannot affect the console UI (for example
+comments or Javadoc alone), and say so when skipping.
+
 ## Git
 
 Use lightweight tags unless the user requests an annotated tag.
