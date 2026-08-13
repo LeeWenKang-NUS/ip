@@ -5,6 +5,13 @@ public class Duke {
                 + "  / _ \\| | | | __/ _ \\ \n"
                 + " / ___ \\ |_| | || (_) |\n"
                 + "/_/   \\_\\__,_|\\__\\___/ \n\n";
-        System.out.println(banner);
+        String greeting = "=======================================================\n"
+                + banner
+                + "Hello! I'm Auto, your personal assistant.\n"
+                + "What can I do for you?\n"
+                + "=======================================================\n"
+                + "Bye. Hope to see you again soon!\n"
+                + "=======================================================\n";
+        System.out.println(greeting);
     }
 }
