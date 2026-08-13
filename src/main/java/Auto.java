@@ -32,6 +32,22 @@ public class Auto {
                     System.out.println(String.format("%d. %s", i + 1, taskList.get(i)));
                 }
                 System.out.println("=======================================================");
+            } else if (userInput.startsWith("mark ")) {
+                int taskIndex = Integer.parseInt(userInput.substring(5).trim()) - 1;
+                Task task = taskList.get(taskIndex);
+                task.mark();
+                System.out.println("=======================================================");
+                System.out.println("Nice! I've marked this task as done");
+                System.out.println("  " + task);
+                System.out.println("=======================================================");
+            } else if (userInput.startsWith("unmark ")) {
+                int taskIndex = Integer.parseInt(userInput.substring(7).trim()) - 1;
+                Task task = taskList.get(taskIndex);
+                task.unmark();
+                System.out.println("=======================================================");
+                System.out.println("Nice! I've marked this task as not done yet");
+                System.out.println("  " + task);
+                System.out.println("=======================================================");
             } else {
                 taskList.add(new Task(userInput));
                 System.out.println("=======================================================");
