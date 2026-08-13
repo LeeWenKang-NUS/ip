@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class Auto {
     public static void main(String[] args) {
         String banner = "    _         _        \n"
@@ -9,9 +11,26 @@ public class Auto {
                 + banner
                 + "Hello! I'm Auto, your personal assistant.\n"
                 + "What can I do for you?\n"
-                + "=======================================================\n"
-                + "Bye. Hope to see you again soon!\n"
-                + "=======================================================\n";
+                + "=======================================================";
         System.out.println(greeting);
+
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            String userInput = scanner.nextLine();
+
+            if (userInput.equals("bye")) {
+                System.out.println("=======================================================");
+                System.out.println("Bye. Hope to see you again soon!");
+                System.out.println("=======================================================");
+                break;
+            } else {
+                System.out.println("=======================================================");
+                System.out.println(userInput);
+                System.out.println("=======================================================");
+            }
+        }
+
+        scanner.close();
     }
 }
