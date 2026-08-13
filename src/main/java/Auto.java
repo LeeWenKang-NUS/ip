@@ -82,9 +82,8 @@ public class Auto {
                 System.out.println(String.format("Now you have %d tasks in the list.", taskList.size()));
                 System.out.println("=======================================================");
             } else {
-                taskList.add(new Task(userInput));
                 System.out.println("=======================================================");
-                System.out.println("Added: " + userInput);
+                System.out.println("Ohhh Noooo... I don't understand you!");
                 System.out.println("=======================================================");
             }
         }
