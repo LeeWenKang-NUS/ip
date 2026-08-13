@@ -6,8 +6,13 @@ description: Run command line UI tests for the Auto program from test/ui-test-pl
 # Test the command line UI
 
 Drive the `Auto` program through its console interface and check what it prints.
-Every test case lives in `test/ui-test-plan.md`; the bundled runner executes them
-and stops at the first failure.
+Every test case lives in `test/ui-test-plan.md`; the bundled runner executes all
+of them and reports the failures together at the end.
+
+Expected output in the plan states **desired** behaviour. A case that crashes
+the program is a failing case, and the plan currently holds a section of cases
+that are expected to fail until invalid input is handled — do not treat those
+failures as a broken test run.
 
 ## Run the tests
 
@@ -86,12 +91,13 @@ the input fed to the program, and the console output produced. Show that record
 to the user so the test session is visible, and also mention that it is saved to
 `_temp/ui-test-session.txt`.
 
-On failure the runner stops immediately and prints the expected output, the
-actual output, and a line diff of the two, plus any stack trace the program
-wrote to stderr. Relay all of that, then say which behaviour is wrong and where
-in the source it comes from. Do not carry on to the remaining test cases and do
-not edit the expected output to match the actual output unless the user confirms
-the new behaviour is correct.
+For each failure the runner prints the expected output, the actual output, and a
+line diff of the two, plus any stack trace the program wrote to stderr, followed
+by a summary listing every failing case. Relay all of that, then say which
+behaviour is wrong and where in the source it comes from. Do not edit the
+expected output to match the actual output unless the user confirms the new
+behaviour is correct — a failure is a result to report, not something to tune
+away.
 
 ## Comparison rules
 
@@ -104,5 +110,5 @@ line separator from `println`, and its ASCII banner has trailing spaces.
 ## Resource
 
 `scripts/run-ui-tests.py` is the runner and uses only the Python standard
-library. It parses the plan, expands the placeholders, runs each case, compares
-the output, writes the session record, and exits non-zero on the first failure.
+library. It parses the plan, expands the placeholders, runs every case, compares
+the output, writes the session record, and exits non-zero if any case failed.

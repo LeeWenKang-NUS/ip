@@ -2,9 +2,9 @@
 """Run the UI test cases recorded in test/ui-test-plan.md against the Auto program.
 
 Each test case starts a fresh instance of the program, feeds its input lines to
-stdin, and compares the captured console output with the expected output. The
-run stops at the first failing test case and reports the expected and actual
-output for that case.
+stdin, and compares the captured console output with the expected output. Every
+test case runs, whether or not earlier ones failed; the expected and actual
+output for each failure is reported at the end.
 
 Uses only the Python standard library.
 """
@@ -189,8 +189,13 @@ def format_session_entry(case: dict, stdout: str, stderr: str, verdict: str) -> 
     return "\n".join(parts)
 
 
-def report_failure(case: dict, expected: str, actual: str, process: subprocess.CompletedProcess[str]) -> None:
-    """Print the expected and actual output for the failing case."""
+def report_failure(case: dict, expected: str, actual: str,
+                   process: subprocess.CompletedProcess[str] | None) -> None:
+    """Print the expected and actual output for one failing case.
+
+    `process` is None when the case timed out, in which case there is no exit
+    code or stderr to report.
+    """
     print(RULE)
     print(f"FAILED: {case['title']}")
     print(RULE)
@@ -206,12 +211,13 @@ def report_failure(case: dict, expected: str, actual: str, process: subprocess.C
         fromfile="expected", tofile="actual", lineterm="",
     )
     print("\n".join(diff))
+    if process is None:
+        return
     if process.stderr.strip():
         print("--- stderr from the program " + "-" * 40)
         print(process.stderr.strip())
     if process.returncode != 0:
         print(f"\nProgram exited with code {process.returncode}.")
-    print("\nTest session terminated at the first failure; later test cases were not run.")
 
 
 def main() -> int:
@@ -238,34 +244,43 @@ def main() -> int:
     compile_sources()
 
     session: list[str] = []
-    failure: tuple[dict, str, str, subprocess.CompletedProcess[str]] | None = None
+    failures: list[tuple[dict, str, str, subprocess.CompletedProcess[str] | None]] = []
 
+    # Every case runs even after a failure, so one broken behaviour cannot hide
+    # the state of the rest of the plan.
     for case in cases:
+        expected = normalize(expand_placeholders(case["expected"], common))
         try:
             process = run_program(case["input"])
         except subprocess.TimeoutExpired:
             session.append(format_session_entry(case, "", "", "FAIL (timed out)"))
-            print("\n".join(session))
-            print(f"\n{case['title']} did not finish within {RUN_TIMEOUT_SECONDS}s. "
-                  "Every test case must end with a 'bye' command so the program exits.")
-            TRANSCRIPT_PATH.write_text("\n".join(session), encoding="utf-8")
-            return 1
+            failures.append((case, expected,
+                             f"(no output: the program did not exit within "
+                             f"{RUN_TIMEOUT_SECONDS}s; every test case must end "
+                             f"with a 'bye' command)", None))
+            continue
 
-        expected = normalize(expand_placeholders(case["expected"], common))
         actual = normalize(process.stdout)
         passed = expected == actual
         session.append(format_session_entry(case, process.stdout, process.stderr,
                                             "PASS" if passed else "FAIL"))
         if not passed:
-            failure = (case, expected, actual, process)
-            break
+            failures.append((case, expected, actual, process))
 
     TRANSCRIPT_PATH.parent.mkdir(parents=True, exist_ok=True)
     TRANSCRIPT_PATH.write_text("\n".join(session), encoding="utf-8")
 
     print("\n".join(session))
-    if failure is not None:
+
+    for failure in failures:
         report_failure(*failure)
+
+    if failures:
+        print(RULE)
+        print(f"{len(cases) - len(failures)} of {len(cases)} test case(s) passed; "
+              f"{len(failures)} failed:")
+        for case, *_ in failures:
+            print(f"  FAILED  {case['title']}")
         print(f"\nSession record saved to {TRANSCRIPT_PATH}")
         return 1
 
