@@ -56,7 +56,7 @@ bye
 =======================================================
 Got it. I've added this task:
   [T][ ] read book
-Now you have 1 tasks in the list
+Now you have 1 tasks in the list.
 =======================================================
 {{FAREWELL}}
 ```

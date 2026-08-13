@@ -214,7 +214,7 @@ bye
 =======================================================
 Got it. I've added this task:
   [T][ ] read book
-Now you have 1 tasks in the list
+Now you have 1 tasks in the list.
 =======================================================
 =======================================================
 1. [T][ ] read book
@@ -243,7 +243,7 @@ bye
 =======================================================
 Got it. I've added this task:
   [D][ ] return book (by: Sunday)
-Now you have 1 tasks in the list
+Now you have 1 tasks in the list.
 =======================================================
 =======================================================
 1. [D][ ] return book (by: Sunday)
@@ -272,7 +272,7 @@ bye
 =======================================================
 Got it. I've added this task:
   [E][ ] project meeting (from: Mon 2pm to: 4pm)
-Now you have 1 tasks in the list
+Now you have 1 tasks in the list.
 =======================================================
 =======================================================
 1. [E][ ] project meeting (from: Mon 2pm to: 4pm)
@@ -302,17 +302,17 @@ bye
 =======================================================
 Got it. I've added this task:
   [T][ ] read book
-Now you have 1 tasks in the list
+Now you have 1 tasks in the list.
 =======================================================
 =======================================================
 Got it. I've added this task:
   [D][ ] return book (by: Sunday)
-Now you have 2 tasks in the list
+Now you have 2 tasks in the list.
 =======================================================
 =======================================================
 Got it. I've added this task:
   [E][ ] project meeting (from: Mon 2pm to: 4pm)
-Now you have 3 tasks in the list
+Now you have 3 tasks in the list.
 =======================================================
 =======================================================
 1. [T][ ] read book
