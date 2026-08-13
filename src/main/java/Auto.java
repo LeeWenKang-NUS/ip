@@ -1,4 +1,4 @@
-public class Duke {
+public class Auto {
     public static void main(String[] args) {
         String banner = "    _         _        \n"
                 + "   / \\  _   _| |_ ___  \n"
