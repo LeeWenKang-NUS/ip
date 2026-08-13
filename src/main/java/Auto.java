@@ -16,7 +16,7 @@ public class Auto {
         System.out.println(greeting);
 
         Scanner scanner = new Scanner(System.in);
-        ArrayList<String> stringList = new ArrayList<String>();
+        ArrayList<Task> taskList = new ArrayList<Task>();
 
         while (true) {
             String userInput = scanner.nextLine();
@@ -28,12 +28,12 @@ public class Auto {
                 break;
             } else if (userInput.equals("list")) {
                 System.out.println("=======================================================");
-                for (int i = 0; i < stringList.size(); i++) {
-                    System.out.println(String.format("%d. %s", i + 1, stringList.get(i)));
+                for (int i = 0; i < taskList.size(); i++) {
+                    System.out.println(String.format("%d. %s", i + 1, taskList.get(i)));
                 }
                 System.out.println("=======================================================");
             } else {
-                stringList.add(userInput);
+                taskList.add(new Task(userInput));
                 System.out.println("=======================================================");
                 System.out.println("Added: " + userInput);
                 System.out.println("=======================================================");
