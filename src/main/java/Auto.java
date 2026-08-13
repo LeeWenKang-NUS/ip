@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Auto {
@@ -15,6 +16,7 @@ public class Auto {
         System.out.println(greeting);
 
         Scanner scanner = new Scanner(System.in);
+        ArrayList<String> stringList = new ArrayList<String>();
 
         while (true) {
             String userInput = scanner.nextLine();
@@ -24,9 +26,17 @@ public class Auto {
                 System.out.println("Bye. Hope to see you again soon!");
                 System.out.println("=======================================================");
                 break;
-            } else {
+            } else if (userInput.equals("list")) {
                 System.out.println("=======================================================");
-                System.out.println(userInput);
+                int counter = 1;
+                stringList.forEach((string) -> {
+                    System.out.println(String.format("%d. %s", counter, string));
+                });
+                System.out.println("=======================================================");
+            } else {
+                stringList.add(userInput);
+                System.out.println("=======================================================");
+                System.out.println("Added: " + userInput);
                 System.out.println("=======================================================");
             }
         }
