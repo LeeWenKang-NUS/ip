@@ -29,6 +29,7 @@ public class Auto {
                     break;
                 } else if (userInput.equals("list")) {
                     System.out.println("=======================================================");
+                    System.out.println("Here are the tasks in your list:");
                     for (int i = 0; i < taskList.size(); i++) {
                         System.out.println(String.format("%d. %s", i + 1, taskList.get(i)));
                     }
