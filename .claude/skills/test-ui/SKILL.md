@@ -9,10 +9,9 @@ Drive the `Auto` program through its console interface and check what it prints.
 Every test case lives in `test/ui-test-plan.md`; the bundled runner executes all
 of them and reports the failures together at the end.
 
-Expected output in the plan states **desired** behaviour. A case that crashes
-the program is a failing case, and the plan currently holds a section of cases
-that are expected to fail until invalid input is handled — do not treat those
-failures as a broken test run.
+Expected output in the plan states **desired** behaviour, not whatever the
+program currently prints. A case that crashes the program is a failing case,
+never a passing one.
 
 ## Run the tests
 
