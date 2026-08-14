@@ -49,6 +49,15 @@ public class Auto {
                     System.out.println("Nice! I've marked this task as not done yet");
                     System.out.println("  " + task);
                     System.out.println("=======================================================");
+                } else if (userInput.startsWith("delete ")) {
+                    int taskIndex = parseTaskIndex(userInput.substring(7), taskList.size());
+                    Task task = taskList.remove(taskIndex);
+                    task.mark();
+                    System.out.println("=======================================================");
+                    System.out.println("Roger! I've deleted this task:");
+                    System.out.println("  " + task);
+                    System.out.println(String.format("Now you have %d tasks in the list.", taskList.size()));
+                    System.out.println("=======================================================");
                 } else if (userInput.startsWith("todo ")) {
                     String taskName = userInput.substring(5);
                     Task newTask = new ToDo(taskName);
