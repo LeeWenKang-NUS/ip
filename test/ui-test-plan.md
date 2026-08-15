@@ -82,8 +82,9 @@ bye
 
 ### TC-02 List an empty task list
 
-**Aim:** Verify that `list` on a fresh session prints only the divider lines,
-with no task entries and no error.
+**Aim:** Verify that `list` on a fresh session prints its header and nothing
+else, with no task entries and no error. The header is unconditional, so an
+empty list is the header alone between the dividers.
 
 **Input**
 
@@ -97,6 +98,7 @@ bye
 ```text
 {{GREETING}}
 =======================================================
+Here are the tasks in your list:
 =======================================================
 {{FAREWELL}}
 ```
@@ -123,6 +125,7 @@ bye
 Ohhh Noooo... I don't understand you!
 =======================================================
 =======================================================
+Here are the tasks in your list:
 =======================================================
 {{FAREWELL}}
 ```
@@ -156,6 +159,7 @@ Got it. I've added this task:
 Now you have 2 tasks in the list.
 =======================================================
 =======================================================
+Here are the tasks in your list:
 1. [T][ ] borrow book
 2. [T][ ] return book
 =======================================================
@@ -199,6 +203,7 @@ Nice! I've marked this task as done
   [T][X] return book
 =======================================================
 =======================================================
+Here are the tasks in your list:
 1. [T][ ] borrow book
 2. [T][X] return book
 =======================================================
@@ -207,6 +212,7 @@ Nice! I've marked this task as not done yet
   [T][ ] return book
 =======================================================
 =======================================================
+Here are the tasks in your list:
 1. [T][ ] borrow book
 2. [T][ ] return book
 =======================================================
@@ -237,6 +243,7 @@ Got it. I've added this task:
 Now you have 1 tasks in the list.
 =======================================================
 =======================================================
+Here are the tasks in your list:
 1. [T][ ] read book
 =======================================================
 {{FAREWELL}}
@@ -266,6 +273,7 @@ Got it. I've added this task:
 Now you have 1 tasks in the list.
 =======================================================
 =======================================================
+Here are the tasks in your list:
 1. [D][ ] return book (by: Sunday)
 =======================================================
 {{FAREWELL}}
@@ -295,6 +303,7 @@ Got it. I've added this task:
 Now you have 1 tasks in the list.
 =======================================================
 =======================================================
+Here are the tasks in your list:
 1. [E][ ] project meeting (from: Mon 2pm to: 4pm)
 =======================================================
 {{FAREWELL}}
@@ -335,6 +344,7 @@ Got it. I've added this task:
 Now you have 3 tasks in the list.
 =======================================================
 =======================================================
+Here are the tasks in your list:
 1. [T][ ] read book
 2. [D][ ] return book (by: Sunday)
 3. [E][ ] project meeting (from: Mon 2pm to: 4pm)
@@ -371,12 +381,14 @@ Got it. I've added this task:
 Now you have 1 tasks in the list.
 =======================================================
 =======================================================
+Here are the tasks in your list:
 1. [T][ ] read book
 =======================================================
 =======================================================
 Ohhh Noooo... I don't understand you!
 =======================================================
 =======================================================
+Here are the tasks in your list:
 1. [T][ ] read book
 =======================================================
 =======================================================
@@ -385,6 +397,7 @@ Got it. I've added this task:
 Now you have 2 tasks in the list.
 =======================================================
 =======================================================
+Here are the tasks in your list:
 1. [T][ ] read book
 2. [T][ ] write essay
 =======================================================
@@ -423,6 +436,7 @@ Ohhh Noooo... I don't understand you!
 Ohhh Noooo... I don't understand you!
 =======================================================
 =======================================================
+Here are the tasks in your list:
 1. [T][ ] read book
 =======================================================
 {{FAREWELL}}
@@ -456,6 +470,7 @@ Now you have 1 tasks in the list.
 Ohhh Noooo... I don't understand you!
 =======================================================
 =======================================================
+Here are the tasks in your list:
 1. [T][ ] read book
 =======================================================
 {{FAREWELL}}
@@ -499,6 +514,7 @@ Nice! I've marked this task as done
   [T][X] read book
 =======================================================
 =======================================================
+Here are the tasks in your list:
 1. [T][X] read book
 =======================================================
 =======================================================
@@ -510,6 +526,7 @@ Nice! I've marked this task as not done yet
   [T][ ] read book
 =======================================================
 =======================================================
+Here are the tasks in your list:
 1. [T][ ] read book
 =======================================================
 {{FAREWELL}}
@@ -546,6 +563,7 @@ Got it. I've added this task:
 Now you have 2 tasks in the list.
 =======================================================
 =======================================================
+Here are the tasks in your list:
 1. [T][ ]    read book
 2. [D][ ] return book (by: Sunday)
 =======================================================
@@ -593,6 +611,7 @@ Nice! I've marked this task as done
   [T][X] write essay
 =======================================================
 =======================================================
+Here are the tasks in your list:
 1. [T][ ] read book
 2. [T][X] write essay
 =======================================================
@@ -620,6 +639,182 @@ bye
 {{GREETING}}
 =======================================================
 Ohhh Noooo... I don't understand you!
+=======================================================
+{{FAREWELL}}
+```
+
+### TC-24 Delete removes a task and renumbers the ones after it
+
+**Aim:** Verify that `delete` takes the task out of the list, reports it with the
+running count already decremented, and that the tasks after it move up so a
+later `list` numbers them contiguously from 1. The deleted task is marked done
+first, so the acknowledgement shows a status the task genuinely had.
+
+**Input**
+
+```text
+todo read book
+todo write essay
+todo file report
+mark 2
+delete 2
+list
+bye
+```
+
+**Expected output**
+
+```text
+{{GREETING}}
+=======================================================
+Got it. I've added this task:
+  [T][ ] read book
+Now you have 1 tasks in the list.
+=======================================================
+=======================================================
+Got it. I've added this task:
+  [T][ ] write essay
+Now you have 2 tasks in the list.
+=======================================================
+=======================================================
+Got it. I've added this task:
+  [T][ ] file report
+Now you have 3 tasks in the list.
+=======================================================
+=======================================================
+Nice! I've marked this task as done
+  [T][X] write essay
+=======================================================
+=======================================================
+Roger! I've deleted this task:
+  [T][X] write essay
+Now you have 2 tasks in the list.
+=======================================================
+=======================================================
+Here are the tasks in your list:
+1. [T][ ] read book
+2. [T][ ] file report
+=======================================================
+{{FAREWELL}}
+```
+
+### TC-25 Deleting the only task empties the list
+
+**Aim:** Verify the lower boundary of the count: deleting the last remaining
+task reports `0 tasks` and leaves a list that prints its header and no entries,
+rather than going negative or leaving a stale entry behind.
+
+**Input**
+
+```text
+todo read book
+mark 1
+delete 1
+list
+bye
+```
+
+**Expected output**
+
+```text
+{{GREETING}}
+=======================================================
+Got it. I've added this task:
+  [T][ ] read book
+Now you have 1 tasks in the list.
+=======================================================
+=======================================================
+Nice! I've marked this task as done
+  [T][X] read book
+=======================================================
+=======================================================
+Roger! I've deleted this task:
+  [T][X] read book
+Now you have 0 tasks in the list.
+=======================================================
+=======================================================
+Here are the tasks in your list:
+=======================================================
+{{FAREWELL}}
+```
+
+### TC-26 Delete rejects a bad task number without touching the list
+
+**Aim:** Verify that `delete` guards its argument exactly as `mark` does — zero,
+past the end, and non-numeric are each reported with their own message, and
+`delete` with no argument at all is unrecognised rather than a delete of
+nothing. The closing `list` proves none of the four rejections removed anything.
+
+**Input**
+
+```text
+todo read book
+delete 0
+delete 9
+delete abc
+delete
+list
+bye
+```
+
+**Expected output**
+
+```text
+{{GREETING}}
+=======================================================
+Got it. I've added this task:
+  [T][ ] read book
+Now you have 1 tasks in the list.
+=======================================================
+=======================================================
+Ohhh Noooo... there is no task 0!
+=======================================================
+=======================================================
+Ohhh Noooo... there is no task 9!
+=======================================================
+=======================================================
+Ohhh Noooo... 'abc' is not a task number!
+=======================================================
+=======================================================
+Ohhh Noooo... I don't understand you!
+=======================================================
+=======================================================
+Here are the tasks in your list:
+1. [T][ ] read book
+=======================================================
+{{FAREWELL}}
+```
+
+### TC-27 Deleting an unfinished task does not report it as done
+
+**Aim:** Verify that the acknowledgement shows the task's real status, so a task
+that was never marked is shown as not done when it is deleted.
+
+**Input**
+
+```text
+todo read book
+delete 1
+list
+bye
+```
+
+**Expected output**
+
+```text
+{{GREETING}}
+=======================================================
+Got it. I've added this task:
+  [T][ ] read book
+Now you have 1 tasks in the list.
+=======================================================
+=======================================================
+Roger! I've deleted this task:
+  [T][ ] read book
+Now you have 0 tasks in the list.
+=======================================================
+=======================================================
+Here are the tasks in your list:
 =======================================================
 {{FAREWELL}}
 ```
@@ -667,6 +862,7 @@ Now you have 1 tasks in the list.
 Ohhh Noooo... there is no task 0!
 =======================================================
 =======================================================
+Here are the tasks in your list:
 1. [T][ ] read book
 =======================================================
 {{FAREWELL}}
@@ -699,6 +895,7 @@ Now you have 1 tasks in the list.
 Ohhh Noooo... there is no task 99!
 =======================================================
 =======================================================
+Here are the tasks in your list:
 1. [T][ ] read book
 =======================================================
 {{FAREWELL}}
@@ -731,6 +928,7 @@ Now you have 1 tasks in the list.
 Ohhh Noooo... 'abc' is not a task number!
 =======================================================
 =======================================================
+Here are the tasks in your list:
 1. [T][ ] read book
 =======================================================
 {{FAREWELL}}
@@ -758,6 +956,7 @@ bye
 Ohhh Noooo... there is no task 1!
 =======================================================
 =======================================================
+Here are the tasks in your list:
 =======================================================
 {{FAREWELL}}
 ```
@@ -783,6 +982,7 @@ bye
 Ohhh Noooo... a deadline needs a /by date!
 =======================================================
 =======================================================
+Here are the tasks in your list:
 =======================================================
 {{FAREWELL}}
 ```
@@ -808,6 +1008,7 @@ bye
 Ohhh Noooo... an event needs a /from and a /to time!
 =======================================================
 =======================================================
+Here are the tasks in your list:
 =======================================================
 {{FAREWELL}}
 ```
@@ -833,6 +1034,7 @@ bye
 Ohhh Noooo... an event needs a /from and a /to time!
 =======================================================
 =======================================================
+Here are the tasks in your list:
 =======================================================
 {{FAREWELL}}
 ```

@@ -62,7 +62,6 @@ public class Auto {
                     case DELETE -> {
                         int taskIndex = parseTaskIndex(argument, taskList.size());
                         Task task = taskList.remove(taskIndex);
-                        task.mark();
                         System.out.println("=======================================================");
                         System.out.println("Roger! I've deleted this task:");
                         System.out.println("  " + task);
