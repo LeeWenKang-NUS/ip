@@ -1,14 +1,25 @@
 /** Converts raw user input and command arguments into domain values. */
 public class Parser {
-
-    /** Holds a recognized command and its verbatim argument. */
-    public record ParsedCommand(Command command, String argument) {
-    }
-
-    /** Recognizes a command and extracts its argument from one input line. */
-    public static ParsedCommand parse(String input) throws AutoException {
-        Command command = Command.fromInput(input);
-        return new ParsedCommand(command, command.argumentIn(input));
+    /** Parses one input line into a fully configured executable command. */
+    public static Command parse(String input) throws AutoException {
+        if (input.equals("bye")) {
+            return new ExitCommand();
+        } else if (input.equals("list")) {
+            return new ListCommand();
+        } else if (input.startsWith("mark ")) {
+            return new MarkCommand(parseTaskNumber(argumentAfter(input, "mark")));
+        } else if (input.startsWith("unmark ")) {
+            return new UnmarkCommand(parseTaskNumber(argumentAfter(input, "unmark")));
+        } else if (input.startsWith("delete ")) {
+            return new DeleteCommand(parseTaskNumber(argumentAfter(input, "delete")));
+        } else if (input.startsWith("todo ")) {
+            return new AddCommand(parseToDo(argumentAfter(input, "todo")));
+        } else if (input.startsWith("deadline ")) {
+            return new AddCommand(parseDeadline(argumentAfter(input, "deadline")));
+        } else if (input.startsWith("event ")) {
+            return new AddCommand(parseEvent(argumentAfter(input, "event")));
+        }
+        throw AutoException.unknownCommand();
     }
 
     /** Parses a user-facing task number. */
@@ -47,5 +58,9 @@ public class Parser {
         }
         return new Event(nameAndTime[0].trim(),
                 fromAndTo[0].trim(), fromAndTo[1].trim());
+    }
+
+    private static String argumentAfter(String input, String keyword) {
+        return input.substring(keyword.length() + 1);
     }
 }
