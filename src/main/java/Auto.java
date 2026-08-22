@@ -1,10 +1,14 @@
 import java.io.IOException;
 
 public class Auto {
+    private static final String DEFAULT_DATA_FILE = "data/auto.txt";
+
     public static void main(String[] args) {
         Ui ui = new Ui();
         ui.showWelcome();
-        TaskList taskList = loadTasks(ui);
+        String filePath = System.getProperty("auto.data.file", DEFAULT_DATA_FILE);
+        Storage storage = new Storage(filePath);
+        TaskList taskList = loadTasks(storage, ui);
 
         boolean isRunning = true;
         while (isRunning) {
@@ -26,7 +30,7 @@ public class Auto {
                         Task task = taskList.get(taskNumber);
                         boolean wasCompleted = task.isCompleted();
                         taskList.mark(taskNumber);
-                        if (!saveTasks(taskList, ui)) {
+                        if (!saveTasks(taskList, storage, ui)) {
                             if (!wasCompleted) {
                                 task.unmark();
                             }
@@ -39,7 +43,7 @@ public class Auto {
                         Task task = taskList.get(taskNumber);
                         boolean wasCompleted = task.isCompleted();
                         taskList.unmark(taskNumber);
-                        if (!saveTasks(taskList, ui)) {
+                        if (!saveTasks(taskList, storage, ui)) {
                             if (wasCompleted) {
                                 task.mark();
                             }
@@ -50,7 +54,7 @@ public class Auto {
                     case DELETE -> {
                         int taskNumber = Parser.parseTaskNumber(argument);
                         Task task = taskList.delete(taskNumber);
-                        if (!saveTasks(taskList, ui)) {
+                        if (!saveTasks(taskList, storage, ui)) {
                             taskList.restoreDeleted(taskNumber, task);
                             break;
                         }
@@ -59,7 +63,7 @@ public class Auto {
                     case TODO -> {
                         Task newTask = Parser.parseToDo(argument);
                         taskList.add(newTask);
-                        if (!saveTasks(taskList, ui)) {
+                        if (!saveTasks(taskList, storage, ui)) {
                             taskList.removeLast();
                             break;
                         }
@@ -68,7 +72,7 @@ public class Auto {
                     case DEADLINE -> {
                         Task newTask = Parser.parseDeadline(argument);
                         taskList.add(newTask);
-                        if (!saveTasks(taskList, ui)) {
+                        if (!saveTasks(taskList, storage, ui)) {
                             taskList.removeLast();
                             break;
                         }
@@ -77,7 +81,7 @@ public class Auto {
                     case EVENT -> {
                         Task newTask = Parser.parseEvent(argument);
                         taskList.add(newTask);
-                        if (!saveTasks(taskList, ui)) {
+                        if (!saveTasks(taskList, storage, ui)) {
                             taskList.removeLast();
                             break;
                         }
@@ -93,9 +97,9 @@ public class Auto {
     }
 
     /** Loads saved tasks, recovering cleanly when the file cannot be used. */
-    private static TaskList loadTasks(Ui ui) {
+    private static TaskList loadTasks(Storage storage, Ui ui) {
         try {
-            Storage.LoadResult result = Storage.load();
+            Storage.LoadResult result = storage.load();
             if (!result.warnings().isEmpty()) {
                 ui.showStorageMessage(String.format(
                         "Warning: %d invalid data line(s) were skipped: %s.",
@@ -110,9 +114,9 @@ public class Auto {
     }
 
     /** Saves a change and reports failure without exposing a stack trace. */
-    private static boolean saveTasks(TaskList tasks, Ui ui) {
+    private static boolean saveTasks(TaskList tasks, Storage storage, Ui ui) {
         try {
-            Storage.save(tasks.asList());
+            storage.save(tasks.asList());
             return true;
         } catch (IOException | RuntimeException e) {
             ui.showStorageMessage(

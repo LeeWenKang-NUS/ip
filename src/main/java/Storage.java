@@ -2,7 +2,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
-import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
@@ -11,7 +10,11 @@ import java.util.List;
 
 /** Loads and saves the task list on the hard disk. */
 public class Storage {
-    private static final String DEFAULT_DATA_FILE = "data/auto.txt";
+    private final String filePath;
+
+    public Storage(String filePath) {
+        this.filePath = filePath;
+    }
 
     /** Contains recovered tasks and warnings for malformed lines. */
     public record LoadResult(List<Task> tasks, List<String> warnings) {
@@ -23,7 +26,7 @@ public class Storage {
      * @param tasks current tasks to save
      * @throws IOException if the data directory or file cannot be written
      */
-    public static void save(List<Task> tasks) throws IOException {
+    public void save(List<Task> tasks) throws IOException {
         Path dataFile = getDataFile().toAbsolutePath();
         if (Files.exists(dataFile) && !Files.isRegularFile(dataFile)) {
             throw new IOException("the data path is not a regular file");
@@ -59,7 +62,7 @@ public class Storage {
      * @return recovered tasks and warnings for skipped lines
      * @throws IOException if the data file cannot be read
      */
-    public static LoadResult load() throws IOException {
+    public LoadResult load() throws IOException {
         Path dataFile = getDataFile();
         if (!Files.exists(dataFile)) {
             return new LoadResult(new ArrayList<>(), new ArrayList<>());
@@ -85,8 +88,8 @@ public class Storage {
         return new LoadResult(tasks, warnings);
     }
 
-    private static Path getDataFile() throws InvalidPathException {
-        return Path.of(System.getProperty("auto.data.file", DEFAULT_DATA_FILE));
+    private Path getDataFile() {
+        return Path.of(filePath);
     }
 
     private static Task parseDataTask(String line) {
