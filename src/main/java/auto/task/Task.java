@@ -9,18 +9,30 @@ public class Task {
     private String name;
     private boolean completed = false;
 
+    /**
+     * Creates an incomplete task with the specified description.
+     *
+     * @param name task description
+     */
     public Task(String name) {
         this.name = name;
     }
 
+    /** Marks this task as complete. */
     public void mark() {
         this.completed = true;
     }
 
+    /** Marks this task as incomplete. */
     public void unmark() {
         this.completed = false;
     }
 
+    /**
+     * Returns whether this task has been completed.
+     *
+     * @return {@code true} if the task is complete, otherwise {@code false}
+     */
     public boolean isCompleted() {
         return completed;
     }
@@ -30,6 +42,11 @@ public class Task {
         return false;
     }
 
+    /**
+     * Returns the task description for use by specialized task types.
+     *
+     * @return task description
+     */
     protected String getName() {
         return name;
     }
@@ -44,6 +61,11 @@ public class Task {
         return String.format("T | %d | %s", completed ? 1 : 0, encode(name));
     }
 
+    /**
+     * Returns the task description prefixed by its completion-status marker.
+     *
+     * @return user-facing task representation
+     */
     @Override
     public String toString() {
         return String.format("[%s] %s",
