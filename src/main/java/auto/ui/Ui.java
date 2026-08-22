@@ -12,6 +12,7 @@ public class Ui {
     private static final String DIVIDER = "=======================================================";
     private final Scanner scanner;
 
+    /** Creates a UI that reads commands from standard input. */
     public Ui() {
         scanner = new Scanner(System.in);
     }
@@ -35,10 +36,16 @@ public class Ui {
         return scanner.nextLine();
     }
 
+    /** Displays the farewell message shown when the user exits Auto. */
     public void showGoodbye() {
         showMessage("Bye. Hope to see you again soon!");
     }
 
+    /**
+     * Displays all tasks in their list order using one-based numbering.
+     *
+     * @param tasks tasks to display
+     */
     public void showTaskList(List<Task> tasks) {
         System.out.println(DIVIDER);
         System.out.println("Here are the tasks in your list:");
@@ -61,14 +68,30 @@ public class Ui {
         System.out.println(DIVIDER);
     }
 
+    /**
+     * Displays confirmation that a task was marked as complete.
+     *
+     * @param task task whose updated state is displayed
+     */
     public void showTaskMarked(Task task) {
         showTask("Nice! I've marked this task as done", task);
     }
 
+    /**
+     * Displays confirmation that a task was marked as incomplete.
+     *
+     * @param task task whose updated state is displayed
+     */
     public void showTaskUnmarked(Task task) {
         showTask("Nice! I've marked this task as not done yet", task);
     }
 
+    /**
+     * Displays the deleted task and the number of tasks that remain.
+     *
+     * @param task deleted task
+     * @param taskCount number of tasks remaining after deletion
+     */
     public void showTaskDeleted(Task task, int taskCount) {
         System.out.println(DIVIDER);
         System.out.println("Roger! I've deleted this task:");
@@ -77,6 +100,12 @@ public class Ui {
         System.out.println(DIVIDER);
     }
 
+    /**
+     * Displays the added task and the updated number of tasks.
+     *
+     * @param task added task
+     * @param taskCount number of tasks after the addition
+     */
     public void showTaskAdded(Task task, int taskCount) {
         System.out.println(DIVIDER);
         System.out.println("Got it. I've added this task:");
@@ -85,10 +114,20 @@ public class Ui {
         System.out.println(DIVIDER);
     }
 
+    /**
+     * Displays a user-facing command or validation error.
+     *
+     * @param message error message to display
+     */
     public void showError(String message) {
         showMessage(message);
     }
 
+    /**
+     * Displays a user-facing storage warning or error.
+     *
+     * @param message storage message to display
+     */
     public void showStorageMessage(String message) {
         showMessage(message);
     }
