@@ -20,6 +20,8 @@ python .claude/skills/test-ui/scripts/run-ui-tests.py
   part of its input.
 - A case can provide an optional **Initial data** block to populate
   `data/test_auto.txt` before the program starts.
+- A case can override the Java storage property with a **Data path:** line to
+  exercise path-level failures without touching production data.
 - **Expected output is the whole console session**, including the greeting and
   the farewell. Those two fixed blocks are written once under
   *Common blocks* below and referenced as `{{GREETING}}` and `{{FAREWELL}}`, so
@@ -1050,9 +1052,9 @@ with their saved completion statuses from `data/test_auto.txt`.
 **Initial data**
 
 ```text
-[T][X] read book
-[D][ ] return book (by: June 6th)
-[E][X] project meeting (from: Aug 6th 2pm to: Aug 6th 4pm)
+T | 1 | cmVhZCBib29r
+D | 0 | cmV0dXJuIGJvb2s= | SnVuZSA2dGg=
+E | 1 | cHJvamVjdCBtZWV0aW5n | QXVnIDZ0aCAycG0= | QXVnIDZ0aCA0cG0=
 ```
 
 **Input**
@@ -1123,6 +1125,75 @@ Nice! I've marked this task as not done yet
 Roger! I've deleted this task:
   [D][ ] return book (by: June 6th)
 Now you have 2 tasks in the list.
+=======================================================
+{{FAREWELL}}
+```
+
+### TC-30 Recover valid tasks from a partially corrupted file
+
+**Aim:** Verify that blank and malformed records are skipped with one warning,
+while valid durable-format records retain separators, Unicode, and status.
+
+**Initial data**
+
+```text
+T | 1 | cmVhZCB8IGJvb2sgKGJ5OiBsYXRlcik=
+not a task
+
+D | 0 | cmV0dXJuIGJvb2s= | SnVuZSA2dGg=
+E | 2 | 6aG555uuIG1lZXRpbmc= | QXVnIDZ0aCAycG0= | QXVnIDZ0aCA0cG0=
+Z | 0 | dW5rbm93bg==
+```
+
+**Input**
+
+```text
+list
+bye
+```
+
+**Expected output**
+
+```text
+{{GREETING}}
+=======================================================
+Warning: 3 invalid data line(s) were skipped: line 2 is invalid and was skipped, line 5 is invalid and was skipped, line 6 is invalid and was skipped.
+=======================================================
+=======================================================
+Here are the tasks in your list:
+1. [T][X] read | book (by: later)
+2. [D][ ] return book (by: June 6th)
+=======================================================
+{{FAREWELL}}
+```
+
+### TC-31 Recover from load and save path failures
+
+**Aim:** Verify that a directory used as the data file causes friendly load and
+save errors, rolls back the attempted addition, and prints no stack trace.
+
+**Data path:** `data`
+
+**Input**
+
+```text
+todo read book
+list
+bye
+```
+
+**Expected output**
+
+```text
+{{GREETING}}
+=======================================================
+Sorry, I couldn't load your saved tasks. Starting with an empty task list.
+=======================================================
+=======================================================
+Sorry, I couldn't save your tasks. Your latest change was not applied.
+=======================================================
+=======================================================
+Here are the tasks in your list:
 =======================================================
 {{FAREWELL}}
 ```

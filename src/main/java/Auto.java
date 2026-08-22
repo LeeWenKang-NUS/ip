@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Auto {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         String banner = "    _         _        \n"
                 + "   / \\  _   _| |_ ___  \n"
                 + "  / _ \\| | | | __/ _ \\ \n"
@@ -17,7 +17,7 @@ public class Auto {
         System.out.println(greeting);
 
         Scanner scanner = new Scanner(System.in);
-        ArrayList<Task> taskList = new ArrayList<Task>(Storage.load());
+        ArrayList<Task> taskList = loadTasks();
 
         boolean isRunning = true;
         while (isRunning) {
@@ -45,8 +45,14 @@ public class Auto {
                     case MARK -> {
                         int taskIndex = parseTaskIndex(argument, taskList.size());
                         Task task = taskList.get(taskIndex);
+                        boolean wasCompleted = task.isCompleted();
                         task.mark();
-                        Storage.save(taskList);
+                        if (!saveTasks(taskList)) {
+                            if (!wasCompleted) {
+                                task.unmark();
+                            }
+                            break;
+                        }
                         System.out.println("=======================================================");
                         System.out.println("Nice! I've marked this task as done");
                         System.out.println("  " + task);
@@ -55,8 +61,14 @@ public class Auto {
                     case UNMARK -> {
                         int taskIndex = parseTaskIndex(argument, taskList.size());
                         Task task = taskList.get(taskIndex);
+                        boolean wasCompleted = task.isCompleted();
                         task.unmark();
-                        Storage.save(taskList);
+                        if (!saveTasks(taskList)) {
+                            if (wasCompleted) {
+                                task.mark();
+                            }
+                            break;
+                        }
                         System.out.println("=======================================================");
                         System.out.println("Nice! I've marked this task as not done yet");
                         System.out.println("  " + task);
@@ -65,7 +77,10 @@ public class Auto {
                     case DELETE -> {
                         int taskIndex = parseTaskIndex(argument, taskList.size());
                         Task task = taskList.remove(taskIndex);
-                        Storage.save(taskList);
+                        if (!saveTasks(taskList)) {
+                            taskList.add(taskIndex, task);
+                            break;
+                        }
                         System.out.println("=======================================================");
                         System.out.println("Roger! I've deleted this task:");
                         System.out.println("  " + task);
@@ -75,7 +90,10 @@ public class Auto {
                     case TODO -> {
                         Task newTask = new ToDo(argument);
                         taskList.add(newTask);
-                        Storage.save(taskList);
+                        if (!saveTasks(taskList)) {
+                            taskList.remove(taskList.size() - 1);
+                            break;
+                        }
                         System.out.println("=======================================================");
                         System.out.println("Got it. I've added this task:");
                         System.out.println("  " + newTask);
@@ -91,7 +109,10 @@ public class Auto {
                         String by = parts[1].trim();
                         Task newTask = new Deadline(taskName, by);
                         taskList.add(newTask);
-                        Storage.save(taskList);
+                        if (!saveTasks(taskList)) {
+                            taskList.remove(taskList.size() - 1);
+                            break;
+                        }
                         System.out.println("=======================================================");
                         System.out.println("Got it. I've added this task:");
                         System.out.println("  " + newTask);
@@ -112,7 +133,10 @@ public class Auto {
                         String to = fromAndTo[1].trim();
                         Task newTask = new Event(taskName, from, to);
                         taskList.add(newTask);
-                        Storage.save(taskList);
+                        if (!saveTasks(taskList)) {
+                            taskList.remove(taskList.size() - 1);
+                            break;
+                        }
                         System.out.println("=======================================================");
                         System.out.println("Got it. I've added this task:");
                         System.out.println("  " + newTask);
@@ -128,6 +152,42 @@ public class Auto {
         }
 
         scanner.close();
+    }
+
+    /** Loads saved tasks, recovering cleanly when the file cannot be used. */
+    private static ArrayList<Task> loadTasks() {
+        ArrayList<Task> tasks = new ArrayList<>();
+        try {
+            Storage.LoadResult result = Storage.load();
+            tasks.addAll(result.tasks());
+            if (!result.warnings().isEmpty()) {
+                printStorageMessage(String.format(
+                        "Warning: %d invalid data line(s) were skipped: %s.",
+                        result.warnings().size(), String.join(", ", result.warnings())));
+            }
+        } catch (IOException | RuntimeException e) {
+            printStorageMessage(
+                    "Sorry, I couldn't load your saved tasks. Starting with an empty task list.");
+        }
+        return tasks;
+    }
+
+    /** Saves a change and reports failure without exposing a stack trace. */
+    private static boolean saveTasks(ArrayList<Task> tasks) {
+        try {
+            Storage.save(tasks);
+            return true;
+        } catch (IOException | RuntimeException e) {
+            printStorageMessage(
+                    "Sorry, I couldn't save your tasks. Your latest change was not applied.");
+            return false;
+        }
+    }
+
+    private static void printStorageMessage(String message) {
+        System.out.println("=======================================================");
+        System.out.println(message);
+        System.out.println("=======================================================");
     }
 
     private static int parseTaskIndex(String argument, int taskCount) throws AutoException {

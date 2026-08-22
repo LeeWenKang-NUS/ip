@@ -91,7 +91,8 @@ def parse_plan(text: str) -> tuple[dict[str, str], list[dict]]:
                 case = None
                 continue
             case = {"title": title, "aim": "", "initial_data": None,
-                    "input": None, "expected": None}
+                    "data_path": "data/test_auto.txt", "input": None,
+                    "expected": None}
             cases.append(case)
             i += 1
             continue
@@ -103,6 +104,8 @@ def parse_plan(text: str) -> tuple[dict[str, str], list[dict]]:
             elif stripped == "**Initial data**":
                 case["initial_data"], i = read_fenced_block(lines, i + 1)
                 continue
+            elif stripped.startswith("**Data path:**"):
+                case["data_path"] = stripped[len("**Data path:**"):].strip().strip("`")
             elif stripped == "**Input**":
                 case["input"], i = read_fenced_block(lines, i + 1)
                 continue
@@ -160,14 +163,15 @@ def compile_sources() -> None:
         raise SystemExit(1)
 
 
-def run_program(stdin_text: str, initial_data: str | None) -> subprocess.CompletedProcess[str]:
+def run_program(stdin_text: str, initial_data: str | None,
+                data_path: str) -> subprocess.CompletedProcess[str]:
     """Start a fresh program instance and feed it the given input lines."""
     DATA_FILE.unlink(missing_ok=True)
     if initial_data is not None:
         DATA_FILE.parent.mkdir(parents=True, exist_ok=True)
         DATA_FILE.write_text(initial_data.rstrip("\n") + "\n", encoding="utf-8")
     return subprocess.run(
-        ["java", "-Dfile.encoding=UTF-8", "-Dauto.data.file=data/test_auto.txt",
+        ["java", "-Dfile.encoding=UTF-8", f"-Dauto.data.file={data_path}",
          "-cp", str(CLASSES_DIR), MAIN_CLASS],
         input=stdin_text.rstrip("\n") + "\n",
         capture_output=True,
@@ -261,7 +265,7 @@ def main() -> int:
     for case in cases:
         expected = normalize(expand_placeholders(case["expected"], common))
         try:
-            process = run_program(case["input"], case["initial_data"])
+            process = run_program(case["input"], case["initial_data"], case["data_path"])
         except subprocess.TimeoutExpired:
             session.append(format_session_entry(case, "", "", "FAIL (timed out)"))
             failures.append((case, expected,

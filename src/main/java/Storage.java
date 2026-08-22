@@ -1,69 +1,142 @@
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 /** Loads and saves the task list on the hard disk. */
 public class Storage {
-    private static final Path DATA_FILE = Path.of(
-            System.getProperty("auto.data.file", "data/auto.txt"));
+    private static final String DEFAULT_DATA_FILE = "data/auto.txt";
+
+    /** Contains recovered tasks and warnings for malformed lines. */
+    public record LoadResult(List<Task> tasks, List<String> warnings) {
+    }
 
     /**
-     * Replaces the data file with one display-formatted task per line.
+     * Atomically replaces the data file with durable task records.
      *
      * @param tasks current tasks to save
      * @throws IOException if the data directory or file cannot be written
      */
     public static void save(List<Task> tasks) throws IOException {
-        Files.createDirectories(DATA_FILE.getParent());
-        Files.write(DATA_FILE, tasks.stream().map(Task::toString).toList());
+        Path dataFile = getDataFile().toAbsolutePath();
+        if (Files.exists(dataFile) && !Files.isRegularFile(dataFile)) {
+            throw new IOException("the data path is not a regular file");
+        }
+        Path parent = dataFile.getParent();
+        Files.createDirectories(parent);
+
+        Path temporaryFile = Files.createTempFile(parent, dataFile.getFileName().toString(), ".tmp");
+        try {
+            Files.write(temporaryFile,
+                    tasks.stream().map(Task::toDataString).toList(), StandardCharsets.UTF_8);
+            try {
+                Files.move(temporaryFile, dataFile, StandardCopyOption.ATOMIC_MOVE,
+                        StandardCopyOption.REPLACE_EXISTING);
+            } catch (AtomicMoveNotSupportedException e) {
+                Files.move(temporaryFile, dataFile, StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                // Some Windows file systems report atomic moves as supported but
+                // cannot atomically replace an existing target.
+                if (!Files.exists(temporaryFile)) {
+                    throw e;
+                }
+                Files.move(temporaryFile, dataFile, StandardCopyOption.REPLACE_EXISTING);
+            }
+        } finally {
+            Files.deleteIfExists(temporaryFile);
+        }
     }
 
     /**
-     * Loads tasks from the data file, or returns an empty list if it does not exist.
+     * Loads valid tasks and reports malformed lines without losing good data.
      *
-     * @return tasks stored during the previous run
+     * @return recovered tasks and warnings for skipped lines
      * @throws IOException if the data file cannot be read
      */
-    public static List<Task> load() throws IOException {
-        if (!Files.exists(DATA_FILE)) {
-            return new ArrayList<>();
+    public static LoadResult load() throws IOException {
+        Path dataFile = getDataFile();
+        if (!Files.exists(dataFile)) {
+            return new LoadResult(new ArrayList<>(), new ArrayList<>());
+        }
+        if (!Files.isRegularFile(dataFile)) {
+            throw new IOException("the data path is not a regular file");
         }
 
         List<Task> tasks = new ArrayList<>();
-        for (String line : Files.readAllLines(DATA_FILE)) {
-            tasks.add(parseTask(line));
+        List<String> warnings = new ArrayList<>();
+        List<String> lines = Files.readAllLines(dataFile, StandardCharsets.UTF_8);
+        for (int i = 0; i < lines.size(); i++) {
+            String line = lines.get(i);
+            if (line.isBlank()) {
+                continue;
+            }
+            try {
+                tasks.add(parseDataTask(line));
+            } catch (IllegalArgumentException | IndexOutOfBoundsException e) {
+                warnings.add(String.format("line %d is invalid and was skipped", i + 1));
+            }
         }
-        return tasks;
+        return new LoadResult(tasks, warnings);
     }
 
-    /** Converts one valid display-formatted data line back into a task. */
-    private static Task parseTask(String line) {
-        char type = line.charAt(1);
-        boolean isCompleted = line.charAt(4) == 'X';
-        String details = line.substring(7);
-        Task task;
+    private static Path getDataFile() throws InvalidPathException {
+        return Path.of(System.getProperty("auto.data.file", DEFAULT_DATA_FILE));
+    }
 
-        if (type == 'T') {
-            task = new ToDo(details);
-        } else if (type == 'D') {
-            int byIndex = details.lastIndexOf(" (by: ");
-            String name = details.substring(0, byIndex);
-            String by = details.substring(byIndex + 6, details.length() - 1);
-            task = new Deadline(name, by);
-        } else {
-            int fromIndex = details.lastIndexOf(" (from: ");
-            int toIndex = details.lastIndexOf(" to: ");
-            String name = details.substring(0, fromIndex);
-            String from = details.substring(fromIndex + 8, toIndex);
-            String to = details.substring(toIndex + 5, details.length() - 1);
-            task = new Event(name, from, to);
+    private static Task parseDataTask(String line) {
+        String[] fields = line.split(" \\| ", -1);
+        if (fields.length < 3 || !(fields[1].equals("0") || fields[1].equals("1"))) {
+            throw new IllegalArgumentException("invalid task record");
         }
 
-        if (isCompleted) {
+        Task task;
+        switch (fields[0]) {
+        case "T" -> {
+            requireFieldCount(fields, 3);
+            task = new ToDo(decodeRequired(fields[2]));
+        }
+        case "D" -> {
+            requireFieldCount(fields, 4);
+            task = new Deadline(decodeRequired(fields[2]), decodeRequired(fields[3]));
+        }
+        case "E" -> {
+            requireFieldCount(fields, 5);
+            task = new Event(decodeRequired(fields[2]), decodeRequired(fields[3]),
+                    decodeRequired(fields[4]));
+        }
+        default -> throw new IllegalArgumentException("unknown task type");
+        }
+        restoreStatus(task, fields[1]);
+        return task;
+    }
+
+    private static void requireFieldCount(String[] fields, int expected) {
+        if (fields.length != expected) {
+            throw new IllegalArgumentException("wrong number of fields");
+        }
+    }
+
+    private static String decodeRequired(String encoded) {
+        return requireText(new String(
+                Base64.getDecoder().decode(encoded), StandardCharsets.UTF_8));
+    }
+
+    private static String requireText(String value) {
+        if (value.isBlank()) {
+            throw new IllegalArgumentException("a required field is empty");
+        }
+        return value;
+    }
+
+    private static void restoreStatus(Task task, String status) {
+        if (status.equals("1")) {
             task.mark();
         }
-        return task;
     }
 }
