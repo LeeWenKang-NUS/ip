@@ -20,6 +20,11 @@ import auto.util.DateUtil;
 public class Storage {
     private final String filePath;
 
+    /**
+     * Creates a storage manager that reads and writes the specified data file.
+     *
+     * @param filePath path of the task data file
+     */
     public Storage(String filePath) {
         this.filePath = filePath;
     }
@@ -100,6 +105,14 @@ public class Storage {
         return Path.of(filePath);
     }
 
+    /**
+     * Parses and validates one durable task record, including its type, fields,
+     * dates, and completion status.
+     *
+     * @param line durable task record to parse
+     * @return reconstructed task
+     * @throws IllegalArgumentException if the record is malformed
+     */
     private static Task parseDataTask(String line) {
         String[] fields = line.split(" \\| ", -1);
         if (fields.length < 3 || !(fields[1].equals("0") || fields[1].equals("1"))) {
@@ -135,6 +148,14 @@ public class Storage {
         }
     }
 
+    /**
+     * Decodes a required Base64 text field and rejects blank decoded values.
+     *
+     * @param encoded Base64-encoded field
+     * @return decoded nonblank text
+     * @throws IllegalArgumentException if the field is not valid Base64 or
+     *         decodes to blank text
+     */
     private static String decodeRequired(String encoded) {
         return requireText(new String(
                 Base64.getDecoder().decode(encoded), StandardCharsets.UTF_8));
