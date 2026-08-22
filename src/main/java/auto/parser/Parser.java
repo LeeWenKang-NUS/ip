@@ -88,6 +88,14 @@ public class Parser {
         return input.substring(keyword.length() + 1);
     }
 
+    /**
+     * Parses a strict user-facing date and translates parsing failures into an
+     * {@link AutoException} containing the invalid value.
+     *
+     * @param value date text in {@code dd/MM/yyyy} format
+     * @return parsed date
+     * @throws AutoException if the value is not a valid date in the required format
+     */
     private static LocalDate parseDate(String value) throws AutoException {
         try {
             return DateUtil.parseInput(value);
