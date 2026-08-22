@@ -10,10 +10,16 @@ import auto.ui.Ui;
 public class OccurCommand extends Command {
     private final LocalDate date;
 
+    /**
+     * Creates a command that displays tasks occurring on the specified date.
+     *
+     * @param date date for which scheduled tasks are requested
+     */
     public OccurCommand(LocalDate date) {
         this.date = date;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) {
         ui.showTasksOccurringOn(tasks.asList(), date);

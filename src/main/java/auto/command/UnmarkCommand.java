@@ -10,10 +10,16 @@ import auto.ui.Ui;
 public class UnmarkCommand extends Command {
     private final int taskNumber;
 
+    /**
+     * Creates a command that unmarks the task with the specified one-based number.
+     *
+     * @param taskNumber one-based number of the task to unmark
+     */
     public UnmarkCommand(int taskNumber) {
         this.taskNumber = taskNumber;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws AutoException {
         Task task = tasks.get(taskNumber);
