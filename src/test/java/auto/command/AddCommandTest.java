@@ -1,0 +1,47 @@
+package auto.command;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.nio.file.Path;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+
+import auto.storage.Storage;
+import auto.task.Task;
+import auto.task.TaskList;
+import auto.task.ToDo;
+
+class AddCommandTest extends CommandTestSupport {
+    @TempDir
+    Path tempDirectory;
+
+    @Test
+    void execute_saveSucceeds_addsPersistsAndAcknowledgesTask() throws Exception {
+        Task task = new ToDo("read book");
+        TaskList tasks = new TaskList();
+        Storage storage = writableStorage(tempDirectory);
+
+        new AddCommand(task).execute(tasks, createUi(), storage);
+
+        assertEquals(1, tasks.size());
+        assertSame(task, tasks.get(1));
+        assertEquals("[T][ ] read book", storage.load().tasks().getFirst().toString());
+        assertTrue(output().contains("Got it. I've added this task:"));
+        assertTrue(output().contains("Now you have 1 tasks in the list."));
+    }
+
+    @Test
+    void execute_saveFails_rollsBackAdditionAndReportsFailure() {
+        TaskList tasks = new TaskList();
+
+        new AddCommand(new ToDo("read book"))
+                .execute(tasks, createUi(), failingStorage(tempDirectory));
+
+        assertEquals(0, tasks.size());
+        assertTrue(output().contains("Sorry, I couldn't save your tasks."));
+        assertTrue(!output().contains("Got it. I've added this task:"));
+    }
+}
