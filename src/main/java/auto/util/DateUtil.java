@@ -28,6 +28,15 @@ public final class DateUtil {
         return parse(value, STORAGE_FORMATTER);
     }
 
+    /**
+     * Parses a date using the supplied strict formatter and exposes all parsing
+     * failures through a consistent exception type.
+     *
+     * @param value date text to parse
+     * @param formatter strict formatter defining the required representation
+     * @return parsed date
+     * @throws IllegalArgumentException if the value is not valid for the formatter
+     */
     private static LocalDate parse(String value, DateTimeFormatter formatter) {
         try {
             return LocalDate.parse(value, formatter);
