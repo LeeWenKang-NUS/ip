@@ -11,8 +11,9 @@ public class Auto {
             String userInput = ui.readCommand();
 
             try {
-                Command command = Command.fromInput(userInput);
-                String argument = command.argumentIn(userInput);
+                Parser.ParsedCommand parsedCommand = Parser.parse(userInput);
+                Command command = parsedCommand.command();
+                String argument = parsedCommand.argument();
 
                 switch (command) {
                     case BYE -> {
@@ -21,7 +22,7 @@ public class Auto {
                     }
                     case LIST -> ui.showTaskList(taskList.asList());
                     case MARK -> {
-                        int taskNumber = parseTaskNumber(argument);
+                        int taskNumber = Parser.parseTaskNumber(argument);
                         Task task = taskList.get(taskNumber);
                         boolean wasCompleted = task.isCompleted();
                         taskList.mark(taskNumber);
@@ -34,7 +35,7 @@ public class Auto {
                         ui.showTaskMarked(task);
                     }
                     case UNMARK -> {
-                        int taskNumber = parseTaskNumber(argument);
+                        int taskNumber = Parser.parseTaskNumber(argument);
                         Task task = taskList.get(taskNumber);
                         boolean wasCompleted = task.isCompleted();
                         taskList.unmark(taskNumber);
@@ -47,7 +48,7 @@ public class Auto {
                         ui.showTaskUnmarked(task);
                     }
                     case DELETE -> {
-                        int taskNumber = parseTaskNumber(argument);
+                        int taskNumber = Parser.parseTaskNumber(argument);
                         Task task = taskList.delete(taskNumber);
                         if (!saveTasks(taskList, ui)) {
                             taskList.restoreDeleted(taskNumber, task);
@@ -56,7 +57,7 @@ public class Auto {
                         ui.showTaskDeleted(task, taskList.size());
                     }
                     case TODO -> {
-                        Task newTask = new ToDo(argument);
+                        Task newTask = Parser.parseToDo(argument);
                         taskList.add(newTask);
                         if (!saveTasks(taskList, ui)) {
                             taskList.removeLast();
@@ -65,13 +66,7 @@ public class Auto {
                         ui.showTaskAdded(newTask, taskList.size());
                     }
                     case DEADLINE -> {
-                        String[] parts = argument.split(" /by ", 2);
-                        if (parts.length < 2) {
-                            throw AutoException.deadlineNeedsBy();
-                        }
-                        String taskName = parts[0].trim();
-                        String by = parts[1].trim();
-                        Task newTask = new Deadline(taskName, by);
+                        Task newTask = Parser.parseDeadline(argument);
                         taskList.add(newTask);
                         if (!saveTasks(taskList, ui)) {
                             taskList.removeLast();
@@ -80,18 +75,7 @@ public class Auto {
                         ui.showTaskAdded(newTask, taskList.size());
                     }
                     case EVENT -> {
-                        String[] nameAndTime = argument.split(" /from ", 2);
-                        if (nameAndTime.length < 2) {
-                            throw AutoException.eventNeedsFromAndTo();
-                        }
-                        String[] fromAndTo = nameAndTime[1].split(" /to ", 2);
-                        if (fromAndTo.length < 2) {
-                            throw AutoException.eventNeedsFromAndTo();
-                        }
-                        String taskName = nameAndTime[0].trim();
-                        String from = fromAndTo[0].trim();
-                        String to = fromAndTo[1].trim();
-                        Task newTask = new Event(taskName, from, to);
+                        Task newTask = Parser.parseEvent(argument);
                         taskList.add(newTask);
                         if (!saveTasks(taskList, ui)) {
                             taskList.removeLast();
@@ -137,14 +121,4 @@ public class Auto {
         }
     }
 
-    private static int parseTaskNumber(String argument) throws AutoException {
-        String trimmed = argument.trim();
-        int taskNumber;
-        try {
-            taskNumber = Integer.parseInt(trimmed);
-        } catch (NumberFormatException e) {
-            throw AutoException.notATaskNumber(trimmed);
-        }
-        return taskNumber;
-    }
 }
