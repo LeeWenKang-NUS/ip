@@ -26,6 +26,7 @@ CLASSES_DIR = REPO_ROOT / "_temp" / "ui-test-classes"
 TRANSCRIPT_PATH = REPO_ROOT / "_temp" / "ui-test-session.txt"
 MAIN_CLASS = "Auto"
 RUN_TIMEOUT_SECONDS = 15
+DATA_FILE = REPO_ROOT / "data" / "test_auto.txt"
 
 RULE = "=" * 68
 THIN_RULE = "-" * 68
@@ -89,7 +90,8 @@ def parse_plan(text: str) -> tuple[dict[str, str], list[dict]]:
                 common[title], i = read_fenced_block(lines, i + 1)
                 case = None
                 continue
-            case = {"title": title, "aim": "", "input": None, "expected": None}
+            case = {"title": title, "aim": "", "initial_data": None,
+                    "input": None, "expected": None}
             cases.append(case)
             i += 1
             continue
@@ -98,6 +100,9 @@ def parse_plan(text: str) -> tuple[dict[str, str], list[dict]]:
         if case is not None:
             if stripped.startswith("**Aim:**"):
                 case["aim"] = stripped[len("**Aim:**"):].strip()
+            elif stripped == "**Initial data**":
+                case["initial_data"], i = read_fenced_block(lines, i + 1)
+                continue
             elif stripped == "**Input**":
                 case["input"], i = read_fenced_block(lines, i + 1)
                 continue
@@ -155,10 +160,15 @@ def compile_sources() -> None:
         raise SystemExit(1)
 
 
-def run_program(stdin_text: str) -> subprocess.CompletedProcess[str]:
+def run_program(stdin_text: str, initial_data: str | None) -> subprocess.CompletedProcess[str]:
     """Start a fresh program instance and feed it the given input lines."""
+    DATA_FILE.unlink(missing_ok=True)
+    if initial_data is not None:
+        DATA_FILE.parent.mkdir(parents=True, exist_ok=True)
+        DATA_FILE.write_text(initial_data.rstrip("\n") + "\n", encoding="utf-8")
     return subprocess.run(
-        ["java", "-Dfile.encoding=UTF-8", "-cp", str(CLASSES_DIR), MAIN_CLASS],
+        ["java", "-Dfile.encoding=UTF-8", "-Dauto.data.file=data/test_auto.txt",
+         "-cp", str(CLASSES_DIR), MAIN_CLASS],
         input=stdin_text.rstrip("\n") + "\n",
         capture_output=True,
         text=True,
@@ -251,7 +261,7 @@ def main() -> int:
     for case in cases:
         expected = normalize(expand_placeholders(case["expected"], common))
         try:
-            process = run_program(case["input"])
+            process = run_program(case["input"], case["initial_data"])
         except subprocess.TimeoutExpired:
             session.append(format_session_entry(case, "", "", "FAIL (timed out)"))
             failures.append((case, expected,

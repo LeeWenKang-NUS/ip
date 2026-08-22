@@ -15,8 +15,11 @@ python .claude/skills/test-ui/scripts/run-ui-tests.py
 
 - **Every test case must end with `bye`.** The program only leaves its input
   loop on that command; without it the run hangs until the harness times out.
-- **Test cases share no state.** The task list lives in memory only, so a case
-  that needs existing tasks must add them itself as part of its input.
+- **Test cases share no state.** The runner removes `data/test_auto.txt` before each
+  fresh process, so a case that needs existing tasks must add them itself as
+  part of its input.
+- A case can provide an optional **Initial data** block to populate
+  `data/test_auto.txt` before the program starts.
 - **Expected output is the whole console session**, including the greeting and
   the farewell. Those two fixed blocks are written once under
   *Common blocks* below and referenced as `{{GREETING}}` and `{{FAREWELL}}`, so
@@ -1035,6 +1038,91 @@ Ohhh Noooo... an event needs a /from and a /to time!
 =======================================================
 =======================================================
 Here are the tasks in your list:
+=======================================================
+{{FAREWELL}}
+```
+
+### TC-29 Load tasks from the data file
+
+**Aim:** Verify that startup restores todo, deadline, and event tasks together
+with their saved completion statuses from `data/test_auto.txt`.
+
+**Initial data**
+
+```text
+[T][X] read book
+[D][ ] return book (by: June 6th)
+[E][X] project meeting (from: Aug 6th 2pm to: Aug 6th 4pm)
+```
+
+**Input**
+
+```text
+list
+bye
+```
+
+**Expected output**
+
+```text
+{{GREETING}}
+=======================================================
+Here are the tasks in your list:
+1. [T][X] read book
+2. [D][ ] return book (by: June 6th)
+3. [E][X] project meeting (from: Aug 6th 2pm to: Aug 6th 4pm)
+=======================================================
+{{FAREWELL}}
+```
+
+### TC-28 Save after every task-list change
+
+**Aim:** Exercise adding each task type, marking, unmarking, and deleting so the
+resulting task list can be verified in `data/test_auto.txt` after the session.
+
+**Input**
+
+```text
+todo read book
+deadline return book /by June 6th
+event project meeting /from Aug 6th 2pm /to Aug 6th 4pm
+mark 1
+unmark 1
+delete 2
+bye
+```
+
+**Expected output**
+
+```text
+{{GREETING}}
+=======================================================
+Got it. I've added this task:
+  [T][ ] read book
+Now you have 1 tasks in the list.
+=======================================================
+=======================================================
+Got it. I've added this task:
+  [D][ ] return book (by: June 6th)
+Now you have 2 tasks in the list.
+=======================================================
+=======================================================
+Got it. I've added this task:
+  [E][ ] project meeting (from: Aug 6th 2pm to: Aug 6th 4pm)
+Now you have 3 tasks in the list.
+=======================================================
+=======================================================
+Nice! I've marked this task as done
+  [T][X] read book
+=======================================================
+=======================================================
+Nice! I've marked this task as not done yet
+  [T][ ] read book
+=======================================================
+=======================================================
+Roger! I've deleted this task:
+  [D][ ] return book (by: June 6th)
+Now you have 2 tasks in the list.
 =======================================================
 {{FAREWELL}}
 ```

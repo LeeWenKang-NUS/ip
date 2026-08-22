@@ -1,8 +1,9 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Auto {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         String banner = "    _         _        \n"
                 + "   / \\  _   _| |_ ___  \n"
                 + "  / _ \\| | | | __/ _ \\ \n"
@@ -16,7 +17,7 @@ public class Auto {
         System.out.println(greeting);
 
         Scanner scanner = new Scanner(System.in);
-        ArrayList<Task> taskList = new ArrayList<Task>();
+        ArrayList<Task> taskList = new ArrayList<Task>(Storage.load());
 
         boolean isRunning = true;
         while (isRunning) {
@@ -45,6 +46,7 @@ public class Auto {
                         int taskIndex = parseTaskIndex(argument, taskList.size());
                         Task task = taskList.get(taskIndex);
                         task.mark();
+                        Storage.save(taskList);
                         System.out.println("=======================================================");
                         System.out.println("Nice! I've marked this task as done");
                         System.out.println("  " + task);
@@ -54,6 +56,7 @@ public class Auto {
                         int taskIndex = parseTaskIndex(argument, taskList.size());
                         Task task = taskList.get(taskIndex);
                         task.unmark();
+                        Storage.save(taskList);
                         System.out.println("=======================================================");
                         System.out.println("Nice! I've marked this task as not done yet");
                         System.out.println("  " + task);
@@ -62,6 +65,7 @@ public class Auto {
                     case DELETE -> {
                         int taskIndex = parseTaskIndex(argument, taskList.size());
                         Task task = taskList.remove(taskIndex);
+                        Storage.save(taskList);
                         System.out.println("=======================================================");
                         System.out.println("Roger! I've deleted this task:");
                         System.out.println("  " + task);
@@ -71,6 +75,7 @@ public class Auto {
                     case TODO -> {
                         Task newTask = new ToDo(argument);
                         taskList.add(newTask);
+                        Storage.save(taskList);
                         System.out.println("=======================================================");
                         System.out.println("Got it. I've added this task:");
                         System.out.println("  " + newTask);
@@ -86,6 +91,7 @@ public class Auto {
                         String by = parts[1].trim();
                         Task newTask = new Deadline(taskName, by);
                         taskList.add(newTask);
+                        Storage.save(taskList);
                         System.out.println("=======================================================");
                         System.out.println("Got it. I've added this task:");
                         System.out.println("  " + newTask);
@@ -106,6 +112,7 @@ public class Auto {
                         String to = fromAndTo[1].trim();
                         Task newTask = new Event(taskName, from, to);
                         taskList.add(newTask);
+                        Storage.save(taskList);
                         System.out.println("=======================================================");
                         System.out.println("Got it. I've added this task:");
                         System.out.println("  " + newTask);
