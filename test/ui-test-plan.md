@@ -1249,3 +1249,134 @@ Here are the tasks in your list:
 =======================================================
 {{FAREWELL}}
 ```
+
+### TC-34 Find tasks occurring on a date
+
+**Aim:** Verify that `occur <date>` shows deadlines due exactly on the date and
+events whose inclusive date range contains it, excludes todos and non-matches,
+and retains the tasks' original list numbers.
+
+**Input**
+
+```text
+todo prepare notes
+deadline submit report /by 08/06/2026
+event conference /from 07/06/2026 /to 09/06/2026
+deadline return book /by 10/06/2026
+occur 08/06/2026
+bye
+```
+
+**Expected output**
+
+```text
+{{GREETING}}
+=======================================================
+Got it. I've added this task:
+  [T][ ] prepare notes
+Now you have 1 tasks in the list.
+=======================================================
+=======================================================
+Got it. I've added this task:
+  [D][ ] submit report (by: Jun 08 2026)
+Now you have 2 tasks in the list.
+=======================================================
+=======================================================
+Got it. I've added this task:
+  [E][ ] conference (from: Jun 07 2026 to: Jun 09 2026)
+Now you have 3 tasks in the list.
+=======================================================
+=======================================================
+Got it. I've added this task:
+  [D][ ] return book (by: Jun 10 2026)
+Now you have 4 tasks in the list.
+=======================================================
+=======================================================
+Here are the tasks occurring on Jun 08 2026:
+2. [D][ ] submit report (by: Jun 08 2026)
+3. [E][ ] conference (from: Jun 07 2026 to: Jun 09 2026)
+=======================================================
+{{FAREWELL}}
+```
+
+### TC-35 Find no tasks occurring on a date
+
+**Aim:** Verify that `occur` prints an empty result cleanly when no deadline or
+event occurs on the requested date.
+
+**Input**
+
+```text
+todo prepare notes
+deadline submit report /by 08/06/2026
+occur 09/06/2026
+bye
+```
+
+**Expected output**
+
+```text
+{{GREETING}}
+=======================================================
+Got it. I've added this task:
+  [T][ ] prepare notes
+Now you have 1 tasks in the list.
+=======================================================
+=======================================================
+Got it. I've added this task:
+  [D][ ] submit report (by: Jun 08 2026)
+Now you have 2 tasks in the list.
+=======================================================
+=======================================================
+Here are the tasks occurring on Jun 09 2026:
+=======================================================
+{{FAREWELL}}
+```
+
+### TC-36 Reject an invalid occur date
+
+**Aim:** Verify that `occur` uses the same strict `dd/MM/yyyy` validation as
+deadline and event commands and that the program continues after an error.
+
+**Input**
+
+```text
+occur 31/02/2026
+bye
+```
+
+**Expected output**
+
+```text
+{{GREETING}}
+=======================================================
+Ohhh Noooo... '31/02/2026' is not a valid date! Use dd/MM/yyyy.
+=======================================================
+{{FAREWELL}}
+```
+
+### TC-37 Reject an event whose end precedes its start
+
+**Aim:** Verify that an event with a `/to` date before its `/from` date is
+rejected, is not added to the task list, and does not terminate the program.
+
+**Input**
+
+```text
+event e /from 22/08/2026 /to 23/08/2021
+list
+bye
+```
+
+**Expected output**
+
+```text
+{{GREETING}}
+=======================================================
+Ohhh Noooo... an event's /to date cannot be before its /from date!
+=======================================================
+=======================================================
+Here are the tasks in your list:
+=======================================================
+{{FAREWELL}}
+```

@@ -1,4 +1,5 @@
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.Base64;
 
 /** Represents a task with a description and completion status. */
@@ -20,6 +21,11 @@ public class Task {
 
     public boolean isCompleted() {
         return completed;
+    }
+
+    /** Returns whether this task is scheduled on the given date. */
+    public boolean occursOn(LocalDate date) {
+        return false;
     }
 
     protected String getName() {

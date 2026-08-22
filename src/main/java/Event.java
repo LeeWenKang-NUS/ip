@@ -10,6 +10,12 @@ public class Event extends Task {
         this.to = to;
     }
 
+    /** Includes both the event's start date and end date. */
+    @Override
+    public boolean occursOn(LocalDate date) {
+        return !date.isBefore(from) && !date.isAfter(to);
+    }
+
     @Override
     public String toDataString() {
         return String.format("E | %d | %s | %s | %s", isCompleted() ? 1 : 0,

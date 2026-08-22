@@ -1,5 +1,6 @@
 import java.util.List;
 import java.util.Scanner;
+import java.time.LocalDate;
 
 /** Handles all console input and output for Auto. */
 public class Ui {
@@ -38,6 +39,19 @@ public class Ui {
         System.out.println("Here are the tasks in your list:");
         for (int i = 0; i < tasks.size(); i++) {
             System.out.println(String.format("%d. %s", i + 1, tasks.get(i)));
+        }
+        System.out.println(DIVIDER);
+    }
+
+    /** Displays scheduled tasks that occur on the requested date. */
+    public void showTasksOccurringOn(List<Task> tasks, LocalDate date) {
+        System.out.println(DIVIDER);
+        System.out.println("Here are the tasks occurring on " + DateUtil.format(date) + ":");
+        for (int i = 0; i < tasks.size(); i++) {
+            Task task = tasks.get(i);
+            if (task.occursOn(date)) {
+                System.out.println(String.format("%d. %s", i + 1, task));
+            }
         }
         System.out.println(DIVIDER);
     }

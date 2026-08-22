@@ -6,6 +6,8 @@ public class Parser {
             return new ExitCommand();
         } else if (input.equals("list")) {
             return new ListCommand();
+        } else if (input.startsWith("occur ")) {
+            return new OccurCommand(parseDate(argumentAfter(input, "occur").trim()));
         } else if (input.startsWith("mark ")) {
             return new MarkCommand(parseTaskNumber(argumentAfter(input, "mark")));
         } else if (input.startsWith("unmark ")) {
@@ -56,8 +58,12 @@ public class Parser {
         if (fromAndTo.length < 2) {
             throw AutoException.eventNeedsFromAndTo();
         }
-        return new Event(nameAndTime[0].trim(),
-                parseDate(fromAndTo[0].trim()), parseDate(fromAndTo[1].trim()));
+        java.time.LocalDate from = parseDate(fromAndTo[0].trim());
+        java.time.LocalDate to = parseDate(fromAndTo[1].trim());
+        if (to.isBefore(from)) {
+            throw AutoException.eventEndsBeforeItStarts();
+        }
+        return new Event(nameAndTime[0].trim(), from, to);
     }
 
     private static String argumentAfter(String input, String keyword) {

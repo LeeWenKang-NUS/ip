@@ -9,6 +9,11 @@ public class Deadline extends Task {
     }
 
     @Override
+    public boolean occursOn(LocalDate date) {
+        return by.equals(date);
+    }
+
+    @Override
     public String toDataString() {
         return String.format("D | %d | %s | %s",
                 isCompleted() ? 1 : 0, encode(getName()), encode(DateUtil.format(by)));

@@ -25,6 +25,10 @@ public class AutoException extends Exception {
         return new AutoException("an event needs a /from and a /to time!");
     }
 
+    public static AutoException eventEndsBeforeItStarts() {
+        return new AutoException("an event's /to date cannot be before its /from date!");
+    }
+
     public static AutoException invalidDate(String value) {
         return new AutoException(String.format(
                 "'%s' is not a valid date! Use dd/MM/yyyy.", value));
