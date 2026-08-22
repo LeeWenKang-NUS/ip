@@ -24,4 +24,9 @@ public class AutoException extends Exception {
     public static AutoException eventNeedsFromAndTo() {
         return new AutoException("an event needs a /from and a /to time!");
     }
+
+    public static AutoException invalidDate(String value) {
+        return new AutoException(String.format(
+                "'%s' is not a valid date! Use dd/MM/yyyy.", value));
+    }
 }

@@ -106,12 +106,14 @@ public class Storage {
         }
         case "D" -> {
             requireFieldCount(fields, 4);
-            task = new Deadline(decodeRequired(fields[2]), decodeRequired(fields[3]));
+            task = new Deadline(decodeRequired(fields[2]),
+                    DateUtil.parseStored(decodeRequired(fields[3])));
         }
         case "E" -> {
             requireFieldCount(fields, 5);
-            task = new Event(decodeRequired(fields[2]), decodeRequired(fields[3]),
-                    decodeRequired(fields[4]));
+            task = new Event(decodeRequired(fields[2]),
+                    DateUtil.parseStored(decodeRequired(fields[3])),
+                    DateUtil.parseStored(decodeRequired(fields[4])));
         }
         default -> throw new IllegalArgumentException("unknown task type");
         }

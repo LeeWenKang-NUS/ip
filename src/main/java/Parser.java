@@ -43,7 +43,7 @@ public class Parser {
         if (parts.length < 2) {
             throw AutoException.deadlineNeedsBy();
         }
-        return new Deadline(parts[0].trim(), parts[1].trim());
+        return new Deadline(parts[0].trim(), parseDate(parts[1].trim()));
     }
 
     /** Parses an event description and its required start and end values. */
@@ -57,10 +57,18 @@ public class Parser {
             throw AutoException.eventNeedsFromAndTo();
         }
         return new Event(nameAndTime[0].trim(),
-                fromAndTo[0].trim(), fromAndTo[1].trim());
+                parseDate(fromAndTo[0].trim()), parseDate(fromAndTo[1].trim()));
     }
 
     private static String argumentAfter(String input, String keyword) {
         return input.substring(keyword.length() + 1);
+    }
+
+    private static java.time.LocalDate parseDate(String value) throws AutoException {
+        try {
+            return DateUtil.parseInput(value);
+        } catch (IllegalArgumentException e) {
+            throw AutoException.invalidDate(value);
+        }
     }
 }

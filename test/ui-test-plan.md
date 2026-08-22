@@ -263,7 +263,7 @@ Here are the tasks in your list:
 **Input**
 
 ```text
-deadline return book /by Sunday
+deadline return book /by 08/06/2026
 list
 bye
 ```
@@ -274,12 +274,12 @@ bye
 {{GREETING}}
 =======================================================
 Got it. I've added this task:
-  [D][ ] return book (by: Sunday)
+  [D][ ] return book (by: Jun 08 2026)
 Now you have 1 tasks in the list.
 =======================================================
 =======================================================
 Here are the tasks in your list:
-1. [D][ ] return book (by: Sunday)
+1. [D][ ] return book (by: Jun 08 2026)
 =======================================================
 {{FAREWELL}}
 ```
@@ -293,7 +293,7 @@ renders them as `(from: <start> to: <end>)`.
 **Input**
 
 ```text
-event project meeting /from Mon 2pm /to 4pm
+event project meeting /from 06/08/2026 /to 07/08/2026
 list
 bye
 ```
@@ -304,12 +304,12 @@ bye
 {{GREETING}}
 =======================================================
 Got it. I've added this task:
-  [E][ ] project meeting (from: Mon 2pm to: 4pm)
+  [E][ ] project meeting (from: Aug 06 2026 to: Aug 07 2026)
 Now you have 1 tasks in the list.
 =======================================================
 =======================================================
 Here are the tasks in your list:
-1. [E][ ] project meeting (from: Mon 2pm to: 4pm)
+1. [E][ ] project meeting (from: Aug 06 2026 to: Aug 07 2026)
 =======================================================
 {{FAREWELL}}
 ```
@@ -323,8 +323,8 @@ different task types, and that a `list` renders each type with its own tag.
 
 ```text
 todo read book
-deadline return book /by Sunday
-event project meeting /from Mon 2pm /to 4pm
+deadline return book /by 08/06/2026
+event project meeting /from 06/08/2026 /to 07/08/2026
 list
 bye
 ```
@@ -340,19 +340,19 @@ Now you have 1 tasks in the list.
 =======================================================
 =======================================================
 Got it. I've added this task:
-  [D][ ] return book (by: Sunday)
+  [D][ ] return book (by: Jun 08 2026)
 Now you have 2 tasks in the list.
 =======================================================
 =======================================================
 Got it. I've added this task:
-  [E][ ] project meeting (from: Mon 2pm to: 4pm)
+  [E][ ] project meeting (from: Aug 06 2026 to: Aug 07 2026)
 Now you have 3 tasks in the list.
 =======================================================
 =======================================================
 Here are the tasks in your list:
 1. [T][ ] read book
-2. [D][ ] return book (by: Sunday)
-3. [E][ ] project meeting (from: Mon 2pm to: 4pm)
+2. [D][ ] return book (by: Jun 08 2026)
+3. [E][ ] project meeting (from: Aug 06 2026 to: Aug 07 2026)
 =======================================================
 {{FAREWELL}}
 ```
@@ -548,7 +548,7 @@ deliberate design.
 
 ```text
 todo    read book
-deadline  return book  /by   Sunday
+deadline  return book  /by   08/06/2026
 list
 bye
 ```
@@ -564,13 +564,13 @@ Now you have 1 tasks in the list.
 =======================================================
 =======================================================
 Got it. I've added this task:
-  [D][ ] return book (by: Sunday)
+  [D][ ] return book (by: Jun 08 2026)
 Now you have 2 tasks in the list.
 =======================================================
 =======================================================
 Here are the tasks in your list:
 1. [T][ ]    read book
-2. [D][ ] return book (by: Sunday)
+2. [D][ ] return book (by: Jun 08 2026)
 =======================================================
 {{FAREWELL}}
 ```
@@ -1000,7 +1000,7 @@ the end time is not optional, and that nothing is added.
 **Input**
 
 ```text
-event project meeting /from Mon 2pm
+event project meeting /from 06/08/2026
 list
 bye
 ```
@@ -1053,8 +1053,8 @@ with their saved completion statuses from `data/test_auto.txt`.
 
 ```text
 T | 1 | cmVhZCBib29r
-D | 0 | cmV0dXJuIGJvb2s= | SnVuZSA2dGg=
-E | 1 | cHJvamVjdCBtZWV0aW5n | QXVnIDZ0aCAycG0= | QXVnIDZ0aCA0cG0=
+D | 0 | cmV0dXJuIGJvb2s= | SnVuIDA2IDIwMjY=
+E | 1 | cHJvamVjdCBtZWV0aW5n | QXVnIDA2IDIwMjY= | QXVnIDA3IDIwMjY=
 ```
 
 **Input**
@@ -1071,8 +1071,8 @@ bye
 =======================================================
 Here are the tasks in your list:
 1. [T][X] read book
-2. [D][ ] return book (by: June 6th)
-3. [E][X] project meeting (from: Aug 6th 2pm to: Aug 6th 4pm)
+2. [D][ ] return book (by: Jun 06 2026)
+3. [E][X] project meeting (from: Aug 06 2026 to: Aug 07 2026)
 =======================================================
 {{FAREWELL}}
 ```
@@ -1086,8 +1086,8 @@ resulting task list can be verified in `data/test_auto.txt` after the session.
 
 ```text
 todo read book
-deadline return book /by June 6th
-event project meeting /from Aug 6th 2pm /to Aug 6th 4pm
+deadline return book /by 06/06/2026
+event project meeting /from 06/08/2026 /to 07/08/2026
 mark 1
 unmark 1
 delete 2
@@ -1105,12 +1105,12 @@ Now you have 1 tasks in the list.
 =======================================================
 =======================================================
 Got it. I've added this task:
-  [D][ ] return book (by: June 6th)
+  [D][ ] return book (by: Jun 06 2026)
 Now you have 2 tasks in the list.
 =======================================================
 =======================================================
 Got it. I've added this task:
-  [E][ ] project meeting (from: Aug 6th 2pm to: Aug 6th 4pm)
+  [E][ ] project meeting (from: Aug 06 2026 to: Aug 07 2026)
 Now you have 3 tasks in the list.
 =======================================================
 =======================================================
@@ -1123,7 +1123,7 @@ Nice! I've marked this task as not done yet
 =======================================================
 =======================================================
 Roger! I've deleted this task:
-  [D][ ] return book (by: June 6th)
+  [D][ ] return book (by: Jun 06 2026)
 Now you have 2 tasks in the list.
 =======================================================
 {{FAREWELL}}
@@ -1140,8 +1140,8 @@ while valid durable-format records retain separators, Unicode, and status.
 T | 1 | cmVhZCB8IGJvb2sgKGJ5OiBsYXRlcik=
 not a task
 
-D | 0 | cmV0dXJuIGJvb2s= | SnVuZSA2dGg=
-E | 2 | 6aG555uuIG1lZXRpbmc= | QXVnIDZ0aCAycG0= | QXVnIDZ0aCA0cG0=
+D | 0 | cmV0dXJuIGJvb2s= | SnVuIDA2IDIwMjY=
+E | 2 | 6aG555uuIG1lZXRpbmc= | QXVnIDA2IDIwMjY= | QXVnIDA3IDIwMjY=
 Z | 0 | dW5rbm93bg==
 ```
 
@@ -1162,7 +1162,7 @@ Warning: 3 invalid data line(s) were skipped: line 2 is invalid and was skipped,
 =======================================================
 Here are the tasks in your list:
 1. [T][X] read | book (by: later)
-2. [D][ ] return book (by: June 6th)
+2. [D][ ] return book (by: Jun 06 2026)
 =======================================================
 {{FAREWELL}}
 ```
@@ -1191,6 +1191,58 @@ Sorry, I couldn't load your saved tasks. Starting with an empty task list.
 =======================================================
 =======================================================
 Sorry, I couldn't save your tasks. Your latest change was not applied.
+=======================================================
+=======================================================
+Here are the tasks in your list:
+=======================================================
+{{FAREWELL}}
+```
+
+### TC-32 Reject a deadline date in the wrong format
+
+**Aim:** Verify that deadline dates must use `dd/MM/yyyy`, and that a rejected
+deadline is not added to the task list.
+
+**Input**
+
+```text
+deadline return book /by 2026-06-06
+list
+bye
+```
+
+**Expected output**
+
+```text
+{{GREETING}}
+=======================================================
+Ohhh Noooo... '2026-06-06' is not a valid date! Use dd/MM/yyyy.
+=======================================================
+=======================================================
+Here are the tasks in your list:
+=======================================================
+{{FAREWELL}}
+```
+
+### TC-33 Reject an impossible event date
+
+**Aim:** Verify that strict date parsing rejects impossible calendar dates and
+does not add a partially parsed event.
+
+**Input**
+
+```text
+event project meeting /from 30/02/2026 /to 01/03/2026
+list
+bye
+```
+
+**Expected output**
+
+```text
+{{GREETING}}
+=======================================================
+Ohhh Noooo... '30/02/2026' is not a valid date! Use dd/MM/yyyy.
 =======================================================
 =======================================================
 Here are the tasks in your list:

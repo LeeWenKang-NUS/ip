@@ -1,8 +1,10 @@
-public class Event extends Task {
-    private String from;
-    private String to;
+import java.time.LocalDate;
 
-    public Event(String name, String from, String to) {
+public class Event extends Task {
+    private final LocalDate from;
+    private final LocalDate to;
+
+    public Event(String name, LocalDate from, LocalDate to) {
         super(name);
         this.from = from;
         this.to = to;
@@ -11,11 +13,12 @@ public class Event extends Task {
     @Override
     public String toDataString() {
         return String.format("E | %d | %s | %s | %s", isCompleted() ? 1 : 0,
-                encode(getName()), encode(from), encode(to));
+                encode(getName()), encode(DateUtil.format(from)), encode(DateUtil.format(to)));
     }
 
     @Override
     public String toString() {
-        return String.format("[E]%s (from: %s to: %s)", super.toString(), from, to);
+        return String.format("[E]%s (from: %s to: %s)", super.toString(),
+                DateUtil.format(from), DateUtil.format(to));
     }
 }
