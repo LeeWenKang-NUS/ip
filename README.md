@@ -1,25 +1,74 @@
-# Duke project template
+# Auto
 
-This is a project template for a greenfield Java project. It's named after the Java mascot _Duke_. Given below are instructions on how to use it.
+Auto is a command-line task manager written in Java. It supports todos,
+deadlines, events, persistent storage, and finding scheduled tasks by date.
 
-## Setting up in Intellij
+## Prerequisites
 
-Prerequisites: JDK 25, update Intellij to the most recent version.
+- JDK 25
+- Command Prompt on Windows for the quickstart command below
 
-1. Open Intellij (if you are not in the welcome screen, click `File` > `Close Project` to close the existing project first)
-1. Open the project into Intellij as follows:
-   1. Click `Open`.
-   1. Select the project directory, and click `OK`.
-   1. If there are any further prompts, accept the defaults.
-1. Configure the project to use **JDK 25** (not other versions) as explained in [here](https://www.jetbrains.com/help/idea/sdk.html#set-up-jdk).<br>
-   In the same dialog, set the **Project language level** field to the `SDK default` option.
-1. After that, locate the `src/main/java/Duke.java` file, right-click it, and choose `Run Duke.main()` (if the code editor is showing compile errors, try restarting the IDE). If the setup is correct, you should see something like the below as the output:
-   ```
-    ____        _        
-   |  _ \ _   _| | _____ 
-   | | | | | | | |/ / _ \
-   | |_| | |_| |   <  __/
-   |____/ \__,_|_|\_\___|
-   ```
+## Quickstart
 
-**Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
+From the project root, run:
+
+```cmd
+cd src/main/java
+javac -d out -sourcepath . auto\Auto.java && java -cp out auto.Auto
+```
+
+`javac` compiles the application and its dependencies into the `out` directory.
+The application is then started using its fully qualified main class,
+`auto.Auto`.
+
+## Commands
+
+```text
+todo DESCRIPTION
+deadline DESCRIPTION /by dd/MM/yyyy
+event DESCRIPTION /from dd/MM/yyyy /to dd/MM/yyyy
+list
+occur dd/MM/yyyy
+mark TASK_NUMBER
+unmark TASK_NUMBER
+delete TASK_NUMBER
+bye
+```
+
+For example:
+
+```text
+deadline submit report /by 22/08/2026
+event conference /from 22/08/2026 /to 24/08/2026
+occur 23/08/2026
+```
+
+Dates entered by the user use `dd/MM/yyyy`. Auto displays dates using
+`MMM dd yyyy`, such as `Aug 22 2026`. An event's `/to` date cannot be before its
+`/from` date.
+
+## Storage
+
+Auto loads and saves tasks automatically using `data/auto.txt`, relative to the
+directory from which the application is run. Stored text fields are Base64
+encoded so task descriptions containing separators can be recovered safely.
+
+## Source structure
+
+`src/main/java` remains the Java source root. Classes are organized under the
+base `auto` package:
+
+```text
+auto
+|-- Auto.java
+|-- command
+|-- exception
+|-- parser
+|-- storage
+|-- task
+|-- ui
+`-- util
+```
+
+When using IntelliJ IDEA, configure the project to use JDK 25 and mark
+`src/main/java` as the source root.
