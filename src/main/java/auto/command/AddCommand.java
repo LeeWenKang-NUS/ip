@@ -1,3 +1,10 @@
+package auto.command;
+
+import auto.storage.Storage;
+import auto.task.Task;
+import auto.task.TaskList;
+import auto.ui.Ui;
+
 /** Adds a parsed task and persists the updated list. */
 public class AddCommand extends Command {
     private final Task task;

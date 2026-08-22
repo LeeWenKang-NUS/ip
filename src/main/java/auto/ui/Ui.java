@@ -1,6 +1,11 @@
+package auto.ui;
+
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
-import java.time.LocalDate;
+
+import auto.task.Task;
+import auto.util.DateUtil;
 
 /** Handles all console input and output for Auto. */
 public class Ui {

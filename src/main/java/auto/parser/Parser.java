@@ -1,3 +1,21 @@
+package auto.parser;
+
+import java.time.LocalDate;
+
+import auto.command.AddCommand;
+import auto.command.Command;
+import auto.command.DeleteCommand;
+import auto.command.ExitCommand;
+import auto.command.ListCommand;
+import auto.command.MarkCommand;
+import auto.command.OccurCommand;
+import auto.command.UnmarkCommand;
+import auto.exception.AutoException;
+import auto.task.Deadline;
+import auto.task.Event;
+import auto.task.ToDo;
+import auto.util.DateUtil;
+
 /** Converts raw user input and command arguments into domain values. */
 public class Parser {
     /** Parses one input line into a fully configured executable command. */
@@ -58,8 +76,8 @@ public class Parser {
         if (fromAndTo.length < 2) {
             throw AutoException.eventNeedsFromAndTo();
         }
-        java.time.LocalDate from = parseDate(fromAndTo[0].trim());
-        java.time.LocalDate to = parseDate(fromAndTo[1].trim());
+        LocalDate from = parseDate(fromAndTo[0].trim());
+        LocalDate to = parseDate(fromAndTo[1].trim());
         if (to.isBefore(from)) {
             throw AutoException.eventEndsBeforeItStarts();
         }
@@ -70,7 +88,7 @@ public class Parser {
         return input.substring(keyword.length() + 1);
     }
 
-    private static java.time.LocalDate parseDate(String value) throws AutoException {
+    private static LocalDate parseDate(String value) throws AutoException {
         try {
             return DateUtil.parseInput(value);
         } catch (IllegalArgumentException e) {

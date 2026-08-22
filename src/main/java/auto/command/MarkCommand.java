@@ -1,3 +1,11 @@
+package auto.command;
+
+import auto.exception.AutoException;
+import auto.storage.Storage;
+import auto.task.Task;
+import auto.task.TaskList;
+import auto.ui.Ui;
+
 /** Marks a numbered task as complete and persists the change. */
 public class MarkCommand extends Command {
     private final int taskNumber;

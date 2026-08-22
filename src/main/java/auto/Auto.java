@@ -1,4 +1,13 @@
+package auto;
+
 import java.io.IOException;
+
+import auto.command.Command;
+import auto.exception.AutoException;
+import auto.parser.Parser;
+import auto.storage.Storage;
+import auto.task.TaskList;
+import auto.ui.Ui;
 
 public class Auto {
     private static final String DEFAULT_DATA_FILE = "data/auto.txt";

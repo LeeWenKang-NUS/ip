@@ -1,4 +1,11 @@
+package auto.command;
+
 import java.io.IOException;
+
+import auto.exception.AutoException;
+import auto.storage.Storage;
+import auto.task.TaskList;
+import auto.ui.Ui;
 
 /** Represents an executable user command. */
 public abstract class Command {

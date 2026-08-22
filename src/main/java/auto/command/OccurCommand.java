@@ -1,4 +1,10 @@
+package auto.command;
+
 import java.time.LocalDate;
+
+import auto.storage.Storage;
+import auto.task.TaskList;
+import auto.ui.Ui;
 
 /** Displays deadlines and events occurring on a requested date. */
 public class OccurCommand extends Command {

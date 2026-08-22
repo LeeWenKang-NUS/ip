@@ -1,3 +1,5 @@
+package auto.exception;
+
 public class AutoException extends Exception {
     private static final String PREFIX = "Ohhh Noooo... ";
 

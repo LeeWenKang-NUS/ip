@@ -1,4 +1,8 @@
+package auto.task;
+
 import java.time.LocalDate;
+
+import auto.util.DateUtil;
 
 public class Deadline extends Task {
     private final LocalDate by;

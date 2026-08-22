@@ -24,7 +24,7 @@ DEFAULT_PLAN = REPO_ROOT / "test" / "ui-test-plan.md"
 SOURCE_DIR = REPO_ROOT / "src" / "main" / "java"
 CLASSES_DIR = REPO_ROOT / "_temp" / "ui-test-classes"
 TRANSCRIPT_PATH = REPO_ROOT / "_temp" / "ui-test-session.txt"
-MAIN_CLASS = "Auto"
+MAIN_CLASS = "auto.Auto"
 RUN_TIMEOUT_SECONDS = 15
 DATA_FILE = REPO_ROOT / "data" / "test_auto.txt"
 

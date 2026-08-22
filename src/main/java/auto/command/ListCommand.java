@@ -1,3 +1,9 @@
+package auto.command;
+
+import auto.storage.Storage;
+import auto.task.TaskList;
+import auto.ui.Ui;
+
 /** Displays every task in the list. */
 public class ListCommand extends Command {
     @Override

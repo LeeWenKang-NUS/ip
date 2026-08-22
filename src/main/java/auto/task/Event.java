@@ -1,4 +1,8 @@
+package auto.task;
+
 import java.time.LocalDate;
+
+import auto.util.DateUtil;
 
 public class Event extends Task {
     private final LocalDate from;

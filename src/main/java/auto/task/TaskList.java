@@ -1,6 +1,10 @@
+package auto.task;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import auto.exception.AutoException;
 
 /** Owns the task collection and its user-facing, one-based operations. */
 public class TaskList {

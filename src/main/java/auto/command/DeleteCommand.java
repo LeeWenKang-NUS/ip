@@ -1,3 +1,11 @@
+package auto.command;
+
+import auto.exception.AutoException;
+import auto.storage.Storage;
+import auto.task.Task;
+import auto.task.TaskList;
+import auto.ui.Ui;
+
 /** Deletes a numbered task and persists the updated list. */
 public class DeleteCommand extends Command {
     private final int taskNumber;

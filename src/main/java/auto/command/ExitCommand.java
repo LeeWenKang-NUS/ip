@@ -1,3 +1,9 @@
+package auto.command;
+
+import auto.storage.Storage;
+import auto.task.TaskList;
+import auto.ui.Ui;
+
 /** Ends the current Auto session. */
 public class ExitCommand extends Command {
     @Override

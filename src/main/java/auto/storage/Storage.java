@@ -1,3 +1,5 @@
+package auto.storage;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.AtomicMoveNotSupportedException;
@@ -7,6 +9,12 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+
+import auto.task.Deadline;
+import auto.task.Event;
+import auto.task.Task;
+import auto.task.ToDo;
+import auto.util.DateUtil;
 
 /** Loads and saves the task list on the hard disk. */
 public class Storage {
