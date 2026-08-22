@@ -1,11 +1,10 @@
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class Auto {
     public static void main(String[] args) {
         Ui ui = new Ui();
         ui.showWelcome();
-        ArrayList<Task> taskList = loadTasks(ui);
+        TaskList taskList = loadTasks(ui);
 
         boolean isRunning = true;
         while (isRunning) {
@@ -20,12 +19,12 @@ public class Auto {
                         ui.showGoodbye();
                         isRunning = false;
                     }
-                    case LIST -> ui.showTaskList(taskList);
+                    case LIST -> ui.showTaskList(taskList.asList());
                     case MARK -> {
-                        int taskIndex = parseTaskIndex(argument, taskList.size());
-                        Task task = taskList.get(taskIndex);
+                        int taskNumber = parseTaskNumber(argument);
+                        Task task = taskList.get(taskNumber);
                         boolean wasCompleted = task.isCompleted();
-                        task.mark();
+                        taskList.mark(taskNumber);
                         if (!saveTasks(taskList, ui)) {
                             if (!wasCompleted) {
                                 task.unmark();
@@ -35,10 +34,10 @@ public class Auto {
                         ui.showTaskMarked(task);
                     }
                     case UNMARK -> {
-                        int taskIndex = parseTaskIndex(argument, taskList.size());
-                        Task task = taskList.get(taskIndex);
+                        int taskNumber = parseTaskNumber(argument);
+                        Task task = taskList.get(taskNumber);
                         boolean wasCompleted = task.isCompleted();
-                        task.unmark();
+                        taskList.unmark(taskNumber);
                         if (!saveTasks(taskList, ui)) {
                             if (wasCompleted) {
                                 task.mark();
@@ -48,10 +47,10 @@ public class Auto {
                         ui.showTaskUnmarked(task);
                     }
                     case DELETE -> {
-                        int taskIndex = parseTaskIndex(argument, taskList.size());
-                        Task task = taskList.remove(taskIndex);
+                        int taskNumber = parseTaskNumber(argument);
+                        Task task = taskList.delete(taskNumber);
                         if (!saveTasks(taskList, ui)) {
-                            taskList.add(taskIndex, task);
+                            taskList.restoreDeleted(taskNumber, task);
                             break;
                         }
                         ui.showTaskDeleted(task, taskList.size());
@@ -60,7 +59,7 @@ public class Auto {
                         Task newTask = new ToDo(argument);
                         taskList.add(newTask);
                         if (!saveTasks(taskList, ui)) {
-                            taskList.remove(taskList.size() - 1);
+                            taskList.removeLast();
                             break;
                         }
                         ui.showTaskAdded(newTask, taskList.size());
@@ -75,7 +74,7 @@ public class Auto {
                         Task newTask = new Deadline(taskName, by);
                         taskList.add(newTask);
                         if (!saveTasks(taskList, ui)) {
-                            taskList.remove(taskList.size() - 1);
+                            taskList.removeLast();
                             break;
                         }
                         ui.showTaskAdded(newTask, taskList.size());
@@ -95,7 +94,7 @@ public class Auto {
                         Task newTask = new Event(taskName, from, to);
                         taskList.add(newTask);
                         if (!saveTasks(taskList, ui)) {
-                            taskList.remove(taskList.size() - 1);
+                            taskList.removeLast();
                             break;
                         }
                         ui.showTaskAdded(newTask, taskList.size());
@@ -110,27 +109,26 @@ public class Auto {
     }
 
     /** Loads saved tasks, recovering cleanly when the file cannot be used. */
-    private static ArrayList<Task> loadTasks(Ui ui) {
-        ArrayList<Task> tasks = new ArrayList<>();
+    private static TaskList loadTasks(Ui ui) {
         try {
             Storage.LoadResult result = Storage.load();
-            tasks.addAll(result.tasks());
             if (!result.warnings().isEmpty()) {
                 ui.showStorageMessage(String.format(
                         "Warning: %d invalid data line(s) were skipped: %s.",
                         result.warnings().size(), String.join(", ", result.warnings())));
             }
+            return new TaskList(result.tasks());
         } catch (IOException | RuntimeException e) {
             ui.showStorageMessage(
                     "Sorry, I couldn't load your saved tasks. Starting with an empty task list.");
+            return new TaskList();
         }
-        return tasks;
     }
 
     /** Saves a change and reports failure without exposing a stack trace. */
-    private static boolean saveTasks(ArrayList<Task> tasks, Ui ui) {
+    private static boolean saveTasks(TaskList tasks, Ui ui) {
         try {
-            Storage.save(tasks);
+            Storage.save(tasks.asList());
             return true;
         } catch (IOException | RuntimeException e) {
             ui.showStorageMessage(
@@ -139,7 +137,7 @@ public class Auto {
         }
     }
 
-    private static int parseTaskIndex(String argument, int taskCount) throws AutoException {
+    private static int parseTaskNumber(String argument) throws AutoException {
         String trimmed = argument.trim();
         int taskNumber;
         try {
@@ -147,9 +145,6 @@ public class Auto {
         } catch (NumberFormatException e) {
             throw AutoException.notATaskNumber(trimmed);
         }
-        if (taskNumber < 1 || taskNumber > taskCount) {
-            throw AutoException.noSuchTask(taskNumber);
-        }
-        return taskNumber - 1;
+        return taskNumber;
     }
 }
