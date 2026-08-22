@@ -13,13 +13,14 @@ deadlines, events, persistent storage, and finding scheduled tasks by date.
 From the project root, run:
 
 ```cmd
-cd src/main/java
-javac -d out -sourcepath . auto\Auto.java && java -cp out auto.Auto
+gradlew.bat shadowJar
+java -jar build\libs\duke.jar
 ```
 
-`javac` compiles the application and its dependencies into the `out` directory.
-The application is then started using its fully qualified main class,
-`auto.Auto`.
+The first command builds an executable JAR containing the application and its
+dependencies. The second command launches Auto directly, without displaying
+Gradle's task-progress output while the application is running. Rebuild the JAR
+after changing the source code.
 
 ## Commands
 
