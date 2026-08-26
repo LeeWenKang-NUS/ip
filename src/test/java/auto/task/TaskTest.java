@@ -31,6 +31,15 @@ class TaskTest {
     }
 
     @Test
+    void matches_substringWithDifferentCase_returnsTrue() {
+        Task task = new Task("Read Book");
+
+        assertTrue(task.matches("book"));
+        assertTrue(task.matches("READ"));
+        assertFalse(task.matches("write"));
+    }
+
+    @Test
     void toString_incompleteAndCompletedTask_displaysExpectedStatus() {
         Task task = new Task("read book");
         assertEquals("[ ] read book", task.toString());

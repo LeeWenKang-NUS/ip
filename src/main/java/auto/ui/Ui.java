@@ -61,6 +61,19 @@ public class Ui {
         System.out.println(DIVIDER);
     }
 
+    /** Displays tasks whose descriptions contain the keyword. */
+    public void showMatchingTasks(List<Task> tasks, String keyword) {
+        System.out.println(DIVIDER);
+        System.out.println("Here are the matching tasks in your list:");
+        for (int i = 0; i < tasks.size(); i++) {
+            Task task = tasks.get(i);
+            if (task.matches(keyword)) {
+                System.out.println(String.format("%d. %s", i + 1, task));
+            }
+        }
+        System.out.println(DIVIDER);
+    }
+
     public void showTaskMarked(Task task) {
         showTask("Nice! I've marked this task as done", task);
     }
