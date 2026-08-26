@@ -6,6 +6,7 @@ import auto.command.AddCommand;
 import auto.command.Command;
 import auto.command.DeleteCommand;
 import auto.command.ExitCommand;
+import auto.command.FindCommand;
 import auto.command.ListCommand;
 import auto.command.MarkCommand;
 import auto.command.OccurCommand;
@@ -27,6 +28,8 @@ public final class Parser {
             return new ExitCommand();
         } else if (input.equals("list")) {
             return new ListCommand();
+        } else if (input.equals("find") || input.startsWith("find ")) {
+            return new FindCommand(parseFindKeyword(input.substring("find".length())));
         } else if (input.startsWith("occur ")) {
             return new OccurCommand(parseDate(argumentAfter(input, "occur").trim()));
         } else if (input.startsWith("mark ")) {
@@ -53,6 +56,15 @@ public final class Parser {
         } catch (NumberFormatException e) {
             throw AutoException.notATaskNumber(trimmed);
         }
+    }
+
+    /** Parses and validates a keyword used to search task descriptions. */
+    public static String parseFindKeyword(String argument) throws AutoException {
+        String keyword = argument.trim();
+        if (keyword.isEmpty()) {
+            throw AutoException.findNeedsKeyword();
+        }
+        return keyword;
     }
 
     /** Creates a todo while preserving its description exactly as entered. */

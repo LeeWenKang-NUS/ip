@@ -18,6 +18,8 @@ class AutoExceptionTest {
                         AutoException.noSuchTask(42)),
                 () -> assertMessage("Ohhh Noooo... 'abc' is not a task number!",
                         AutoException.notATaskNumber("abc")),
+                () -> assertMessage("Ohhh Noooo... a find command needs a keyword!",
+                        AutoException.findNeedsKeyword()),
                 () -> assertMessage("Ohhh Noooo... a deadline needs a /by date!",
                         AutoException.deadlineNeedsBy()),
                 () -> assertMessage("Ohhh Noooo... an event needs a /from and a /to time!",

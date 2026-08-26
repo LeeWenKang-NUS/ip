@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import auto.command.AddCommand;
 import auto.command.DeleteCommand;
 import auto.command.ExitCommand;
+import auto.command.FindCommand;
 import auto.command.ListCommand;
 import auto.command.MarkCommand;
 import auto.command.OccurCommand;
@@ -26,6 +27,7 @@ class ParserTest {
         assertAll(
                 () -> assertInstanceOf(ExitCommand.class, Parser.parse("bye")),
                 () -> assertInstanceOf(ListCommand.class, Parser.parse("list")),
+                () -> assertInstanceOf(FindCommand.class, Parser.parse("find book")),
                 () -> assertInstanceOf(OccurCommand.class, Parser.parse("occur 22/08/2026")),
                 () -> assertInstanceOf(MarkCommand.class, Parser.parse("mark 1")),
                 () -> assertInstanceOf(UnmarkCommand.class, Parser.parse("unmark 1")),
@@ -46,6 +48,22 @@ class ParserTest {
         assertUnknownCommand("deadline");
         assertUnknownCommand("event");
         assertUnknownCommand("occur");
+    }
+
+    @Test
+    void parseFindKeyword_validKeyword_trimsOuterWhitespace() throws Exception {
+        assertEquals("read book", Parser.parseFindKeyword("  read book  "));
+    }
+
+    @Test
+    void parse_findWithoutKeyword_throwsKeywordError() {
+        assertAll(
+                () -> assertExceptionMessage(
+                        "Ohhh Noooo... a find command needs a keyword!",
+                        () -> Parser.parse("find")),
+                () -> assertExceptionMessage(
+                        "Ohhh Noooo... a find command needs a keyword!",
+                        () -> Parser.parse("find   ")));
     }
 
     @Test

@@ -3,6 +3,7 @@ package auto.task;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.Base64;
+import java.util.Locale;
 
 /** Represents a task with a description and completion status. */
 public class Task {
@@ -35,10 +36,12 @@ public class Task {
     }
 
     /**
-     * Returns the task description for use by specialized task types.
-     *
-     * @return task description
+     * Returns whether this task's description contains the keyword, ignoring case.
      */
+    public boolean matches(String keyword) {
+        return name.toLowerCase(Locale.ROOT).contains(keyword.toLowerCase(Locale.ROOT));
+    }
+
     protected String getName() {
         return name;
     }

@@ -1380,3 +1380,95 @@ Here are the tasks in your list:
 =======================================================
 {{FAREWELL}}
 ```
+
+### TC-38 Find tasks by description
+
+**Aim:** Verify that `find <keyword>` performs a case-insensitive substring
+search, preserves list order and original task numbers, and excludes non-matches.
+
+**Input**
+
+```text
+todo read book
+deadline submit essay /by 08/06/2026
+event BOOK launch /from 09/06/2026 /to 10/06/2026
+find book
+bye
+```
+
+**Expected output**
+
+```text
+{{GREETING}}
+=======================================================
+Got it. I've added this task:
+  [T][ ] read book
+Now you have 1 tasks in the list.
+=======================================================
+=======================================================
+Got it. I've added this task:
+  [D][ ] submit essay (by: Jun 08 2026)
+Now you have 2 tasks in the list.
+=======================================================
+=======================================================
+Got it. I've added this task:
+  [E][ ] BOOK launch (from: Jun 09 2026 to: Jun 10 2026)
+Now you have 3 tasks in the list.
+=======================================================
+=======================================================
+Here are the matching tasks in your list:
+1. [T][ ] read book
+3. [E][ ] BOOK launch (from: Jun 09 2026 to: Jun 10 2026)
+=======================================================
+{{FAREWELL}}
+```
+
+### TC-39 Find no matching tasks
+
+**Aim:** Verify that `find` prints an empty result cleanly when no task
+description contains the keyword.
+
+**Input**
+
+```text
+todo read book
+find essay
+bye
+```
+
+**Expected output**
+
+```text
+{{GREETING}}
+=======================================================
+Got it. I've added this task:
+  [T][ ] read book
+Now you have 1 tasks in the list.
+=======================================================
+=======================================================
+Here are the matching tasks in your list:
+=======================================================
+{{FAREWELL}}
+```
+
+### TC-40 Reject find without a keyword
+
+**Aim:** Verify that `find` requires a non-blank keyword and that the program
+continues after reporting the error.
+
+**Input**
+
+```text
+find
+bye
+```
+
+**Expected output**
+
+```text
+{{GREETING}}
+=======================================================
+Ohhh Noooo... a find command needs a keyword!
+=======================================================
+{{FAREWELL}}
+```

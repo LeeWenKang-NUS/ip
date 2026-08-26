@@ -128,6 +128,33 @@ class UiTest {
     }
 
     @Test
+    void showMatchingTasks_mixedTasks_displaysMatchesWithOriginalNumbers() {
+        Ui ui = new Ui();
+        List<Task> tasks = List.of(
+                new ToDo("read book"),
+                new ToDo("write essay"),
+                new ToDo("return BOOK"));
+
+        ui.showMatchingTasks(tasks, "book");
+
+        assertOutput(
+                DIVIDER,
+                "Here are the matching tasks in your list:",
+                "1. [T][ ] read book",
+                "3. [T][ ] return BOOK",
+                DIVIDER);
+    }
+
+    @Test
+    void showMatchingTasks_noMatches_displaysHeaderWithoutEntries() {
+        Ui ui = new Ui();
+
+        ui.showMatchingTasks(List.of(new ToDo("read book")), "essay");
+
+        assertOutput(DIVIDER, "Here are the matching tasks in your list:", DIVIDER);
+    }
+
+    @Test
     void showTaskAdded_displaysTaskAndUpdatedCount() {
         Ui ui = new Ui();
 

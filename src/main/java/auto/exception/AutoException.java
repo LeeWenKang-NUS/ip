@@ -23,6 +23,11 @@ public class AutoException extends Exception {
         return new AutoException(String.format("'%s' is not a task number!", argument));
     }
 
+    /** Returns an error for a find command without a keyword. */
+    public static AutoException findNeedsKeyword() {
+        return new AutoException("a find command needs a keyword!");
+    }
+
     /** Returns an error for a deadline without its required {@code /by} value. */
     public static AutoException deadlineNeedsBy() {
         return new AutoException("a deadline needs a /by date!");
