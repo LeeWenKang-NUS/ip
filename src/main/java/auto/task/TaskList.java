@@ -10,14 +10,17 @@ import auto.exception.AutoException;
 public class TaskList {
     private final ArrayList<Task> tasks;
 
+    /** Creates an empty task list. */
     public TaskList() {
         tasks = new ArrayList<>();
     }
 
+    /** Creates a task list containing a defensive copy of the supplied tasks. */
     public TaskList(List<Task> initialTasks) {
         tasks = new ArrayList<>(initialTasks);
     }
 
+    /** Adds a task to the end of the list. */
     public void add(Task task) {
         tasks.add(task);
     }
@@ -32,18 +35,21 @@ public class TaskList {
         return tasks.remove(toIndex(taskNumber));
     }
 
+    /** Marks and returns the task identified by its one-based number. */
     public Task mark(int taskNumber) throws AutoException {
         Task task = get(taskNumber);
         task.mark();
         return task;
     }
 
+    /** Unmarks and returns the task identified by its one-based number. */
     public Task unmark(int taskNumber) throws AutoException {
         Task task = get(taskNumber);
         task.unmark();
         return task;
     }
 
+    /** Returns the number of tasks in the list. */
     public int size() {
         return tasks.size();
     }

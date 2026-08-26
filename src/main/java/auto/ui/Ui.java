@@ -12,6 +12,7 @@ public class Ui {
     private static final String DIVIDER = "=======================================================";
     private final Scanner scanner;
 
+    /** Creates a UI that reads commands from standard input. */
     public Ui() {
         scanner = new Scanner(System.in);
     }
@@ -35,10 +36,12 @@ public class Ui {
         return scanner.nextLine();
     }
 
+    /** Displays the farewell message shown when the user exits Auto. */
     public void showGoodbye() {
         showMessage("Bye. Hope to see you again soon!");
     }
 
+    /** Displays all tasks in list order using one-based numbering. */
     public void showTaskList(List<Task> tasks) {
         System.out.println(DIVIDER);
         System.out.println("Here are the tasks in your list:");
@@ -61,14 +64,17 @@ public class Ui {
         System.out.println(DIVIDER);
     }
 
+    /** Displays confirmation that the specified task was marked as complete. */
     public void showTaskMarked(Task task) {
         showTask("Nice! I've marked this task as done", task);
     }
 
+    /** Displays confirmation that the specified task was marked as incomplete. */
     public void showTaskUnmarked(Task task) {
         showTask("Nice! I've marked this task as not done yet", task);
     }
 
+    /** Displays the deleted task and the number of tasks that remain. */
     public void showTaskDeleted(Task task, int taskCount) {
         System.out.println(DIVIDER);
         System.out.println("Roger! I've deleted this task:");
@@ -77,6 +83,7 @@ public class Ui {
         System.out.println(DIVIDER);
     }
 
+    /** Displays the added task and the updated number of tasks. */
     public void showTaskAdded(Task task, int taskCount) {
         System.out.println(DIVIDER);
         System.out.println("Got it. I've added this task:");
@@ -85,10 +92,12 @@ public class Ui {
         System.out.println(DIVIDER);
     }
 
+    /** Displays a user-facing command or validation error. */
     public void showError(String message) {
         showMessage(message);
     }
 
+    /** Displays a user-facing storage warning or error. */
     public void showStorageMessage(String message) {
         showMessage(message);
     }

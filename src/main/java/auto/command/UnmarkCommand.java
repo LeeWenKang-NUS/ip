@@ -10,6 +10,7 @@ import auto.ui.Ui;
 public class UnmarkCommand extends Command {
     private final int taskNumber;
 
+    /** Creates a command that unmarks the task with the specified one-based number. */
     public UnmarkCommand(int taskNumber) {
         this.taskNumber = taskNumber;
     }

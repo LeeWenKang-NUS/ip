@@ -17,7 +17,10 @@ import auto.task.ToDo;
 import auto.util.DateUtil;
 
 /** Converts raw user input and command arguments into domain values. */
-public class Parser {
+public final class Parser {
+    private Parser() {
+    }
+
     /** Parses one input line into a fully configured executable command. */
     public static Command parse(String input) throws AutoException {
         if (input.equals("bye")) {

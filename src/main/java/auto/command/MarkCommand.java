@@ -10,6 +10,7 @@ import auto.ui.Ui;
 public class MarkCommand extends Command {
     private final int taskNumber;
 
+    /** Creates a command that marks the task with the specified one-based number. */
     public MarkCommand(int taskNumber) {
         this.taskNumber = taskNumber;
     }

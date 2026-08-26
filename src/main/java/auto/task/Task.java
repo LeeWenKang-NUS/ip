@@ -7,22 +7,26 @@ import java.util.Base64;
 /** Represents a task with a description and completion status. */
 public class Task {
     private String name;
-    private boolean completed = false;
+    private boolean isCompleted = false;
 
+    /** Creates an incomplete task with the specified description. */
     public Task(String name) {
         this.name = name;
     }
 
+    /** Marks this task as complete. */
     public void mark() {
-        this.completed = true;
+        this.isCompleted = true;
     }
 
+    /** Marks this task as incomplete. */
     public void unmark() {
-        this.completed = false;
+        this.isCompleted = false;
     }
 
+    /** Returns whether this task has been completed. */
     public boolean isCompleted() {
-        return completed;
+        return isCompleted;
     }
 
     /** Returns whether this task is scheduled on the given date. */
@@ -41,13 +45,14 @@ public class Task {
 
     /** Returns this task in the durable storage format. */
     public String toDataString() {
-        return String.format("T | %d | %s", completed ? 1 : 0, encode(name));
+        return String.format("T | %d | %s", isCompleted ? 1 : 0, encode(name));
     }
 
+    /** Returns the task description prefixed by its completion-status marker. */
     @Override
     public String toString() {
         return String.format("[%s] %s",
-                this.completed ? "X" : " ",
+                this.isCompleted ? "X" : " ",
                 this.name);
     }
 }

@@ -10,6 +10,7 @@ import auto.ui.Ui;
 public class DeleteCommand extends Command {
     private final int taskNumber;
 
+    /** Creates a command that deletes the task with the specified one-based number. */
     public DeleteCommand(int taskNumber) {
         this.taskNumber = taskNumber;
     }
