@@ -20,11 +20,7 @@ import auto.util.DateUtil;
 public class Storage {
     private final String filePath;
 
-    /**
-     * Creates a storage manager that reads and writes the specified data file.
-     *
-     * @param filePath path of the task data file
-     */
+    /** Creates a storage manager that reads and writes the specified data file. */
     public Storage(String filePath) {
         this.filePath = filePath;
     }
@@ -36,8 +32,8 @@ public class Storage {
     /**
      * Atomically replaces the data file with durable task records.
      *
-     * @param tasks current tasks to save
-     * @throws IOException if the data directory or file cannot be written
+     * @param tasks Current tasks to save.
+     * @throws IOException If the data directory or file cannot be written.
      */
     public void save(List<Task> tasks) throws IOException {
         Path dataFile = getDataFile().toAbsolutePath();
@@ -72,8 +68,8 @@ public class Storage {
     /**
      * Loads valid tasks and reports malformed lines without losing good data.
      *
-     * @return recovered tasks and warnings for skipped lines
-     * @throws IOException if the data file cannot be read
+     * @return Recovered tasks and warnings for skipped lines.
+     * @throws IOException If the data file cannot be read.
      */
     public LoadResult load() throws IOException {
         Path dataFile = getDataFile();
@@ -105,14 +101,7 @@ public class Storage {
         return Path.of(filePath);
     }
 
-    /**
-     * Parses and validates one durable task record, including its type, fields,
-     * dates, and completion status.
-     *
-     * @param line durable task record to parse
-     * @return reconstructed task
-     * @throws IllegalArgumentException if the record is malformed
-     */
+    /** Parses and validates one durable task record. */
     private static Task parseDataTask(String line) {
         String[] fields = line.split(" \\| ", -1);
         if (fields.length < 3 || !(fields[1].equals("0") || fields[1].equals("1"))) {
@@ -121,22 +110,22 @@ public class Storage {
 
         Task task;
         switch (fields[0]) {
-        case "T" -> {
-            requireFieldCount(fields, 3);
-            task = new ToDo(decodeRequired(fields[2]));
-        }
-        case "D" -> {
-            requireFieldCount(fields, 4);
-            task = new Deadline(decodeRequired(fields[2]),
-                    DateUtil.parseStored(decodeRequired(fields[3])));
-        }
-        case "E" -> {
-            requireFieldCount(fields, 5);
-            task = new Event(decodeRequired(fields[2]),
-                    DateUtil.parseStored(decodeRequired(fields[3])),
-                    DateUtil.parseStored(decodeRequired(fields[4])));
-        }
-        default -> throw new IllegalArgumentException("unknown task type");
+            case "T" -> {
+                requireFieldCount(fields, 3);
+                task = new ToDo(decodeRequired(fields[2]));
+            }
+            case "D" -> {
+                requireFieldCount(fields, 4);
+                task = new Deadline(decodeRequired(fields[2]),
+                        DateUtil.parseStored(decodeRequired(fields[3])));
+            }
+            case "E" -> {
+                requireFieldCount(fields, 5);
+                task = new Event(decodeRequired(fields[2]),
+                        DateUtil.parseStored(decodeRequired(fields[3])),
+                        DateUtil.parseStored(decodeRequired(fields[4])));
+            }
+            default -> throw new IllegalArgumentException("unknown task type");
         }
         restoreStatus(task, fields[1]);
         return task;
@@ -154,7 +143,7 @@ public class Storage {
      * @param encoded Base64-encoded field
      * @return decoded nonblank text
      * @throws IllegalArgumentException if the field is not valid Base64 or
-     *         decodes to blank text
+     *                                  decodes to blank text
      */
     private static String decodeRequired(String encoded) {
         return requireText(new String(

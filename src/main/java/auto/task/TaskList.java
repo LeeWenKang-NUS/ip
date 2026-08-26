@@ -15,20 +15,12 @@ public class TaskList {
         tasks = new ArrayList<>();
     }
 
-    /**
-     * Creates a task list containing a defensive copy of the supplied tasks.
-     *
-     * @param initialTasks tasks with which to initialize the list
-     */
+    /** Creates a task list containing a defensive copy of the supplied tasks. */
     public TaskList(List<Task> initialTasks) {
         tasks = new ArrayList<>(initialTasks);
     }
 
-    /**
-     * Appends a task to the end of the list.
-     *
-     * @param task task to add
-     */
+    /** Adds a task to the end of the list. */
     public void add(Task task) {
         tasks.add(task);
     }
@@ -43,37 +35,21 @@ public class TaskList {
         return tasks.remove(toIndex(taskNumber));
     }
 
-    /**
-     * Marks the task identified by its one-based number as complete.
-     *
-     * @param taskNumber one-based task number
-     * @return task whose completion state was updated
-     * @throws AutoException if the task number is outside the list
-     */
+    /** Marks and returns the task identified by its one-based number. */
     public Task mark(int taskNumber) throws AutoException {
         Task task = get(taskNumber);
         task.mark();
         return task;
     }
 
-    /**
-     * Marks the task identified by its one-based number as incomplete.
-     *
-     * @param taskNumber one-based task number
-     * @return task whose completion state was updated
-     * @throws AutoException if the task number is outside the list
-     */
+    /** Unmarks and returns the task identified by its one-based number. */
     public Task unmark(int taskNumber) throws AutoException {
         Task task = get(taskNumber);
         task.unmark();
         return task;
     }
 
-    /**
-     * Returns the number of tasks in the list.
-     *
-     * @return current task count
-     */
+    /** Returns the number of tasks in the list. */
     public int size() {
         return tasks.size();
     }

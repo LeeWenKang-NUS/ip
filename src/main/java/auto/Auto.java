@@ -9,9 +9,7 @@ import auto.storage.Storage;
 import auto.task.TaskList;
 import auto.ui.Ui;
 
-/**
- * Coordinates Auto's storage, command-line UI, task list, and command execution loop.
- */
+/** Coordinates Auto's storage, UI, task list, and command execution loop. */
 public class Auto {
     private static final String DEFAULT_DATA_FILE = "data/auto.txt";
     private final Storage storage;
@@ -21,7 +19,7 @@ public class Auto {
     /**
      * Creates an Auto application that persists tasks at the specified file path.
      *
-     * @param filePath path of the file used to load and save tasks
+     * @param filePath Path of the file used to load and save tasks.
      */
     public Auto(String filePath) {
         storage = new Storage(filePath);
@@ -30,9 +28,10 @@ public class Auto {
     }
 
     /**
-     * Launches Auto using the configured data-file property or the default data file.
+     * Launches Auto using the configured data-file property or the default data
+     * file.
      *
-     * @param args command-line arguments, which are currently unused
+     * @param args Command-line arguments, which are currently unused.
      */
     public static void main(String[] args) {
         String filePath = System.getProperty("auto.data.file", DEFAULT_DATA_FILE);

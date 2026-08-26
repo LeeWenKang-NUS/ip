@@ -12,8 +12,6 @@ public class MarkCommand extends Command {
 
     /**
      * Creates a command that marks the task with the specified one-based number.
-     *
-     * @param taskNumber one-based number of the task to mark
      */
     public MarkCommand(int taskNumber) {
         this.taskNumber = taskNumber;
