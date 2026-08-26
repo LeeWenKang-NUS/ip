@@ -23,6 +23,13 @@ Unless the user says otherwise, assume that you are assisting a student working 
 
 # Project-specific requirements
 
+## Java coding standard
+
+For every Java creation, edit, formatting pass, or code review in this project,
+invoke and follow the project-specific `seedu-java-coding-standard` skill at
+`.claude/skills/seedu-java-coding-standard/SKILL.md`. Treat its SE-EDU basic +
+intermediate rules as mandatory for all Java code in this repository.
+
 ## Java version:
 
 Ensure that Java 25 is used when running the application or build tasks. On macOS, use `sdk use java 25.0.3.fx-zulu` to switch to Java 25 if needed.
@@ -47,6 +54,12 @@ Skip both steps only for changes that cannot affect the console UI (for example
 comments or Javadoc alone), and say so when skipping.
 
 ## Git
+
+For every commit-message proposal, commit review, commit creation, or branch-name
+proposal or creation in this project, invoke and follow the project-specific
+`seedu-git-standard` skill at
+`.claude/skills/seedu-git-standard/SKILL.md`. Treat its SE-EDU Git conventions as
+mandatory for all commits and branches in this repository.
 
 Use lightweight tags unless the user requests an annotated tag.
 When proposing or creating a commit message, include enough detail to explain the rationale for the change.
