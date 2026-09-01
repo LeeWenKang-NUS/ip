@@ -19,16 +19,15 @@ public class Ui {
 
     /** Displays the application banner and greeting. */
     public void showWelcome() {
-        String banner = "    _         _        \n"
-                + "   / \\  _   _| |_ ___  \n"
-                + "  / _ \\| | | | __/ _ \\ \n"
-                + " / ___ \\ |_| | || (_) |\n"
-                + "/_/   \\_\\__,_|\\__\\___/ \n\n";
-        System.out.println(DIVIDER + "\n"
-                + banner
-                + "Hello! I'm Auto, your personal assistant.\n"
-                + "What can I do for you?\n"
-                + DIVIDER);
+        showMessage(
+                "    _         _        ",
+                "   / \\  _   _| |_ ___  ",
+                "  / _ \\| | | | __/ _ \\ ",
+                " / ___ \\ |_| | || (_) |",
+                "/_/   \\_\\__,_|\\__\\___/ ",
+                "",
+                "Hello! I'm Auto, your personal assistant.",
+                "What can I do for you?");
     }
 
     /** Reads the user's next command. */
@@ -89,20 +88,18 @@ public class Ui {
 
     /** Displays the deleted task and the number of tasks that remain. */
     public void showTaskDeleted(Task task, int taskCount) {
-        System.out.println(DIVIDER);
-        System.out.println("Roger! I've deleted this task:");
-        System.out.println("  " + task);
-        System.out.println(String.format("Now you have %d tasks in the list.", taskCount));
-        System.out.println(DIVIDER);
+        showMessage(
+                "Roger! I've deleted this task:",
+                "  " + task,
+                String.format("Now you have %d tasks in the list.", taskCount));
     }
 
     /** Displays the added task and the updated number of tasks. */
     public void showTaskAdded(Task task, int taskCount) {
-        System.out.println(DIVIDER);
-        System.out.println("Got it. I've added this task:");
-        System.out.println("  " + task);
-        System.out.println(String.format("Now you have %d tasks in the list.", taskCount));
-        System.out.println(DIVIDER);
+        showMessage(
+                "Got it. I've added this task:",
+                "  " + task,
+                String.format("Now you have %d tasks in the list.", taskCount));
     }
 
     /** Displays a user-facing command or validation error. */
@@ -121,15 +118,14 @@ public class Ui {
     }
 
     private void showTask(String message, Task task) {
-        System.out.println(DIVIDER);
-        System.out.println(message);
-        System.out.println("  " + task);
-        System.out.println(DIVIDER);
+        showMessage(message, "  " + task);
     }
 
-    private void showMessage(String message) {
+    private void showMessage(String... lines) {
         System.out.println(DIVIDER);
-        System.out.println(message);
+        for (String line : lines) {
+            System.out.println(line);
+        }
         System.out.println(DIVIDER);
     }
 }
