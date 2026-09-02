@@ -3,6 +3,7 @@ package auto.ui;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
+import java.util.function.Consumer;
 
 import auto.task.Task;
 import auto.util.DateUtil;
@@ -11,10 +12,22 @@ import auto.util.DateUtil;
 public class Ui {
     private static final String DIVIDER = "=======================================================";
     private final Scanner scanner;
+    private final Consumer<String> output;
 
     /** Creates a UI that reads commands from standard input. */
     public Ui() {
         scanner = new Scanner(System.in);
+        output = System.out::println;
+    }
+
+    /**
+     * Creates an output-only UI that sends each rendered message to the given sink.
+     *
+     * @param output Destination for rendered messages.
+     */
+    public Ui(Consumer<String> output) {
+        scanner = null;
+        this.output = output;
     }
 
     /** Displays the application banner and greeting. */
@@ -32,6 +45,7 @@ public class Ui {
 
     /** Reads the user's next command. */
     public String readCommand() {
+        assert scanner != null : "An output-only UI cannot read commands";
         return scanner.nextLine();
     }
 
@@ -42,38 +56,39 @@ public class Ui {
 
     /** Displays all tasks in list order using one-based numbering. */
     public void showTaskList(List<Task> tasks) {
-        System.out.println(DIVIDER);
-        System.out.println("Here are the tasks in your list:");
+        StringBuilder message = new StringBuilder("Here are the tasks in your list:");
         for (int i = 0; i < tasks.size(); i++) {
-            System.out.println(String.format("%d. %s", i + 1, tasks.get(i)));
+            message.append(System.lineSeparator())
+                    .append(String.format("%d. %s", i + 1, tasks.get(i)));
         }
-        System.out.println(DIVIDER);
+        showMessage(message.toString());
     }
 
     /** Displays scheduled tasks that occur on the requested date. */
     public void showTasksOccurringOn(List<Task> tasks, LocalDate date) {
-        System.out.println(DIVIDER);
-        System.out.println("Here are the tasks occurring on " + DateUtil.format(date) + ":");
+        StringBuilder message = new StringBuilder(
+                "Here are the tasks occurring on " + DateUtil.format(date) + ":");
         for (int i = 0; i < tasks.size(); i++) {
             Task task = tasks.get(i);
             if (task.occursOn(date)) {
-                System.out.println(String.format("%d. %s", i + 1, task));
+                message.append(System.lineSeparator())
+                        .append(String.format("%d. %s", i + 1, task));
             }
         }
-        System.out.println(DIVIDER);
+        showMessage(message.toString());
     }
 
     /** Displays tasks whose descriptions contain the keyword. */
     public void showMatchingTasks(List<Task> tasks, String keyword) {
-        System.out.println(DIVIDER);
-        System.out.println("Here are the matching tasks in your list:");
+        StringBuilder message = new StringBuilder("Here are the matching tasks in your list:");
         for (int i = 0; i < tasks.size(); i++) {
             Task task = tasks.get(i);
             if (task.matches(keyword)) {
-                System.out.println(String.format("%d. %s", i + 1, task));
+                message.append(System.lineSeparator())
+                        .append(String.format("%d. %s", i + 1, task));
             }
         }
-        System.out.println(DIVIDER);
+        showMessage(message.toString());
     }
 
     /** Displays confirmation that the specified task was marked as complete. */
@@ -114,7 +129,9 @@ public class Ui {
 
     /** Releases the console input resource when the application exits. */
     public void close() {
-        scanner.close();
+        if (scanner != null) {
+            scanner.close();
+        }
     }
 
     private void showTask(String message, Task task) {
@@ -122,10 +139,11 @@ public class Ui {
     }
 
     private void showMessage(String... lines) {
-        System.out.println(DIVIDER);
+        StringBuilder message = new StringBuilder(DIVIDER);
         for (String line : lines) {
-            System.out.println(line);
+            message.append(System.lineSeparator()).append(line);
         }
-        System.out.println(DIVIDER);
+        message.append(System.lineSeparator()).append(DIVIDER);
+        output.accept(message.toString());
     }
 }

@@ -81,6 +81,30 @@ class AutoTest {
     }
 
     @Test
+    void getResponse_multipleCommands_preservesStateAndReturnsCommandOutput() throws Exception {
+        Path dataFile = tempDirectory.resolve("tasks.txt");
+        Auto auto = new Auto(dataFile.toString());
+
+        String addResponse = auto.getResponse("todo read book");
+        String listResponse = auto.getResponse("list");
+
+        assertTrue(addResponse.contains("Got it. I've added this task:"));
+        assertTrue(listResponse.contains("1. [T][ ] read book"));
+        assertEquals(List.of("T | 0 | cmVhZCBib29r"),
+                Files.readAllLines(dataFile, StandardCharsets.UTF_8));
+    }
+
+    @Test
+    void getResponse_invalidCommand_returnsErrorWithoutWritingToConsole() {
+        Auto auto = new Auto(tempDirectory.resolve("tasks.txt").toString());
+
+        String response = auto.getResponse("borrow book");
+
+        assertTrue(response.contains("Ohhh Noooo... I don't understand you!"));
+        assertEquals("", outputText());
+    }
+
+    @Test
     void run_partiallyCorruptedData_warnsAndRetainsValidTasks() throws Exception {
         Path dataFile = tempDirectory.resolve("tasks.txt");
         Files.writeString(dataFile, String.join("\n",
