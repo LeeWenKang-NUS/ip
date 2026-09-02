@@ -79,5 +79,6 @@ visible.
 
 1. Send `bye`.
 
-Expected: Auto displays `Bye. Hope to see you again soon!`. Closing or disabling
-the window is outside the current MVP scope.
+Expected: Auto processes the farewell and immediately closes the application
+window. The Gradle `run` task also finishes rather than remaining active in the
+IDE. The farewell bubble may close before it is visibly rendered.

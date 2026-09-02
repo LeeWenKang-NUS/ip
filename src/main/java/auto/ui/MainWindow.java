@@ -1,6 +1,7 @@
 package auto.ui;
 
 import auto.Auto;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -13,6 +14,7 @@ import javafx.scene.layout.VBox;
  * Handles user interaction with the main chat window.
  */
 public class MainWindow {
+    private static final String EXIT_COMMAND = "bye";
     private static final String ASCII_ART = String.join(System.lineSeparator(),
             "    _         _        ",
             "   / \\  _   _| |_ ___  ",
@@ -78,6 +80,17 @@ public class MainWindow {
                 createMessageBox("You", input, true),
                 createMessageBox("Auto", response, false));
         userInput.clear();
+
+        if (input.equals(EXIT_COMMAND)) {
+            closeAfterFarewell();
+        }
+    }
+
+    /** Closes the active window and terminates the application process. */
+    private void closeAfterFarewell() {
+        userInput.getScene().getWindow().hide();
+        Platform.exit();
+        System.exit(0);
     }
 
     /**
