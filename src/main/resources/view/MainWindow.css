@@ -1,0 +1,18 @@
+.root {
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 14px;
+}
+
+.user-message {
+    -fx-alignment: center-right;
+    -fx-background-color: #dbeafe;
+    -fx-background-radius: 8px;
+    -fx-padding: 8px;
+}
+
+.auto-message {
+    -fx-alignment: center-left;
+    -fx-background-color: #e5e7eb;
+    -fx-background-radius: 8px;
+    -fx-padding: 8px;
+}
