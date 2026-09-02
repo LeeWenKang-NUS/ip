@@ -3,16 +3,34 @@
     -fx-font-size: 14px;
 }
 
-.user-message {
-    -fx-alignment: center-right;
-    -fx-background-color: #dbeafe;
-    -fx-background-radius: 8px;
-    -fx-padding: 8px;
+.message-bubble {
+    -fx-background-radius: 12px;
+    -fx-padding: 8px 12px 10px 12px;
 }
 
-.auto-message {
-    -fx-alignment: center-left;
+.user-bubble {
+    -fx-background-color: #dbeafe;
+}
+
+.auto-bubble {
     -fx-background-color: #e5e7eb;
-    -fx-background-radius: 8px;
-    -fx-padding: 8px;
+}
+
+.message-sender {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2563eb;
+}
+
+.auto-bubble .message-sender {
+    -fx-text-fill: #4b5563;
+}
+
+.message-content {
+    -fx-text-fill: #111827;
+}
+
+.ascii-art {
+    -fx-font-family: "Monospaced";
+    -fx-font-size: 13px;
 }

@@ -2,22 +2,24 @@ package auto.ui;
 
 import auto.Auto;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 /**
  * Handles user interaction with the main chat window.
  */
 public class MainWindow {
-    private static final String WELCOME_MESSAGE = String.join(System.lineSeparator(),
+    private static final String ASCII_ART = String.join(System.lineSeparator(),
             "    _         _        ",
             "   / \\  _   _| |_ ___  ",
             "  / _ \\| | | | __/ _ \\ ",
             " / ___ \\ |_| | || (_) |",
-            "/_/   \\_\\__,_|\\__\\___/ ",
-            "",
+            "/_/   \\_\\__,_|\\__\\___/ ");
+    private static final String WELCOME_MESSAGE = String.join(System.lineSeparator(),
             "Hello! I'm Auto, your personal assistant.",
             "What can I do for you?");
 
@@ -48,13 +50,17 @@ public class MainWindow {
      */
     public void setAuto(Auto auto) {
         this.auto = auto;
-        String welcomeMessage = WELCOME_MESSAGE;
+        String greeting = WELCOME_MESSAGE;
         String startupMessage = auto.getStartupMessage();
         if (!startupMessage.isEmpty()) {
-            welcomeMessage += System.lineSeparator() + System.lineSeparator() + startupMessage;
+            greeting += System.lineSeparator() + System.lineSeparator() + startupMessage;
         }
-        dialogContainer.getChildren().add(
-                createMessageLabel("Auto: " + welcomeMessage, "auto-message"));
+
+        Label artLabel = createContentLabel(ASCII_ART);
+        artLabel.getStyleClass().add("ascii-art");
+        Label greetingLabel = createContentLabel(greeting);
+        dialogContainer.getChildren().add(createMessageRow(
+                "Auto", false, artLabel, greetingLabel));
     }
 
     /**
@@ -69,23 +75,44 @@ public class MainWindow {
 
         String response = auto.getResponse(input);
         dialogContainer.getChildren().addAll(
-                createMessageLabel("You: " + input, "user-message"),
-                createMessageLabel("Auto: " + response, "auto-message"));
+                createMessageBox("You", input, true),
+                createMessageBox("Auto", response, false));
         userInput.clear();
     }
 
     /**
-     * Creates a wrapping chat-message label with the supplied style class.
+     * Creates an aligned message bubble with separate sender and content rows.
      *
-     * @param message Text displayed in the chat history.
-     * @param styleClass CSS class used to identify the message speaker.
-     * @return The configured message label.
+     * @param sender Name displayed above the message.
+     * @param message Message displayed in the bubble.
+     * @param isUser Whether the bubble represents a user message.
+     * @return Row containing the configured message bubble.
      */
-    private Label createMessageLabel(String message, String styleClass) {
-        Label label = new Label(message);
-        label.setWrapText(true);
-        label.setMaxWidth(Double.MAX_VALUE);
-        label.getStyleClass().add(styleClass);
-        return label;
+    private HBox createMessageBox(String sender, String message, boolean isUser) {
+        return createMessageRow(sender, isUser, createContentLabel(message));
+    }
+
+    /** Creates a wrapping label for message content. */
+    private Label createContentLabel(String message) {
+        Label messageLabel = new Label(message);
+        messageLabel.setWrapText(true);
+        messageLabel.getStyleClass().add("message-content");
+        return messageLabel;
+    }
+
+    /** Creates an aligned bubble row containing the supplied content labels. */
+    private HBox createMessageRow(String sender, boolean isUser, Label... contentLabels) {
+        Label senderLabel = new Label(sender);
+        senderLabel.getStyleClass().add("message-sender");
+
+        VBox bubble = new VBox(6);
+        bubble.getChildren().add(senderLabel);
+        bubble.getChildren().addAll(contentLabels);
+        bubble.setMaxWidth(320);
+        bubble.getStyleClass().addAll("message-bubble", isUser ? "user-bubble" : "auto-bubble");
+
+        HBox row = new HBox(bubble);
+        row.setAlignment(isUser ? Pos.CENTER_RIGHT : Pos.CENTER_LEFT);
+        return row;
     }
 }

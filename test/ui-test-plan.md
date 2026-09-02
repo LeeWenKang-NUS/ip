@@ -15,6 +15,7 @@ Run the application with:
 
 Expected: The first Auto chat bubble immediately shows the ASCII Auto banner,
 `Hello! I'm Auto, your personal assistant.`, and `What can I do for you?`.
+The banner uses a monospace font, so its characters remain aligned as drawn.
 Saved tasks have already been loaded before this message appears. If the data
 file could not be loaded fully, the same welcome bubble also contains the load
 warning below the greeting.
@@ -25,7 +26,9 @@ warning below the greeting.
 2. Press Enter.
 
 Expected: The chat shows the user command followed by Auto's confirmation that
-the todo was added. The input field is cleared.
+the todo was added. Each bubble shows its sender on a separately styled line
+above the message. The user bubble is aligned right and Auto's bubble is aligned
+left. The input field is cleared.
 
 ## TC-02 Send with the button
 
