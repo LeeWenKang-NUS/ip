@@ -11,6 +11,16 @@ import javafx.scene.layout.VBox;
  * Handles user interaction with the main chat window.
  */
 public class MainWindow {
+    private static final String WELCOME_MESSAGE = String.join(System.lineSeparator(),
+            "    _         _        ",
+            "   / \\  _   _| |_ ___  ",
+            "  / _ \\| | | | __/ _ \\ ",
+            " / ___ \\ |_| | || (_) |",
+            "/_/   \\_\\__,_|\\__\\___/ ",
+            "",
+            "Hello! I'm Auto, your personal assistant.",
+            "What can I do for you?");
+
     private Auto auto;
 
     @FXML
@@ -38,6 +48,13 @@ public class MainWindow {
      */
     public void setAuto(Auto auto) {
         this.auto = auto;
+        String welcomeMessage = WELCOME_MESSAGE;
+        String startupMessage = auto.getStartupMessage();
+        if (!startupMessage.isEmpty()) {
+            welcomeMessage += System.lineSeparator() + System.lineSeparator() + startupMessage;
+        }
+        dialogContainer.getChildren().add(
+                createMessageLabel("Auto: " + welcomeMessage, "auto-message"));
     }
 
     /**

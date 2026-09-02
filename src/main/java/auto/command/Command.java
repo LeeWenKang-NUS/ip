@@ -1,11 +1,13 @@
 package auto.command;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.function.Predicate;
 
 import auto.exception.AutoException;
 import auto.storage.Storage;
+import auto.task.Task;
 import auto.task.TaskList;
-import auto.ui.Ui;
 
 /** Represents an executable user command. */
 public abstract class Command {
@@ -13,27 +15,39 @@ public abstract class Command {
      * Executes this command against the current application collaborators.
      *
      * @param tasks   Task list to query or modify.
-     * @param ui      Console UI used to display the command result.
      * @param storage Storage used to persist task-list mutations.
+     * @return Result to display to the user.
      * @throws AutoException If the command refers to invalid user input or state.
      */
-    public abstract void execute(TaskList tasks, Ui ui, Storage storage)
+    public abstract CommandResult execute(TaskList tasks, Storage storage)
             throws AutoException;
 
-    /** Returns whether this command ends the application interaction loop. */
-    public boolean isExit() {
-        return false;
-    }
-
-    /** Saves a mutation and presents storage failures consistently. */
-    protected boolean saveTasks(TaskList tasks, Ui ui, Storage storage) {
+    /** Saves a mutation, returning whether persistence succeeded. */
+    protected boolean saveTasks(TaskList tasks, Storage storage) {
         try {
             storage.save(tasks.asList());
             return true;
         } catch (IOException | RuntimeException e) {
-            ui.showStorageMessage(
-                    "Sorry, I couldn't save your tasks. Your latest change was not applied.");
             return false;
         }
+    }
+
+    /** Returns the standard result shown after a mutation cannot be saved. */
+    protected CommandResult storageFailure() {
+        return new CommandResult(
+                "Sorry, I couldn't save your tasks. Your latest change was not applied.");
+    }
+
+    /** Formats selected tasks using their original one-based list numbers. */
+    protected String formatTasks(String heading, List<Task> tasks, Predicate<Task> selection) {
+        StringBuilder message = new StringBuilder(heading);
+        for (int i = 0; i < tasks.size(); i++) {
+            Task task = tasks.get(i);
+            if (selection.test(task)) {
+                message.append(System.lineSeparator())
+                        .append(String.format("%d. %s", i + 1, task));
+            }
+        }
+        return message.toString();
     }
 }

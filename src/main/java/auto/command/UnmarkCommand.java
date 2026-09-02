@@ -4,7 +4,6 @@ import auto.exception.AutoException;
 import auto.storage.Storage;
 import auto.task.Task;
 import auto.task.TaskList;
-import auto.ui.Ui;
 
 /** Marks a numbered task as incomplete and persists the change. */
 public class UnmarkCommand extends Command {
@@ -19,16 +18,17 @@ public class UnmarkCommand extends Command {
 
     /** {@inheritDoc} */
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) throws AutoException {
+    public CommandResult execute(TaskList tasks, Storage storage) throws AutoException {
         Task task = tasks.get(taskNumber);
         boolean wasCompleted = task.isCompleted();
         tasks.unmark(taskNumber);
-        if (!saveTasks(tasks, ui, storage)) {
+        if (!saveTasks(tasks, storage)) {
             if (wasCompleted) {
                 task.mark();
             }
-            return;
+            return storageFailure();
         }
-        ui.showTaskUnmarked(task);
+        return new CommandResult("Nice! I've marked this task as not done yet"
+                + System.lineSeparator() + "  " + task);
     }
 }

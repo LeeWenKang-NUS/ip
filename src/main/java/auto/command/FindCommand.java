@@ -2,7 +2,6 @@ package auto.command;
 
 import auto.storage.Storage;
 import auto.task.TaskList;
-import auto.ui.Ui;
 
 /** Displays tasks whose descriptions contain a requested keyword. */
 public class FindCommand extends Command {
@@ -14,7 +13,10 @@ public class FindCommand extends Command {
     }
 
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) {
-        ui.showMatchingTasks(tasks.asList(), keyword);
+    public CommandResult execute(TaskList tasks, Storage storage) {
+        return new CommandResult(formatTasks(
+                "Here are the matching tasks in your list:",
+                tasks.asList(),
+                task -> task.matches(keyword)));
     }
 }

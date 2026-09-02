@@ -26,11 +26,11 @@ class FindCommandTest extends CommandTestSupport {
                 new ToDo("write essay"));
         TaskList tasks = new TaskList(originalTasks);
 
-        new FindCommand("book").execute(tasks, createUi(), failingStorage(tempDirectory));
+        CommandResult result = new FindCommand("book").execute(tasks, failingStorage(tempDirectory));
 
         assertEquals(originalTasks, tasks.asList());
-        assertTrue(output().contains("1. [T][ ] read book"));
-        assertTrue(output().contains("2. [T][ ] return BOOK"));
-        assertFalse(output().contains("3. [T][ ] write essay"));
+        assertTrue(result.message().contains("1. [T][ ] read book"));
+        assertTrue(result.message().contains("2. [T][ ] return BOOK"));
+        assertFalse(result.message().contains("3. [T][ ] write essay"));
     }
 }

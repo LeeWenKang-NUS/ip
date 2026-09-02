@@ -23,10 +23,10 @@ class ListCommandTest extends CommandTestSupport {
         Task second = new ToDo("write essay");
         TaskList tasks = new TaskList(List.of(first, second));
 
-        new ListCommand().execute(tasks, createUi(), failingStorage(tempDirectory));
+        CommandResult result = new ListCommand().execute(tasks, failingStorage(tempDirectory));
 
         assertEquals(2, tasks.size());
-        assertTrue(output().contains("1. [T][ ] read book"));
-        assertTrue(output().contains("2. [T][ ] write essay"));
+        assertTrue(result.message().contains("1. [T][ ] read book"));
+        assertTrue(result.message().contains("2. [T][ ] write essay"));
     }
 }

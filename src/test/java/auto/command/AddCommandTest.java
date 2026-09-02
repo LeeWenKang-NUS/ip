@@ -24,24 +24,24 @@ class AddCommandTest extends CommandTestSupport {
         TaskList tasks = new TaskList();
         Storage storage = writableStorage(tempDirectory);
 
-        new AddCommand(task).execute(tasks, createUi(), storage);
+        CommandResult result = new AddCommand(task).execute(tasks, storage);
 
         assertEquals(1, tasks.size());
         assertSame(task, tasks.get(1));
         assertEquals("[T][ ] read book", storage.load().tasks().getFirst().toString());
-        assertTrue(output().contains("Got it. I've added this task:"));
-        assertTrue(output().contains("Now you have 1 tasks in the list."));
+        assertTrue(result.message().contains("Got it. I've added this task:"));
+        assertTrue(result.message().contains("Now you have 1 tasks in the list."));
     }
 
     @Test
     void execute_saveFails_rollsBackAdditionAndReportsFailure() {
         TaskList tasks = new TaskList();
 
-        new AddCommand(new ToDo("read book"))
-                .execute(tasks, createUi(), failingStorage(tempDirectory));
+        CommandResult result = new AddCommand(new ToDo("read book"))
+                .execute(tasks, failingStorage(tempDirectory));
 
         assertEquals(0, tasks.size());
-        assertTrue(output().contains("Sorry, I couldn't save your tasks."));
-        assertTrue(!output().contains("Got it. I've added this task:"));
+        assertTrue(result.message().contains("Sorry, I couldn't save your tasks."));
+        assertTrue(!result.message().contains("Got it. I've added this task:"));
     }
 }

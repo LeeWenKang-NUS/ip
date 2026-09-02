@@ -3,20 +3,18 @@ package auto;
 import java.io.IOException;
 
 import auto.command.Command;
+import auto.command.CommandResult;
 import auto.exception.AutoException;
 import auto.parser.Parser;
 import auto.storage.Storage;
 import auto.task.TaskList;
-import auto.ui.Ui;
 
 /** Coordinates Auto's storage, UI, task list, and command execution loop. */
 public class Auto {
     private static final String DEFAULT_DATA_FILE = "data/auto.txt";
     private final Storage storage;
-    private final Ui ui;
     private final TaskList tasks;
     private final String startupMessage;
-    private boolean isStartupMessageShown;
 
     /** Creates an Auto application using the configured or default data file. */
     public Auto() {
@@ -30,43 +28,9 @@ public class Auto {
      */
     public Auto(String filePath) {
         storage = new Storage(filePath);
-        ui = new Ui();
         LoadOutcome loadOutcome = loadTasks();
         tasks = loadOutcome.tasks();
         startupMessage = loadOutcome.message();
-    }
-
-    /**
-     * Launches Auto using the configured data-file property or the default data
-     * file.
-     *
-     * @param args Command-line arguments, which are currently unused.
-     */
-    public static void main(String[] args) {
-        new Auto().run();
-    }
-
-    /** Starts the interaction loop and releases UI resources on exit. */
-    public void run() {
-        ui.showWelcome();
-        showStartupMessage(ui);
-
-        try {
-            boolean isRunning = true;
-            while (isRunning) {
-                String userInput = ui.readCommand();
-
-                try {
-                    Command command = Parser.parse(userInput);
-                    command.execute(tasks, ui, storage);
-                    isRunning = !command.isExit();
-                } catch (AutoException e) {
-                    ui.showError(e.getMessage());
-                }
-            }
-        } finally {
-            ui.close();
-        }
     }
 
     /**
@@ -77,17 +41,25 @@ public class Auto {
      */
     public String getResponse(String input) {
         StringBuilder response = new StringBuilder();
-        Ui responseUi = new Ui(message -> appendResponse(response, message));
-        showStartupMessage(responseUi);
 
         try {
             Command command = Parser.parse(input);
-            command.execute(tasks, responseUi, storage);
+            CommandResult result = command.execute(tasks, storage);
+            appendResponse(response, result.message());
         } catch (AutoException e) {
-            responseUi.showError(e.getMessage());
+            appendResponse(response, e.getMessage());
         }
 
         return response.toString();
+    }
+
+    /**
+     * Returns the warning produced while loading storage, if any.
+     *
+     * @return Pending storage warning, or an empty string when there is none.
+     */
+    public String getStartupMessage() {
+        return startupMessage == null ? "" : startupMessage;
     }
 
     /** Loads saved tasks, recovering cleanly when the file cannot be used. */
@@ -106,13 +78,6 @@ public class Auto {
                     new TaskList(),
                     "Sorry, I couldn't load your saved tasks. Starting with an empty task list.");
         }
-    }
-
-    private void showStartupMessage(Ui targetUi) {
-        if (!isStartupMessageShown && startupMessage != null) {
-            targetUi.showStorageMessage(startupMessage);
-        }
-        isStartupMessageShown = true;
     }
 
     private void appendResponse(StringBuilder response, String message) {

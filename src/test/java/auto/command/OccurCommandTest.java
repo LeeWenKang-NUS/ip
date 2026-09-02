@@ -31,12 +31,12 @@ class OccurCommandTest extends CommandTestSupport {
                 new Deadline("return book", date.plusDays(1)));
         TaskList tasks = new TaskList(originalTasks);
 
-        new OccurCommand(date).execute(tasks, createUi(), failingStorage(tempDirectory));
+        CommandResult result = new OccurCommand(date).execute(tasks, failingStorage(tempDirectory));
 
         assertEquals(originalTasks, tasks.asList());
-        assertTrue(output().contains("2. [D][ ] submit report"));
-        assertTrue(output().contains("3. [E][ ] conference"));
-        assertFalse(output().contains("1. [T][ ] prepare notes"));
-        assertFalse(output().contains("4. [D][ ] return book"));
+        assertTrue(result.message().contains("2. [D][ ] submit report"));
+        assertTrue(result.message().contains("3. [E][ ] conference"));
+        assertFalse(result.message().contains("1. [T][ ] prepare notes"));
+        assertFalse(result.message().contains("4. [D][ ] return book"));
     }
 }

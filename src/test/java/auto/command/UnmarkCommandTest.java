@@ -26,11 +26,11 @@ class UnmarkCommandTest extends CommandTestSupport {
         TaskList tasks = new TaskList(List.of(task));
         Storage storage = writableStorage(tempDirectory);
 
-        new UnmarkCommand(1).execute(tasks, createUi(), storage);
+        CommandResult result = new UnmarkCommand(1).execute(tasks, storage);
 
         assertFalse(task.isCompleted());
         assertFalse(storage.load().tasks().getFirst().isCompleted());
-        assertTrue(output().contains("Nice! I've marked this task as not done yet"));
+        assertTrue(result.message().contains("Nice! I've marked this task as not done yet"));
     }
 
     @Test
@@ -38,10 +38,10 @@ class UnmarkCommandTest extends CommandTestSupport {
         Task task = completedTask();
         TaskList tasks = new TaskList(List.of(task));
 
-        new UnmarkCommand(1).execute(tasks, createUi(), failingStorage(tempDirectory));
+        CommandResult result = new UnmarkCommand(1).execute(tasks, failingStorage(tempDirectory));
 
         assertTrue(task.isCompleted());
-        assertTrue(output().contains("Sorry, I couldn't save your tasks."));
+        assertTrue(result.message().contains("Sorry, I couldn't save your tasks."));
     }
 
     @Test
@@ -49,7 +49,7 @@ class UnmarkCommandTest extends CommandTestSupport {
         Task task = new ToDo("read book");
         TaskList tasks = new TaskList(List.of(task));
 
-        new UnmarkCommand(1).execute(tasks, createUi(), failingStorage(tempDirectory));
+        new UnmarkCommand(1).execute(tasks, failingStorage(tempDirectory));
 
         assertFalse(task.isCompleted());
     }
@@ -60,7 +60,7 @@ class UnmarkCommandTest extends CommandTestSupport {
         TaskList tasks = new TaskList(List.of(task));
 
         assertThrows(AutoException.class,
-                () -> new UnmarkCommand(0).execute(tasks, createUi(), writableStorage(tempDirectory)));
+                () -> new UnmarkCommand(0).execute(tasks, writableStorage(tempDirectory)));
 
         assertTrue(task.isCompleted());
     }

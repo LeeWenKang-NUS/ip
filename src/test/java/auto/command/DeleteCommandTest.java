@@ -28,13 +28,13 @@ class DeleteCommandTest extends CommandTestSupport {
         TaskList tasks = new TaskList(List.of(first, second));
         Storage storage = writableStorage(tempDirectory);
 
-        new DeleteCommand(1).execute(tasks, createUi(), storage);
+        CommandResult result = new DeleteCommand(1).execute(tasks, storage);
 
         assertEquals(1, tasks.size());
         assertSame(second, tasks.get(1));
         assertEquals("[T][ ] write essay", storage.load().tasks().getFirst().toString());
-        assertTrue(output().contains("Roger! I've deleted this task:"));
-        assertTrue(output().contains("Now you have 1 tasks in the list."));
+        assertTrue(result.message().contains("Roger! I've deleted this task:"));
+        assertTrue(result.message().contains("Now you have 1 tasks in the list."));
     }
 
     @Test
@@ -43,12 +43,12 @@ class DeleteCommandTest extends CommandTestSupport {
         Task second = new ToDo("write essay");
         TaskList tasks = new TaskList(List.of(first, second));
 
-        new DeleteCommand(1).execute(tasks, createUi(), failingStorage(tempDirectory));
+        CommandResult result = new DeleteCommand(1).execute(tasks, failingStorage(tempDirectory));
 
         assertEquals(2, tasks.size());
         assertSame(first, tasks.get(1));
         assertSame(second, tasks.get(2));
-        assertTrue(output().contains("Sorry, I couldn't save your tasks."));
+        assertTrue(result.message().contains("Sorry, I couldn't save your tasks."));
     }
 
     @Test
@@ -58,7 +58,7 @@ class DeleteCommandTest extends CommandTestSupport {
         DeleteCommand command = new DeleteCommand(0);
 
         AutoException exception = assertThrows(AutoException.class,
-                () -> command.execute(tasks, createUi(), writableStorage(tempDirectory)));
+                () -> command.execute(tasks, writableStorage(tempDirectory)));
 
         assertEquals("Ohhh Noooo... there is no task 0!", exception.getMessage());
         assertEquals(1, tasks.size());

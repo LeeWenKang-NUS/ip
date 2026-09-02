@@ -3,7 +3,6 @@ package auto.command;
 import auto.storage.Storage;
 import auto.task.Task;
 import auto.task.TaskList;
-import auto.ui.Ui;
 
 /** Adds a parsed task and persists the updated list. */
 public class AddCommand extends Command {
@@ -16,12 +15,14 @@ public class AddCommand extends Command {
 
     /** {@inheritDoc} */
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) {
+    public CommandResult execute(TaskList tasks, Storage storage) {
         tasks.add(task);
-        if (!saveTasks(tasks, ui, storage)) {
+        if (!saveTasks(tasks, storage)) {
             tasks.removeLast();
-            return;
+            return storageFailure();
         }
-        ui.showTaskAdded(task, tasks.size());
+        return new CommandResult(String.format(
+                "Got it. I've added this task:%n  %s%nNow you have %d tasks in the list.",
+                task, tasks.size()));
     }
 }

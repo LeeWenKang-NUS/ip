@@ -4,7 +4,6 @@ import auto.exception.AutoException;
 import auto.storage.Storage;
 import auto.task.Task;
 import auto.task.TaskList;
-import auto.ui.Ui;
 
 /** Deletes a numbered task and persists the updated list. */
 public class DeleteCommand extends Command {
@@ -19,12 +18,14 @@ public class DeleteCommand extends Command {
 
     /** {@inheritDoc} */
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) throws AutoException {
+    public CommandResult execute(TaskList tasks, Storage storage) throws AutoException {
         Task task = tasks.delete(taskNumber);
-        if (!saveTasks(tasks, ui, storage)) {
+        if (!saveTasks(tasks, storage)) {
             tasks.restoreDeleted(taskNumber, task);
-            return;
+            return storageFailure();
         }
-        ui.showTaskDeleted(task, tasks.size());
+        return new CommandResult(String.format(
+                "Roger! I've deleted this task:%n  %s%nNow you have %d tasks in the list.",
+                task, tasks.size()));
     }
 }

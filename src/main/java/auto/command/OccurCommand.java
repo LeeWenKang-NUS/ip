@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 import auto.storage.Storage;
 import auto.task.TaskList;
-import auto.ui.Ui;
+import auto.util.DateUtil;
 
 /** Displays deadlines and events occurring on a requested date. */
 public class OccurCommand extends Command {
@@ -17,7 +17,10 @@ public class OccurCommand extends Command {
 
     /** {@inheritDoc} */
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) {
-        ui.showTasksOccurringOn(tasks.asList(), date);
+    public CommandResult execute(TaskList tasks, Storage storage) {
+        return new CommandResult(formatTasks(
+                "Here are the tasks occurring on " + DateUtil.format(date) + ":",
+                tasks.asList(),
+                task -> task.occursOn(date)));
     }
 }

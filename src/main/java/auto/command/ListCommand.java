@@ -2,13 +2,13 @@ package auto.command;
 
 import auto.storage.Storage;
 import auto.task.TaskList;
-import auto.ui.Ui;
 
 /** Displays every task in the list. */
 public class ListCommand extends Command {
     /** {@inheritDoc} */
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) {
-        ui.showTaskList(tasks.asList());
+    public CommandResult execute(TaskList tasks, Storage storage) {
+        return new CommandResult(formatTasks(
+                "Here are the tasks in your list:", tasks.asList(), task -> true));
     }
 }

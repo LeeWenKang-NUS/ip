@@ -1,7 +1,6 @@
 package auto.command;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.file.Path;
@@ -20,15 +19,9 @@ class ExitCommandTest extends CommandTestSupport {
         TaskList tasks = new TaskList();
         ExitCommand command = new ExitCommand();
 
-        command.execute(tasks, createUi(), failingStorage(tempDirectory));
+        CommandResult result = command.execute(tasks, failingStorage(tempDirectory));
 
         assertEquals(0, tasks.size());
-        assertTrue(output().contains("Bye. Hope to see you again soon!"));
-    }
-
-    @Test
-    void isExit_exitAndNonExitCommands_returnsExpectedState() {
-        assertTrue(new ExitCommand().isExit());
-        assertFalse(new ListCommand().isExit());
+        assertTrue(result.message().contains("Bye. Hope to see you again soon!"));
     }
 }

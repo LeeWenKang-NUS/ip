@@ -26,11 +26,11 @@ class MarkCommandTest extends CommandTestSupport {
         TaskList tasks = new TaskList(List.of(task));
         Storage storage = writableStorage(tempDirectory);
 
-        new MarkCommand(1).execute(tasks, createUi(), storage);
+        CommandResult result = new MarkCommand(1).execute(tasks, storage);
 
         assertTrue(task.isCompleted());
         assertTrue(storage.load().tasks().getFirst().isCompleted());
-        assertTrue(output().contains("Nice! I've marked this task as done"));
+        assertTrue(result.message().contains("Nice! I've marked this task as done"));
     }
 
     @Test
@@ -38,10 +38,10 @@ class MarkCommandTest extends CommandTestSupport {
         Task task = new ToDo("read book");
         TaskList tasks = new TaskList(List.of(task));
 
-        new MarkCommand(1).execute(tasks, createUi(), failingStorage(tempDirectory));
+        CommandResult result = new MarkCommand(1).execute(tasks, failingStorage(tempDirectory));
 
         assertFalse(task.isCompleted());
-        assertTrue(output().contains("Sorry, I couldn't save your tasks."));
+        assertTrue(result.message().contains("Sorry, I couldn't save your tasks."));
     }
 
     @Test
@@ -50,7 +50,7 @@ class MarkCommandTest extends CommandTestSupport {
         task.mark();
         TaskList tasks = new TaskList(List.of(task));
 
-        new MarkCommand(1).execute(tasks, createUi(), failingStorage(tempDirectory));
+        new MarkCommand(1).execute(tasks, failingStorage(tempDirectory));
 
         assertTrue(task.isCompleted());
     }
@@ -61,7 +61,7 @@ class MarkCommandTest extends CommandTestSupport {
         TaskList tasks = new TaskList(List.of(task));
 
         assertThrows(AutoException.class,
-                () -> new MarkCommand(2).execute(tasks, createUi(), writableStorage(tempDirectory)));
+                () -> new MarkCommand(2).execute(tasks, writableStorage(tempDirectory)));
 
         assertFalse(task.isCompleted());
     }
