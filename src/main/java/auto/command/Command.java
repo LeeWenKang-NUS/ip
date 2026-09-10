@@ -3,6 +3,8 @@ package auto.command;
 import java.io.IOException;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import auto.exception.AutoException;
 import auto.storage.Storage;
@@ -40,14 +42,11 @@ public abstract class Command {
 
     /** Formats selected tasks using their original one-based list numbers. */
     protected String formatTasks(String heading, List<Task> tasks, Predicate<Task> selection) {
-        StringBuilder message = new StringBuilder(heading);
-        for (int i = 0; i < tasks.size(); i++) {
-            Task task = tasks.get(i);
-            if (selection.test(task)) {
-                message.append(System.lineSeparator())
-                        .append(String.format("%d. %s", i + 1, task));
-            }
-        }
-        return message.toString();
+        String taskLines = IntStream.range(0, tasks.size())
+                .filter(i -> selection.test(tasks.get(i)))
+                .mapToObj(i -> String.format("%d. %s", i + 1, tasks.get(i)))
+                .collect(Collectors.joining(System.lineSeparator()));
+
+        return taskLines.isEmpty() ? heading : heading + System.lineSeparator() + taskLines;
     }
 }
