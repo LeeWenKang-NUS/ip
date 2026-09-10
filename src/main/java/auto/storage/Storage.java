@@ -47,21 +47,26 @@ public class Storage {
         try {
             Files.write(temporaryFile,
                     tasks.stream().map(Task::toDataString).toList(), StandardCharsets.UTF_8);
-            try {
-                Files.move(temporaryFile, dataFile, StandardCopyOption.ATOMIC_MOVE,
-                        StandardCopyOption.REPLACE_EXISTING);
-            } catch (AtomicMoveNotSupportedException e) {
-                Files.move(temporaryFile, dataFile, StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException e) {
-                // Some Windows file systems report atomic moves as supported but
-                // cannot atomically replace an existing target.
-                if (!Files.exists(temporaryFile)) {
-                    throw e;
-                }
-                Files.move(temporaryFile, dataFile, StandardCopyOption.REPLACE_EXISTING);
-            }
+            replaceDataFile(temporaryFile, dataFile);
         } finally {
             Files.deleteIfExists(temporaryFile);
+        }
+    }
+
+    /** Replaces the data file, falling back when an atomic replacement fails. */
+    private static void replaceDataFile(Path temporaryFile, Path dataFile) throws IOException {
+        try {
+            Files.move(temporaryFile, dataFile, StandardCopyOption.ATOMIC_MOVE,
+                    StandardCopyOption.REPLACE_EXISTING);
+        } catch (AtomicMoveNotSupportedException e) {
+            Files.move(temporaryFile, dataFile, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            // Some Windows file systems report atomic moves as supported but
+            // cannot atomically replace an existing target.
+            if (!Files.exists(temporaryFile)) {
+                throw e;
+            }
+            Files.move(temporaryFile, dataFile, StandardCopyOption.REPLACE_EXISTING);
         }
     }
 
@@ -140,10 +145,10 @@ public class Storage {
     /**
      * Decodes a required Base64 text field and rejects blank decoded values.
      *
-     * @param encoded Base64-encoded field
-     * @return decoded nonblank text
+     * @param encoded Base64-encoded field.
+     * @return Decoded nonblank text.
      * @throws IllegalArgumentException if the field is not valid Base64 or
-     *                                  decodes to blank text
+     *                                  decodes to blank text.
      */
     private static String decodeRequired(String encoded) {
         return requireText(new String(
