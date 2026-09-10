@@ -158,6 +158,8 @@ public class Storage {
     }
 
     private static void restoreStatus(Task task, String status) {
+        // Record validation must reject malformed flags before this helper interprets them.
+        assert "0".equals(status) || "1".equals(status) : "Stored status must already be validated";
         if (status.equals("1")) {
             task.mark();
         }

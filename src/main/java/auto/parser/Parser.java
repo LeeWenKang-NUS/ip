@@ -100,6 +100,8 @@ public final class Parser {
     }
 
     private static String argumentAfter(String input, String keyword) {
+        // Dispatch must recognize the command and its separator before extracting arguments.
+        assert input.startsWith(keyword + " ") : "Argument extraction requires a matched command prefix";
         return input.substring(keyword.length() + 1);
     }
 
