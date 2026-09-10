@@ -14,6 +14,8 @@ import javafx.scene.layout.VBox;
  * Handles user interaction with the main chat window.
  */
 public class MainWindow {
+    private static final double MESSAGE_CONTENT_SPACING = 6;
+    private static final double MESSAGE_MAX_WIDTH = 320;
     private static final String EXIT_COMMAND = "bye";
     private static final String ASCII_ART = String.join(System.lineSeparator(),
             "    _         _        ",
@@ -66,7 +68,7 @@ public class MainWindow {
     }
 
     /**
-     * Displays the user's message and an echoed response, then clears the input.
+     * Executes the user's command, displays its response, and clears the input.
      */
     @FXML
     private void handleUserInput() {
@@ -118,10 +120,10 @@ public class MainWindow {
         Label senderLabel = new Label(sender);
         senderLabel.getStyleClass().add("message-sender");
 
-        VBox bubble = new VBox(6);
+        VBox bubble = new VBox(MESSAGE_CONTENT_SPACING);
         bubble.getChildren().add(senderLabel);
         bubble.getChildren().addAll(contentLabels);
-        bubble.setMaxWidth(320);
+        bubble.setMaxWidth(MESSAGE_MAX_WIDTH);
         bubble.getStyleClass().addAll("message-bubble", isUser ? "user-bubble" : "auto-bubble");
 
         HBox row = new HBox(bubble);

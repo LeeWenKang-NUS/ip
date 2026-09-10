@@ -3,7 +3,6 @@ package auto;
 import java.io.IOException;
 
 import auto.command.Command;
-import auto.command.CommandResult;
 import auto.exception.AutoException;
 import auto.parser.Parser;
 import auto.storage.Storage;
@@ -40,17 +39,12 @@ public class Auto {
      * @return Rendered response suitable for display in a chat interface.
      */
     public String getResponse(String input) {
-        StringBuilder response = new StringBuilder();
-
         try {
             Command command = Parser.parse(input);
-            CommandResult result = command.execute(tasks, storage);
-            appendResponse(response, result.message());
+            return command.execute(tasks, storage).message();
         } catch (AutoException e) {
-            appendResponse(response, e.getMessage());
+            return e.getMessage();
         }
-
-        return response.toString();
     }
 
     /**
@@ -78,13 +72,6 @@ public class Auto {
                     new TaskList(),
                     "Sorry, I couldn't load your saved tasks. Starting with an empty task list.");
         }
-    }
-
-    private void appendResponse(StringBuilder response, String message) {
-        if (!response.isEmpty()) {
-            response.append(System.lineSeparator());
-        }
-        response.append(message);
     }
 
     /** Holds tasks and any user-facing warning produced while loading them. */
