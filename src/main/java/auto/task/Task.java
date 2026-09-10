@@ -7,7 +7,7 @@ import java.util.Locale;
 
 /** Represents a task with a description and completion status. */
 public class Task {
-    private String name;
+    private final String name;
     private boolean isCompleted = false;
 
     /** Creates an incomplete task with the specified description. */
