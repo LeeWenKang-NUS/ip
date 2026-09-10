@@ -61,11 +61,16 @@ public class TaskList {
 
     /** Restores a deletion that could not be persisted. */
     public void restoreDeleted(int taskNumber, Task task) {
+        // A failed deletion must be undone at its original position, including the former last slot.
+        assert taskNumber >= 1 && taskNumber <= tasks.size() + 1
+                : "Deletion rollback requires a valid original position";
         tasks.add(taskNumber - 1, task);
     }
 
     /** Reverses the most recent addition when it could not be persisted. */
     public void removeLast() {
+        // Addition rollback is only called after a task has been appended successfully.
+        assert !tasks.isEmpty() : "Addition rollback requires an appended task";
         tasks.remove(tasks.size() - 1);
     }
 
