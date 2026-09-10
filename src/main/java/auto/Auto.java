@@ -1,12 +1,19 @@
 package auto;
 
 import java.io.IOException;
+import java.time.Clock;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import auto.command.Command;
 import auto.exception.AutoException;
 import auto.parser.Parser;
 import auto.storage.Storage;
+import auto.task.Task;
 import auto.task.TaskList;
+import auto.util.DateUtil;
 
 /** Coordinates Auto's storage, UI, task list, and command execution loop. */
 public class Auto {
@@ -26,10 +33,15 @@ public class Auto {
      * @param filePath Path of the file used to load and save tasks.
      */
     public Auto(String filePath) {
+        this(filePath, Clock.systemDefaultZone());
+    }
+
+    /** Creates an application with a controllable clock for startup reminders. */
+    Auto(String filePath, Clock clock) {
         storage = new Storage(filePath);
         LoadOutcome loadOutcome = loadTasks();
         tasks = loadOutcome.tasks();
-        startupMessage = loadOutcome.message();
+        startupMessage = createStartupMessage(loadOutcome.message(), LocalDate.now(clock));
     }
 
     /**
@@ -48,12 +60,30 @@ public class Auto {
     }
 
     /**
-     * Returns the warning produced while loading storage, if any.
+     * Returns storage warnings and reminders captured when the application opens.
      *
-     * @return Pending storage warning, or an empty string when there is none.
+     * @return Startup details, or an empty string when there are none.
      */
     public String getStartupMessage() {
-        return startupMessage == null ? "" : startupMessage;
+        return startupMessage;
+    }
+
+    /** Combines any load warning with today's tasks, retaining their list numbers. */
+    private String createStartupMessage(String warning, LocalDate today) {
+        List<Task> savedTasks = tasks.asList();
+        String reminders = IntStream.range(0, savedTasks.size())
+                .filter(i -> savedTasks.get(i).occursOn(today))
+                .mapToObj(i -> String.format("%d. %s", i + 1, savedTasks.get(i)))
+                .collect(Collectors.joining(System.lineSeparator()));
+        String message = warning == null ? "" : warning;
+        if (reminders.isEmpty()) {
+            return message;
+        }
+        if (!message.isEmpty()) {
+            message += System.lineSeparator() + System.lineSeparator();
+        }
+        return message + "Reminders for today (" + DateUtil.format(today) + "):"
+                + System.lineSeparator() + reminders;
     }
 
     /** Loads saved tasks, recovering cleanly when the file cannot be used. */

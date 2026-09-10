@@ -18,7 +18,8 @@ Expected: The first Auto chat bubble immediately shows the ASCII Auto banner,
 The banner uses a monospace font, so its characters remain aligned as drawn.
 Saved tasks have already been loaded before this message appears. If the data
 file could not be loaded fully, the same welcome bubble also contains the load
-warning below the greeting.
+warning below the greeting. Deadlines due today and events spanning today
+appear below any warning under `Reminders for today (MMM dd yyyy):`.
 
 ## TC-01 Send with Enter
 
@@ -82,3 +83,32 @@ visible.
 Expected: Auto processes the farewell and immediately closes the application
 window. The Gradle `run` task also finishes rather than remaining active in the
 IDE. The farewell bubble may close before it is visibly rendered.
+
+## TC-09 Show today's reminders on each launch
+
+1. Using today's local date in dd/MM/yyyy format, add a todo, a deadline due
+   today, and events starting today, ending today, and spanning today.
+2. Add deadlines and events entirely before or after today.
+3. Mark the deadline due today as completed, then close and reopen Auto.
+
+Expected: The first welcome bubble includes `Reminders for today (MMM dd yyyy):`
+with today's date. It lists the deadline and all three events, using their
+original list numbers and normal task formatting, including the deadline's
+`[X]` marker. The todo and tasks on other dates do not appear in reminders.
+Reopening the application displays the reminders again without changing tasks.
+
+## TC-10 Omit reminders when nothing occurs today
+
+1. Start with an empty saved task list, or only todos and tasks on other dates.
+2. Open Auto.
+
+Expected: The normal welcome message appears without a reminders heading.
+
+## TC-11 Show reminders alongside recovery warnings
+
+1. Save a deadline due today, then close Auto.
+2. Append a malformed line such as `not a task` to the saved data file.
+3. Reopen Auto.
+
+Expected: The welcome bubble shows the existing invalid-data warning, then
+a blank line and today's reminders, including the recovered deadline.
