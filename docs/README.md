@@ -2,11 +2,12 @@
 
 <img src="./auto-icon.png" width="300">
 
+<p>
+  <img src="Ui.png" alt="Sample screenshot 1" width="48%">
+  <img src="app-screenshot.png" alt="Sample screenshot 2" width="48%">
+</p>
+
 > Auto is your task kaki. A task chatbot with a Singaporean personality!
-
-<img src="./Ui.png" width="300">
-
-<img src="./app-screenshot.png" width="300">
 
 ## Features
 
@@ -28,7 +29,7 @@ List all tasks managed by the application.
 
 Example: `list`
 
-![Todo Example](./feature-screenshot/list.png)
+<img src="./feature-screenshot/list.png" alt="List example" width="400">
 
 ## Adding todo
 
@@ -36,7 +37,7 @@ Adds a todo task to the application and saves it to the save file.
 
 Example: `todo Complete CS2103 iP`
 
-![Todo Example](./feature-screenshot/todo.png)
+<img src="./feature-screenshot/todo.png" alt="Todo example" width="400">
 
 ## Adding deadlines
 
@@ -44,7 +45,7 @@ Adds a deadline task to the application and saves it to the save file. Deadline 
 
 Example: `deadline Complete CS2103 iP /by 15/09/2026`
 
-![Deadline Example](./feature-screenshot/deadline.png)
+<img src="./feature-screenshot/deadline.png" alt="Deadline example" width="400">
 
 ## Adding event
 
@@ -52,7 +53,7 @@ Adds a event task to the application and saves it to the save file. Event task r
 
 Example: `event Reading Week /from 21/09/2026 /to 25/09/2026`
 
-![Event Example](./feature-screenshot/event.png)
+<img src="./feature-screenshot/event.png" alt="Event example" width="400">
 
 ## Occur on date
 
@@ -65,7 +66,7 @@ Requires the date format provided to be `dd/MM/yyyy`.
 
 Example: `occur 23/09/2026`
 
-![Occur Example](./feature-screenshot/occur.png)
+<img src="./feature-screenshot/occur.png" alt="Occur example" width="400">
 
 ## Find task
 
@@ -73,7 +74,7 @@ The find command searches the task list based on the task name.
 
 Example: `find CS2103`
 
-![Find Example](./feature-screenshot/find.png)
+<img src="./feature-screenshot/find.png" alt="Find example" width="400">
 
 ## Mark/unmark tasks
 
@@ -82,8 +83,8 @@ Mark and unmark a task as complete or uncomplete. The task's index needs to be s
 Example: `mark 3`
 Example: `unmark 3`
 
-![Mark Example](./feature-screenshot/mark.png)
-![Unmark Example](./feature-screenshot/unmark.png)
+<img src="./feature-screenshot/mark.png" alt="Mark example" width="400">
+<img src="./feature-screenshot/unmark.png" alt="Unmark example" width="400">
 
 ## Delete tasks
 
@@ -91,4 +92,4 @@ Delete a task from the application and the save file. The task's index needs to 
 
 Example: `delete 3`
 
-![Delete Example](./feature-screenshot/delete.png)
+<img src="./feature-screenshot/delete.png" alt="Delete example" width="400">
