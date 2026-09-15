@@ -13,6 +13,12 @@ Run the application with:
 
 1. Start the application.
 
+Expected window icons on Windows: The coffee-cup image from
+`src/main/resources/images/auto-icon.png` appears in the top-left title bar
+and on the running application's taskbar button. Minimize and restore the
+window; both icons remain the coffee cup. Repeat after launching the packaged
+JAR with `java -jar build/libs/auto.jar` to check that the icon is bundled.
+
 Expected: The first Auto chat bubble immediately shows the ASCII Auto banner,
 `Hello! I'm Auto, your personal assistant.`, and `What can I do for you?`.
 The banner uses a monospace font, so its characters remain aligned as drawn.
