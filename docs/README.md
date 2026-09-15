@@ -3,8 +3,8 @@
 <img src="./auto-icon.png" width="300">
 
 <p>
-  <img src="Ui.png" alt="Sample screenshot 1" width="48%">
-  <img src="app-screenshot.png" alt="Sample screenshot 2" width="48%">
+  <img src="Ui.png" alt="Sample screenshot 1" width="35%">
+  <img src="app-screenshot.png" alt="Sample screenshot 2" width="35%">
 </p>
 
 > Auto is your task kaki. A task chatbot with a Singaporean personality!
