@@ -12,109 +12,83 @@
 
 | No. | Feature                        | Description                                                                                           |
 | --- | ------------------------------ | ----------------------------------------------------------------------------------------------------- |
-| 1   | Adding todo                    |                                                                                                       |
-| 2   | Adding deadline                | Adding a task with a `by` date                                                                        |
-| 3   | Adding event                   | Adding a task with a `from` and `to` date                                                             |
-| 4   | Occur on date                  | Search for deadlines that occur on a specific date or events that occur between the date              |
-| 5   | Search task                    | Search task based on name                                                                             |
-| 6   | Mark/unmark task               | Mark and unmark task as done                                                                          |
-| 7   | Delete task                    | Remove the task from the list                                                                         |
-| 8   | Task reminders (BCD-Extension) | Similar to `Occur on date`, but reminder is displayed on application start and using the current date |
+| 1   | List tasks                     |                                                                                                       |
+| 2   | Adding todo                    |                                                                                                       |
+| 3   | Adding deadline                | Adding a task with a `by` date                                                                        |
+| 4   | Adding event                   | Adding a task with a `from` and `to` date                                                             |
+| 5   | Occur on date                  | Search for deadlines that occur on a specific date or events that occur between the date              |
+| 6   | Find task                      | Search task based on name                                                                             |
+| 7   | Mark/unmark task               | Mark and unmark task as done                                                                          |
+| 8   | Delete task                    | Remove the task from the list                                                                         |
+| 9   | Task reminders (BCD-Extension) | Similar to `Occur on date`, but reminder is displayed on application start and using the current date |
+
+## List tasks
+
+List all tasks managed by the application.
+
+Example: `list`
+
+![Todo Example](./feature-screenshot/list.png)
 
 ## Adding todo
 
-// Describe the action and its outcome.
+Adds a todo task to the application and saves it to the save file.
 
-// Give examples of usage
+Example: `todo Complete CS2103 iP`
 
-Example: `keyword (optional arguments)`
-
-// A description of the expected outcome goes here
-
-```
-expected output
-```
+![Todo Example](./feature-screenshot/todo.png)
 
 ## Adding deadlines
 
-// Describe the action and its outcome.
+Adds a deadline task to the application and saves it to the save file. Deadline task require a `/by dd/MM/yyyy` argument to be provided.
 
-// Give examples of usage
+Example: `deadline Complete CS2103 iP /by 15/09/2026`
 
-Example: `keyword (optional arguments)`
-
-// A description of the expected outcome goes here
-
-```
-expected output
-```
+![Deadline Example](./feature-screenshot/deadline.png)
 
 ## Adding event
 
-// Describe the action and its outcome.
+Adds a event task to the application and saves it to the save file. Event task require a `/from dd/MM/yyyy /to dd/MM/yyyy` argument to be provided.
 
-// Give examples of usage
+Example: `event Reading Week /from 21/09/2026 /to 25/09/2026`
 
-Example: `keyword (optional arguments)`
-
-// A description of the expected outcome goes here
-
-```
-expected output
-```
+![Event Example](./feature-screenshot/event.png)
 
 ## Occur on date
 
-// Describe the action and its outcome.
+The occur command searches the task list for:
 
-// Give examples of usage
+1. Deadlines that occur on the specified date.
+2. Events that span the specified date.
 
-Example: `keyword (optional arguments)`
+Requires the date format provided to be `dd/MM/yyyy`.
 
-// A description of the expected outcome goes here
+Example: `occur 23/09/2026`
 
-```
-expected output
-```
+![Occur Example](./feature-screenshot/occur.png)
 
-## Search task
+## Find task
 
-// Describe the action and its outcome.
+The find command searches the task list based on the task name.
 
-// Give examples of usage
+Example: `find CS2103`
 
-Example: `keyword (optional arguments)`
-
-// A description of the expected outcome goes here
-
-```
-expected output
-```
+![Find Example](./feature-screenshot/find.png)
 
 ## Mark/unmark tasks
 
-// Describe the action and its outcome.
+Mark and unmark a task as complete or uncomplete. The task's index needs to be specified
 
-// Give examples of usage
+Example: `mark 3`
+Example: `unmark 3`
 
-Example: `keyword (optional arguments)`
-
-// A description of the expected outcome goes here
-
-```
-expected output
-```
+![Mark Example](./feature-screenshot/mark.png)
+![Unmark Example](./feature-screenshot/unmark.png)
 
 ## Delete tasks
 
-// Describe the action and its outcome.
+Delete a task from the application and the save file. The task's index needs to be specified
 
-// Give examples of usage
+Example: `delete 3`
 
-Example: `keyword (optional arguments)`
-
-// A description of the expected outcome goes here
-
-```
-expected output
-```
+![Delete Example](./feature-screenshot/delete.png)
