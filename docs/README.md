@@ -1,17 +1,12 @@
 # Auto User Guide
 
-// Update the title above to match the actual product name
-
-// Product screenshot goes here
-
-// Product intro goes here
-![Auto Icon](./auto-icon.png)
+<img src="./auto-icon.png" width="300">
 
 > Auto is your task kaki. A task chatbot with a Singaporean personality!
 
-![Application Screenshot](./Ui.png)
+<img src="./Ui.png" width="300">
 
-![More Application Screenshot](./app-screenshot.png)
+<img src="./app-screenshot.png" width="300">
 
 ## Features
 
