@@ -22,7 +22,7 @@
 | 7   | Mark/unmark task               | Mark and unmark task as done                                                                          |
 | 8   | Delete task                    | Remove the task from the list                                                                         |
 | 9   | Task reminders (BCD-Extension) | Similar to `Occur on date`, but reminder is displayed on application start and using the current date |
-| 10   | Latest message button | Scroll to the latest message |
+| 10  | Latest message button          | Scroll to the latest message                                                                          |
 
 ## List tasks
 
@@ -94,6 +94,12 @@ Delete a task from the application and the save file. The task's index needs to 
 Example: `delete 3`
 
 <img src="./feature-screenshot/delete.png" alt="Delete example" width="400">
+
+## Task reminders
+
+Deadline and event tasks that occur during the system's current time are displayed when the application is first started.
+
+<img src="./feature-screenshot/reminder.png" alt="Reminder example" width="400">
 
 ## Latest message button
 
