@@ -37,7 +37,7 @@ public abstract class Command {
     /** Returns the standard result shown after a mutation cannot be saved. */
     protected CommandResult storageFailure() {
         return new CommandResult(
-                "Sorry, I couldn't save your tasks. Your latest change was not applied.");
+                "Paiseh, I couldn't save your tasks. Your latest change was not applied.");
     }
 
     /** Formats selected tasks using their original one-based list numbers. */

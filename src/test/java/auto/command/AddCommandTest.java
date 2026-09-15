@@ -41,7 +41,7 @@ class AddCommandTest extends CommandTestSupport {
                 .execute(tasks, failingStorage(tempDirectory));
 
         assertEquals(0, tasks.size());
-        assertTrue(result.message().contains("Sorry, I couldn't save your tasks."));
+        assertTrue(result.message().contains("Paiseh, I couldn't save your tasks."));
         assertTrue(!result.message().contains("Can! Added this task for you:"));
     }
 }

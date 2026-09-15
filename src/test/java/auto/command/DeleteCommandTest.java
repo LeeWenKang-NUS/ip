@@ -48,7 +48,7 @@ class DeleteCommandTest extends CommandTestSupport {
         assertEquals(2, tasks.size());
         assertSame(first, tasks.get(1));
         assertSame(second, tasks.get(2));
-        assertTrue(result.message().contains("Sorry, I couldn't save your tasks."));
+        assertTrue(result.message().contains("Paiseh, I couldn't save your tasks."));
     }
 
     @Test
@@ -60,7 +60,7 @@ class DeleteCommandTest extends CommandTestSupport {
         AutoException exception = assertThrows(AutoException.class,
                 () -> command.execute(tasks, writableStorage(tempDirectory)));
 
-        assertEquals("Ohhh Noooo... there is no task 0!", exception.getMessage());
+        assertEquals("Paiseh, no task 0 leh. Type list to check the numbers.", exception.getMessage());
         assertEquals(1, tasks.size());
         assertSame(task, tasks.asList().getFirst());
     }

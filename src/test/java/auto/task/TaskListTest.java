@@ -47,8 +47,8 @@ class TaskListTest {
         AutoException belowRange = assertThrows(AutoException.class, () -> tasks.get(0));
         AutoException aboveRange = assertThrows(AutoException.class, () -> tasks.get(2));
 
-        assertEquals("Ohhh Noooo... there is no task 0!", belowRange.getMessage());
-        assertEquals("Ohhh Noooo... there is no task 2!", aboveRange.getMessage());
+        assertEquals("Paiseh, no task 0 leh. Type list to check the numbers.", belowRange.getMessage());
+        assertEquals("Paiseh, no task 2 leh. Type list to check the numbers.", aboveRange.getMessage());
     }
 
     @Test

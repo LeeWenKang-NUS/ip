@@ -10,25 +10,25 @@ class AutoExceptionTest {
     @Test
     void factoryMethods_allCases_returnExpectedPrefixedMessages() {
         assertAll(
-                () -> assertMessage("Ohhh Noooo... I don't understand you!",
+                () -> assertMessage("Paiseh, I don't understand this command lah.",
                         AutoException.unknownCommand()),
-                () -> assertMessage("Ohhh Noooo... there is no task 0!",
+                () -> assertMessage("Paiseh, no task 0 leh. Type list to check the numbers.",
                         AutoException.noSuchTask(0)),
-                () -> assertMessage("Ohhh Noooo... there is no task 42!",
+                () -> assertMessage("Paiseh, no task 42 leh. Type list to check the numbers.",
                         AutoException.noSuchTask(42)),
-                () -> assertMessage("Ohhh Noooo... 'abc' is not a task number!",
+                () -> assertMessage("Paiseh, 'abc' is not a task number lah. Use a whole number.",
                         AutoException.notATaskNumber("abc")),
-                () -> assertMessage("Ohhh Noooo... a find command needs a keyword!",
+                () -> assertMessage("Paiseh, find what ah? Try find book.",
                         AutoException.findNeedsKeyword()),
-                () -> assertMessage("Ohhh Noooo... a deadline needs a /by date!",
+                () -> assertMessage("Paiseh, by when ah? Add /by followed by a date in dd/MM/yyyy.",
                         AutoException.deadlineNeedsBy()),
-                () -> assertMessage("Ohhh Noooo... an event needs a /from and a /to time!",
+                () -> assertMessage("Paiseh, when start, when end? Add /from and /to dates in dd/MM/yyyy.",
                         AutoException.eventNeedsFromAndTo()),
                 () -> assertMessage(
-                        "Ohhh Noooo... an event's /to date cannot be before its /from date!",
+                        "Paiseh, end before start cannot lah. Check your /from and /to dates.",
                         AutoException.eventEndsBeforeItStarts()),
                 () -> assertMessage(
-                        "Ohhh Noooo... '31/02/2026' is not a valid date! Use dd/MM/yyyy.",
+                        "Paiseh, '31/02/2026' is not a valid date leh. Use dd/MM/yyyy.",
                         AutoException.invalidDate("31/02/2026")));
     }
 

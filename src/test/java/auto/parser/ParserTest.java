@@ -59,10 +59,10 @@ class ParserTest {
     void parse_findWithoutKeyword_throwsKeywordError() {
         assertAll(
                 () -> assertExceptionMessage(
-                        "Ohhh Noooo... a find command needs a keyword!",
+                        "Paiseh, find what ah? Try find book.",
                         () -> Parser.parse("find")),
                 () -> assertExceptionMessage(
-                        "Ohhh Noooo... a find command needs a keyword!",
+                        "Paiseh, find what ah? Try find book.",
                         () -> Parser.parse("find   ")));
     }
 
@@ -77,18 +77,18 @@ class ParserTest {
     @Test
     void parse_taskNumberCommandsWithNonNumber_throwsTaskNumberError() {
         assertAll(
-                () -> assertExceptionMessage("Ohhh Noooo... 'abc' is not a task number!",
+                () -> assertExceptionMessage("Paiseh, 'abc' is not a task number lah. Use a whole number.",
                         () -> Parser.parse("mark abc")),
-                () -> assertExceptionMessage("Ohhh Noooo... '1.5' is not a task number!",
+                () -> assertExceptionMessage("Paiseh, '1.5' is not a task number lah. Use a whole number.",
                         () -> Parser.parse("unmark 1.5")),
-                () -> assertExceptionMessage("Ohhh Noooo... '' is not a task number!",
+                () -> assertExceptionMessage("Paiseh, '' is not a task number lah. Use a whole number.",
                         () -> Parser.parse("delete   ")));
     }
 
     @Test
     void parse_occurWithInvalidDate_throwsInvalidDateError() {
         assertExceptionMessage(
-                "Ohhh Noooo... '31/02/2026' is not a valid date! Use dd/MM/yyyy.",
+                "Paiseh, '31/02/2026' is not a valid date leh. Use dd/MM/yyyy.",
                 () -> Parser.parse("occur 31/02/2026"));
     }
 
@@ -102,11 +102,11 @@ class ParserTest {
     @Test
     void parseTaskNumber_nonIntegerEmptyAndOverflow_throwsTrimmedArgumentError() {
         assertAll(
-                () -> assertExceptionMessage("Ohhh Noooo... 'one' is not a task number!",
+                () -> assertExceptionMessage("Paiseh, 'one' is not a task number lah. Use a whole number.",
                         () -> Parser.parseTaskNumber(" one ")),
-                () -> assertExceptionMessage("Ohhh Noooo... '' is not a task number!",
+                () -> assertExceptionMessage("Paiseh, '' is not a task number lah. Use a whole number.",
                         () -> Parser.parseTaskNumber("   ")),
-                () -> assertExceptionMessage("Ohhh Noooo... '2147483648' is not a task number!",
+                () -> assertExceptionMessage("Paiseh, '2147483648' is not a task number lah. Use a whole number.",
                         () -> Parser.parseTaskNumber("2147483648")));
     }
 
@@ -171,11 +171,11 @@ class ParserTest {
     void parseEvent_invalidStartOrEndDate_throwsInvalidDateError() {
         assertAll(
                 () -> assertExceptionMessage(
-                        "Ohhh Noooo... '31/02/2026' is not a valid date! Use dd/MM/yyyy.",
+                        "Paiseh, '31/02/2026' is not a valid date leh. Use dd/MM/yyyy.",
                         () -> Parser.parseEvent(
                                 "conference /from 31/02/2026 /to 23/08/2026")),
                 () -> assertExceptionMessage(
-                        "Ohhh Noooo... '2026-08-23' is not a valid date! Use dd/MM/yyyy.",
+                        "Paiseh, '2026-08-23' is not a valid date leh. Use dd/MM/yyyy.",
                         () -> Parser.parseEvent(
                                 "conference /from 21/08/2026 /to 2026-08-23")));
     }
@@ -183,29 +183,29 @@ class ParserTest {
     @Test
     void parseEvent_endBeforeStart_throwsRangeError() {
         assertExceptionMessage(
-                "Ohhh Noooo... an event's /to date cannot be before its /from date!",
+                "Paiseh, end before start cannot lah. Check your /from and /to dates.",
                 () -> Parser.parseEvent(
                         "conference /from 23/08/2026 /to 21/08/2026"));
     }
 
     private void assertUnknownCommand(String input) {
-        assertExceptionMessage("Ohhh Noooo... I don't understand you!",
+        assertExceptionMessage("Paiseh, I don't understand this command lah.",
                 () -> Parser.parse(input));
     }
 
     private void assertDeadlineNeedsBy(String input) {
-        assertExceptionMessage("Ohhh Noooo... a deadline needs a /by date!",
+        assertExceptionMessage("Paiseh, by when ah? Add /by followed by a date in dd/MM/yyyy.",
                 () -> Parser.parseDeadline(input));
     }
 
     private void assertInvalidDate(String date) {
         assertExceptionMessage(
-                String.format("Ohhh Noooo... '%s' is not a valid date! Use dd/MM/yyyy.", date),
+                String.format("Paiseh, '%s' is not a valid date leh. Use dd/MM/yyyy.", date),
                 () -> Parser.parseDeadline("submit report /by " + date));
     }
 
     private void assertEventNeedsFromAndTo(String input) {
-        assertExceptionMessage("Ohhh Noooo... an event needs a /from and a /to time!",
+        assertExceptionMessage("Paiseh, when start, when end? Add /from and /to dates in dd/MM/yyyy.",
                 () -> Parser.parseEvent(input));
     }
 

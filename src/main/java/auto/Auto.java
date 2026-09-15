@@ -93,14 +93,14 @@ public class Auto {
             String message = null;
             if (!result.warnings().isEmpty()) {
                 message = String.format(
-                        "Warning: %d invalid data line(s) were skipped: %s.",
+                        "Paiseh, some saved data cannot be read. %d invalid data line(s) were skipped: %s.",
                         result.warnings().size(), String.join(", ", result.warnings()));
             }
             return new LoadOutcome(new TaskList(result.tasks()), message);
         } catch (IOException | RuntimeException e) {
             return new LoadOutcome(
                     new TaskList(),
-                    "Sorry, I couldn't load your saved tasks. Starting with an empty task list.");
+                    "Paiseh, I couldn't load your saved tasks. Starting with an empty task list.");
         }
     }
 

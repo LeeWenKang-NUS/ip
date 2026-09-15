@@ -41,7 +41,7 @@ class MarkCommandTest extends CommandTestSupport {
         CommandResult result = new MarkCommand(1).execute(tasks, failingStorage(tempDirectory));
 
         assertFalse(task.isCompleted());
-        assertTrue(result.message().contains("Sorry, I couldn't save your tasks."));
+        assertTrue(result.message().contains("Paiseh, I couldn't save your tasks."));
     }
 
     @Test

@@ -78,7 +78,8 @@ class AutoTest {
         Auto auto = new Auto(dataFile.toString(), STARTUP_CLOCK);
 
         assertEquals(String.join(System.lineSeparator(),
-                "Warning: 1 invalid data line(s) were skipped: line 2 is invalid and was skipped.",
+                "Paiseh, some saved data cannot be read. 1 invalid data line(s) were skipped: "
+                        + "line 2 is invalid and was skipped.",
                 "", "Eh, remember these tasks for today (Sep 10 2026):",
                 "1. [D][ ] submit report (by: Sep 10 2026)"), auto.getStartupMessage());
     }
@@ -105,7 +106,7 @@ class AutoTest {
 
         String response = auto.getResponse("borrow book");
 
-        assertEquals("Ohhh Noooo... I don't understand you!", response);
+        assertEquals("Paiseh, I don't understand this command lah.", response);
     }
 
     @Test
@@ -128,7 +129,8 @@ class AutoTest {
         String startupMessage = auto.getStartupMessage();
         String response = auto.getResponse("list");
 
-        assertTrue(startupMessage.contains("Warning: 1 invalid data line(s) were skipped"));
+        assertTrue(startupMessage.contains(
+                "Paiseh, some saved data cannot be read. 1 invalid data line(s) were skipped"));
         assertEquals("Here's what you have on your plate:" + System.lineSeparator()
                 + "1. [T][ ] read book", response);
     }
@@ -141,9 +143,9 @@ class AutoTest {
         String response = auto.getResponse("todo read book");
 
         assertTrue(startupMessage.contains(
-                "Sorry, I couldn't load your saved tasks. Starting with an empty task list."));
+                "Paiseh, I couldn't load your saved tasks. Starting with an empty task list."));
         assertTrue(response.contains(
-                "Sorry, I couldn't save your tasks. Your latest change was not applied."));
+                "Paiseh, I couldn't save your tasks. Your latest change was not applied."));
         assertEquals("Here's what you have on your plate:", auto.getResponse("list"));
     }
 }

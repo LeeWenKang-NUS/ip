@@ -50,7 +50,7 @@ Expected: No chat messages are added.
 
 1. Send `borrow book`.
 
-Expected: Auto displays `Ohhh Noooo... I don't understand you!` and the
+Expected: Auto displays `Paiseh, I don't understand this command lah.` and the
 application remains usable.
 
 ## TC-05 Preserve state between messages
@@ -111,7 +111,8 @@ Expected: The normal welcome message appears without a reminders heading.
 2. Append a malformed line such as `not a task` to the saved data file.
 3. Reopen Auto.
 
-Expected: The welcome bubble shows the existing invalid-data warning, then
+Expected: The welcome bubble shows a warning beginning
+`Paiseh, some saved data cannot be read. 1 invalid data line(s) were skipped:`, then
 a blank line and today's reminders, including the recovered deadline.
 
 ## TC-12 Use the task-kaki voice for normal commands
@@ -134,3 +135,35 @@ with `Found these tasks for you:`. Both show `1. [T][ ] read book`.
 `[T][ ] read book`. Deletion starts with `Can, removed this task already:`.
 `occur` starts with `Here's what you have on Sep 18 2026:` and lists both
 dated tasks using their original numbers and existing task formatting.
+
+## TC-13 Explain command errors in the task-kaki voice
+
+Start with an empty saved task list. Send each command below and check the
+exact response. The application must remain usable after each error.
+
+| Command | Expected response |
+| --- | --- |
+| `borrow book` | `Paiseh, I don't understand this command lah.` |
+| `mark 1` | `Paiseh, no task 1 leh. Type list to check the numbers.` |
+| `mark abc` | `Paiseh, 'abc' is not a task number lah. Use a whole number.` |
+| `find` | `Paiseh, find what ah? Try find book.` |
+| `deadline submit assignment` | `Paiseh, by when ah? Add /by followed by a date in dd/MM/yyyy.` |
+| `event study session` | `Paiseh, when start, when end? Add /from and /to dates in dd/MM/yyyy.` |
+| `event study /from 19/09/2026 /to 18/09/2026` | `Paiseh, end before start cannot lah. Check your /from and /to dates.` |
+| `occur 31/02/2026` | `Paiseh, '31/02/2026' is not a valid date leh. Use dd/MM/yyyy.` |
+
+Finally send `todo read book`, then `list`. The task is added normally and
+appears as task 1, confirming the invalid commands did not add tasks.
+
+## TC-14 Explain storage failures clearly
+
+1. With Auto closed, temporarily move any existing `data/auto.txt` to a safe
+   backup location and create a directory named `data/auto.txt` instead.
+2. Launch Auto, then send `todo read book` and `list`.
+3. Close Auto, remove the empty directory, and restore the original file.
+
+Expected: The welcome bubble includes
+`Paiseh, I couldn't load your saved tasks. Starting with an empty task list.`
+Adding the task returns
+`Paiseh, I couldn't save your tasks. Your latest change was not applied.`
+The task list remains empty.
