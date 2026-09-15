@@ -4,6 +4,10 @@ import auto.Auto;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -16,13 +20,10 @@ import javafx.scene.layout.VBox;
 public class MainWindow {
     private static final double MESSAGE_CONTENT_SPACING = 6;
     private static final double MESSAGE_MAX_WIDTH = 320;
+    private static final double SCROLL_BOTTOM_TOLERANCE = 0.05;
     private static final String EXIT_COMMAND = "bye";
-    private static final String ASCII_ART = String.join(System.lineSeparator(),
-            "    _         _        ",
-            "   / \\  _   _| |_ ___  ",
-            "  / _ \\| | | | __/ _ \\ ",
-            " / ___ \\ |_| | || (_) |",
-            "/_/   \\_\\__,_|\\__\\___/ ");
+    private static final String APPLICATION_ICON = "/images/auto-icon.png";
+    private static final double WELCOME_ICON_SIZE = 96;
     private static final String WELCOME_MESSAGE = String.join(System.lineSeparator(),
             "Hello! I'm Auto, your task kaki.",
             "What you need to settle today?");
@@ -38,13 +39,38 @@ public class MainWindow {
     @FXML
     private TextField userInput;
 
+    @FXML
+    private Button latestMessageButton;
+
     /**
-     * Configures the chat history to follow newly added messages.
+     * Always follows new messages and offers a shortcut when manually scrolled up.
      */
     @FXML
     public void initialize() {
-        dialogContainer.heightProperty().addListener(
-                observable -> scrollPane.setVvalue(1.0));
+        scrollPane.vvalueProperty().addListener(observable -> updateLatestMessageButton());
+        scrollPane.viewportBoundsProperty().addListener(observable -> updateLatestMessageButton());
+        dialogContainer.heightProperty().addListener(observable -> {
+            scrollPane.setVvalue(scrollPane.getVmax());
+            updateLatestMessageButton();
+        });
+        updateLatestMessageButton();
+    }
+
+    /**
+     * Shows the shortcut only when scrollable messages remain below the viewport.
+     */
+    private void updateLatestMessageButton() {
+        boolean hasOverflow = dialogContainer.getHeight() > scrollPane.getViewportBounds().getHeight();
+        boolean isAboveBottom = scrollPane.getVvalue() < scrollPane.getVmax() - SCROLL_BOTTOM_TOLERANCE;
+        latestMessageButton.setVisible(hasOverflow && isAboveBottom);
+    }
+
+    /** Returns to the newest message and restores focus to the command input. */
+    @FXML
+    private void scrollToLatestMessage() {
+        scrollPane.setVvalue(scrollPane.getVmax());
+        updateLatestMessageButton();
+        userInput.requestFocus();
     }
 
     /**
@@ -60,11 +86,16 @@ public class MainWindow {
             greeting += System.lineSeparator() + System.lineSeparator() + startupMessage;
         }
 
-        Label artLabel = createContentLabel(ASCII_ART);
-        artLabel.getStyleClass().add("ascii-art");
+        ImageView welcomeIcon = new ImageView(new Image(
+                MainWindow.class.getResource(APPLICATION_ICON).toExternalForm()));
+        welcomeIcon.setFitWidth(WELCOME_ICON_SIZE);
+        welcomeIcon.setFitHeight(WELCOME_ICON_SIZE);
+        welcomeIcon.setPreserveRatio(true);
+        welcomeIcon.setSmooth(true);
+        welcomeIcon.setAccessibleText("Auto coffee-cup icon");
         Label greetingLabel = createContentLabel(greeting);
         dialogContainer.getChildren().add(createMessageRow(
-                "Auto", false, artLabel, greetingLabel));
+                "Auto", false, welcomeIcon, greetingLabel));
     }
 
     /**
@@ -98,9 +129,9 @@ public class MainWindow {
     /**
      * Creates an aligned message bubble with separate sender and content rows.
      *
-     * @param sender Name displayed above the message.
+     * @param sender  Name displayed above the message.
      * @param message Message displayed in the bubble.
-     * @param isUser Whether the bubble represents a user message.
+     * @param isUser  Whether the bubble represents a user message.
      * @return Row containing the configured message bubble.
      */
     private HBox createMessageBox(String sender, String message, boolean isUser) {
@@ -115,14 +146,14 @@ public class MainWindow {
         return messageLabel;
     }
 
-    /** Creates an aligned bubble row containing the supplied content labels. */
-    private HBox createMessageRow(String sender, boolean isUser, Label... contentLabels) {
+    /** Creates an aligned bubble row containing the supplied content nodes. */
+    private HBox createMessageRow(String sender, boolean isUser, Node... contentNodes) {
         Label senderLabel = new Label(sender);
         senderLabel.getStyleClass().add("message-sender");
 
         VBox bubble = new VBox(MESSAGE_CONTENT_SPACING);
         bubble.getChildren().add(senderLabel);
-        bubble.getChildren().addAll(contentLabels);
+        bubble.getChildren().addAll(contentNodes);
         bubble.setMaxWidth(MESSAGE_MAX_WIDTH);
         bubble.getStyleClass().addAll("message-bubble", isUser ? "user-bubble" : "auto-bubble");
 

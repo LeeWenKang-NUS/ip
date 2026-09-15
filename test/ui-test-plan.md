@@ -13,9 +13,17 @@ Run the application with:
 
 1. Start the application.
 
-Expected: The first Auto chat bubble immediately shows the ASCII Auto banner,
-`Hello! I'm Auto, your task kaki.`, and `What you need to settle today?`.
-The banner uses a monospace font, so its characters remain aligned as drawn.
+Expected window icons on Windows: The coffee-cup image from
+`src/main/resources/images/auto-icon.png` appears in the top-left title bar
+and on the running application's taskbar button. Minimize and restore the
+window; both icons remain the coffee cup. Repeat after launching the packaged
+JAR with `java -jar build/libs/auto.jar` to check that the icon is bundled.
+
+Expected: The first Auto chat bubble immediately shows the coffee-cup
+application icon above `Hello! I'm Auto, your task kaki.` and
+`What you need to settle today?`.
+The icon fits within 96 by 96 pixels, keeps its original proportions, and
+has no ASCII banner. Check this greeting in both Gradle and packaged JAR launches.
 Saved tasks have already been loaded before this message appears. If the data
 file could not be loaded fully, the same welcome bubble also contains the load
 warning below the greeting. Deadlines due today and events spanning today
@@ -75,6 +83,17 @@ Expected: The previously added task is restored from `data/auto.txt`.
 
 Expected: The history scrolls automatically so the newest response remains
 visible.
+
+Scroll up using the wheel or scrollbar. Expected: A `↓ Latest message` button
+appears at the bottom-right of the history. Click it: the history scrolls to
+the bottom, the button disappears, and the input field receives focus.
+Scroll up again and manually scroll to the bottom: the button disappears.
+While scrolled up, send `list`: the history automatically jumps to the latest
+reply and the button disappears. Subsequent commands also scroll to their
+latest replies, even if you manually scroll up between commands.
+With a short history that fits entirely in the window, the button is hidden.
+Enlarge the window until the history fits: the button disappears.
+The button must also be reachable with Tab and activatable with Space.
 
 ## TC-08 Exit response
 

@@ -7,6 +7,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.StackPane?>
 
 <BorderPane prefHeight="600.0" prefWidth="400.0"
             stylesheets="@MainWindow.css"
@@ -14,6 +15,7 @@
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="auto.ui.MainWindow">
     <center>
+        <StackPane>
         <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER">
             <content>
                 <VBox fx:id="dialogContainer" spacing="8.0">
@@ -23,6 +25,14 @@
                 </VBox>
             </content>
         </ScrollPane>
+            <Button fx:id="latestMessageButton" text="↓ Latest message"
+                    onAction="#scrollToLatestMessage" visible="false"
+                    styleClass="latest-message-button" StackPane.alignment="BOTTOM_RIGHT">
+                <StackPane.margin>
+                    <Insets bottom="12.0" right="28.0" />
+                </StackPane.margin>
+            </Button>
+        </StackPane>
     </center>
     <bottom>
         <HBox spacing="8.0">

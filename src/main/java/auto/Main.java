@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import auto.ui.MainWindow;
@@ -15,6 +16,7 @@ import auto.ui.MainWindow;
  */
 public class Main extends Application {
     private static final String MAIN_WINDOW_FXML = "/view/MainWindow.fxml";
+    private static final String APPLICATION_ICON = "/images/auto-icon.png";
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -25,6 +27,7 @@ public class Main extends Application {
 
         stage.setScene(new Scene(root));
         stage.setTitle("Auto");
+        stage.getIcons().add(new Image(Main.class.getResource(APPLICATION_ICON).toExternalForm()));
         stage.setMinWidth(400);
         stage.setMinHeight(600);
         stage.show();
