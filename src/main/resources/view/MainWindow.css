@@ -46,8 +46,3 @@
 .message-content {
     -fx-text-fill: #111827;
 }
-
-.ascii-art {
-    -fx-font-family: "Monospaced";
-    -fx-font-size: 13px;
-}

@@ -19,9 +19,10 @@ and on the running application's taskbar button. Minimize and restore the
 window; both icons remain the coffee cup. Repeat after launching the packaged
 JAR with `java -jar build/libs/auto.jar` to check that the icon is bundled.
 
-Expected: The first Auto chat bubble immediately shows the ASCII Auto banner,
+Expected: The first Auto chat bubble immediately shows the coffee-cup application icon above
 `Hello! I'm Auto, your personal assistant.`, and `What can I do for you?`.
-The banner uses a monospace font, so its characters remain aligned as drawn.
+The icon fits within 96 by 96 pixels, keeps its original proportions, and
+has no ASCII banner. Check this greeting in both Gradle and packaged JAR launches.
 Saved tasks have already been loaded before this message appears. If the data
 file could not be loaded fully, the same welcome bubble also contains the load
 warning below the greeting. Deadlines due today and events spanning today

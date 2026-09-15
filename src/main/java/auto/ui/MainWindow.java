@@ -4,6 +4,9 @@ import auto.Auto;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -19,12 +22,8 @@ public class MainWindow {
     private static final double MESSAGE_MAX_WIDTH = 320;
     private static final double SCROLL_BOTTOM_TOLERANCE = 0.05;
     private static final String EXIT_COMMAND = "bye";
-    private static final String ASCII_ART = String.join(System.lineSeparator(),
-            "    _         _        ",
-            "   / \\  _   _| |_ ___  ",
-            "  / _ \\| | | | __/ _ \\ ",
-            " / ___ \\ |_| | || (_) |",
-            "/_/   \\_\\__,_|\\__\\___/ ");
+    private static final String APPLICATION_ICON = "/images/auto-icon.png";
+    private static final double WELCOME_ICON_SIZE = 96;
     private static final String WELCOME_MESSAGE = String.join(System.lineSeparator(),
             "Hello! I'm Auto, your personal assistant.",
             "What can I do for you?");
@@ -87,11 +86,16 @@ public class MainWindow {
             greeting += System.lineSeparator() + System.lineSeparator() + startupMessage;
         }
 
-        Label artLabel = createContentLabel(ASCII_ART);
-        artLabel.getStyleClass().add("ascii-art");
+        ImageView welcomeIcon = new ImageView(new Image(
+                MainWindow.class.getResource(APPLICATION_ICON).toExternalForm()));
+        welcomeIcon.setFitWidth(WELCOME_ICON_SIZE);
+        welcomeIcon.setFitHeight(WELCOME_ICON_SIZE);
+        welcomeIcon.setPreserveRatio(true);
+        welcomeIcon.setSmooth(true);
+        welcomeIcon.setAccessibleText("Auto coffee-cup icon");
         Label greetingLabel = createContentLabel(greeting);
         dialogContainer.getChildren().add(createMessageRow(
-                "Auto", false, artLabel, greetingLabel));
+                "Auto", false, welcomeIcon, greetingLabel));
     }
 
     /**
@@ -142,14 +146,14 @@ public class MainWindow {
         return messageLabel;
     }
 
-    /** Creates an aligned bubble row containing the supplied content labels. */
-    private HBox createMessageRow(String sender, boolean isUser, Label... contentLabels) {
+    /** Creates an aligned bubble row containing the supplied content nodes. */
+    private HBox createMessageRow(String sender, boolean isUser, Node... contentNodes) {
         Label senderLabel = new Label(sender);
         senderLabel.getStyleClass().add("message-sender");
 
         VBox bubble = new VBox(MESSAGE_CONTENT_SPACING);
         bubble.getChildren().add(senderLabel);
-        bubble.getChildren().addAll(contentLabels);
+        bubble.getChildren().addAll(contentNodes);
         bubble.setMaxWidth(MESSAGE_MAX_WIDTH);
         bubble.getStyleClass().addAll("message-bubble", isUser ? "user-bubble" : "auto-bubble");
 
