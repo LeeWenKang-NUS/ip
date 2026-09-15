@@ -33,8 +33,8 @@ class DeleteCommandTest extends CommandTestSupport {
         assertEquals(1, tasks.size());
         assertSame(second, tasks.get(1));
         assertEquals("[T][ ] write essay", storage.load().tasks().getFirst().toString());
-        assertTrue(result.message().contains("Roger! I've deleted this task:"));
-        assertTrue(result.message().contains("Now you have 1 tasks in the list."));
+        assertTrue(result.message().contains("Can, removed this task already:"));
+        assertTrue(result.message().contains("You now have 1 tasks on your list. Slowly clear, can one."));
     }
 
     @Test

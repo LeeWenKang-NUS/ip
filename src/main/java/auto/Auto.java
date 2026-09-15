@@ -82,7 +82,7 @@ public class Auto {
         if (!message.isEmpty()) {
             message += System.lineSeparator() + System.lineSeparator();
         }
-        return message + "Reminders for today (" + DateUtil.format(today) + "):"
+        return message + "Eh, remember these tasks for today (" + DateUtil.format(today) + "):"
                 + System.lineSeparator() + reminders;
     }
 

@@ -28,7 +28,7 @@ public class MarkCommand extends Command {
             }
             return storageFailure();
         }
-        return new CommandResult("Nice! I've marked this task as done" + System.lineSeparator()
+        return new CommandResult("Steady lah! Marked this task as done:" + System.lineSeparator()
                 + "  " + task);
     }
 }

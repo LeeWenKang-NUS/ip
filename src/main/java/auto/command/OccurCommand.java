@@ -19,7 +19,7 @@ public class OccurCommand extends Command {
     @Override
     public CommandResult execute(TaskList tasks, Storage storage) {
         return new CommandResult(formatTasks(
-                "Here are the tasks occurring on " + DateUtil.format(date) + ":",
+                "Here's what you have on " + DateUtil.format(date) + ":",
                 tasks.asList(),
                 task -> task.occursOn(date)));
     }

@@ -14,12 +14,12 @@ Run the application with:
 1. Start the application.
 
 Expected: The first Auto chat bubble immediately shows the ASCII Auto banner,
-`Hello! I'm Auto, your personal assistant.`, and `What can I do for you?`.
+`Hello! I'm Auto, your task kaki.`, and `What you need to settle today?`.
 The banner uses a monospace font, so its characters remain aligned as drawn.
 Saved tasks have already been loaded before this message appears. If the data
 file could not be loaded fully, the same welcome bubble also contains the load
 warning below the greeting. Deadlines due today and events spanning today
-appear below any warning under `Reminders for today (MMM dd yyyy):`.
+appear below any warning under `Eh, remember these tasks for today (MMM dd yyyy):`.
 
 ## TC-01 Send with Enter
 
@@ -81,7 +81,8 @@ visible.
 1. Send `bye`.
 
 Expected: Auto processes the farewell and immediately closes the application
-window. The Gradle `run` task also finishes rather than remaining active in the
+window after producing `Okay, bye lah! Go take a kopi break.`. The application
+closes and the Gradle `run` task also finishes rather than remaining active in the
 IDE. The farewell bubble may close before it is visibly rendered.
 
 ## TC-09 Show today's reminders on each launch
@@ -91,7 +92,7 @@ IDE. The farewell bubble may close before it is visibly rendered.
 2. Add deadlines and events entirely before or after today.
 3. Mark the deadline due today as completed, then close and reopen Auto.
 
-Expected: The first welcome bubble includes `Reminders for today (MMM dd yyyy):`
+Expected: The first welcome bubble includes `Eh, remember these tasks for today (MMM dd yyyy):`
 with today's date. It lists the deadline and all three events, using their
 original list numbers and normal task formatting, including the deadline's
 `[X]` marker. The todo and tasks on other dates do not appear in reminders.
@@ -112,3 +113,24 @@ Expected: The normal welcome message appears without a reminders heading.
 
 Expected: The welcome bubble shows the existing invalid-data warning, then
 a blank line and today's reminders, including the recovered deadline.
+
+## TC-12 Use the task-kaki voice for normal commands
+
+1. Start with an empty saved task list.
+2. Send `todo read book`, then `list`, then `find book`.
+3. Send `mark 1`, then `unmark 1`, then `delete 1`.
+4. Send `deadline submit assignment /by 18/09/2026`.
+5. Send `event study session /from 18/09/2026 /to 19/09/2026`.
+6. Send `occur 18/09/2026`.
+
+Expected: Each added task is introduced by `Can! Added this task for you:`.
+The count reads `You now have N tasks on your list. Slowly clear, can one.`, with N equal
+to the current total (1, 0 after deletion, then 1 and 2 for the dated tasks).
+`list` starts with `Here's what you have on your plate:`; `find book` starts
+with `Found these tasks for you:`. Both show `1. [T][ ] read book`.
+`mark 1` starts with `Steady lah! Marked this task as done:` and shows
+`[T][X] read book`. `unmark 1` starts with
+`No worries, marked this as not done yet. Take your time lah:` and shows
+`[T][ ] read book`. Deletion starts with `Can, removed this task already:`.
+`occur` starts with `Here's what you have on Sep 18 2026:` and lists both
+dated tasks using their original numbers and existing task formatting.

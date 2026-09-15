@@ -22,7 +22,7 @@ public class AddCommand extends Command {
             return storageFailure();
         }
         return new CommandResult(String.format(
-                "Got it. I've added this task:%n  %s%nNow you have %d tasks in the list.",
+                "Can! Added this task for you:%n  %s%nYou now have %d tasks on your list. Slowly clear, can one.",
                 task, tasks.size()));
     }
 }

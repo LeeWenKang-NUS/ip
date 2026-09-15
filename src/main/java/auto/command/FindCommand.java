@@ -15,7 +15,7 @@ public class FindCommand extends Command {
     @Override
     public CommandResult execute(TaskList tasks, Storage storage) {
         return new CommandResult(formatTasks(
-                "Here are the matching tasks in your list:",
+                "Found these tasks for you:",
                 tasks.asList(),
                 task -> task.matches(keyword)));
     }

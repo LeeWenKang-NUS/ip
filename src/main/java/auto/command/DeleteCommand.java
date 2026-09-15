@@ -25,7 +25,7 @@ public class DeleteCommand extends Command {
             return storageFailure();
         }
         return new CommandResult(String.format(
-                "Roger! I've deleted this task:%n  %s%nNow you have %d tasks in the list.",
+                "Can, removed this task already:%n  %s%nYou now have %d tasks on your list. Slowly clear, can one.",
                 task, tasks.size()));
     }
 }

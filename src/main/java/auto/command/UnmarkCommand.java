@@ -28,7 +28,7 @@ public class UnmarkCommand extends Command {
             }
             return storageFailure();
         }
-        return new CommandResult("Nice! I've marked this task as not done yet"
+        return new CommandResult("No worries, marked this as not done yet. Take your time lah:"
                 + System.lineSeparator() + "  " + task);
     }
 }

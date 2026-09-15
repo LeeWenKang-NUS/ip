@@ -49,7 +49,7 @@ class AutoTest {
         Auto auto = new Auto(dataFile.toString(), STARTUP_CLOCK);
 
         assertEquals(String.join(System.lineSeparator(),
-                "Reminders for today (Sep 10 2026):",
+                "Eh, remember these tasks for today (Sep 10 2026):",
                 "2. [D][X] submit report (by: Sep 10 2026)",
                 "3. [E][ ] starts today (from: Sep 10 2026 to: Sep 11 2026)",
                 "4. [E][ ] ends today (from: Sep 09 2026 to: Sep 10 2026)",
@@ -79,7 +79,7 @@ class AutoTest {
 
         assertEquals(String.join(System.lineSeparator(),
                 "Warning: 1 invalid data line(s) were skipped: line 2 is invalid and was skipped.",
-                "", "Reminders for today (Sep 10 2026):",
+                "", "Eh, remember these tasks for today (Sep 10 2026):",
                 "1. [D][ ] submit report (by: Sep 10 2026)"), auto.getStartupMessage());
     }
 
@@ -92,8 +92,8 @@ class AutoTest {
         String markResponse = auto.getResponse("mark 1");
         String listResponse = auto.getResponse("list");
 
-        assertTrue(addResponse.contains("Got it. I've added this task:"));
-        assertTrue(markResponse.contains("Nice! I've marked this task as done"));
+        assertTrue(addResponse.contains("Can! Added this task for you:"));
+        assertTrue(markResponse.contains("Steady lah! Marked this task as done:"));
         assertTrue(listResponse.contains("1. [T][X] read book"));
         assertEquals(List.of("T | 1 | cmVhZCBib29r"),
                 Files.readAllLines(dataFile, StandardCharsets.UTF_8));
@@ -129,7 +129,7 @@ class AutoTest {
         String response = auto.getResponse("list");
 
         assertTrue(startupMessage.contains("Warning: 1 invalid data line(s) were skipped"));
-        assertEquals("Here are the tasks in your list:" + System.lineSeparator()
+        assertEquals("Here's what you have on your plate:" + System.lineSeparator()
                 + "1. [T][ ] read book", response);
     }
 
@@ -144,6 +144,6 @@ class AutoTest {
                 "Sorry, I couldn't load your saved tasks. Starting with an empty task list."));
         assertTrue(response.contains(
                 "Sorry, I couldn't save your tasks. Your latest change was not applied."));
-        assertEquals("Here are the tasks in your list:", auto.getResponse("list"));
+        assertEquals("Here's what you have on your plate:", auto.getResponse("list"));
     }
 }

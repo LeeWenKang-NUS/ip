@@ -30,7 +30,7 @@ class UnmarkCommandTest extends CommandTestSupport {
 
         assertFalse(task.isCompleted());
         assertFalse(storage.load().tasks().getFirst().isCompleted());
-        assertTrue(result.message().contains("Nice! I've marked this task as not done yet"));
+        assertTrue(result.message().contains("No worries, marked this as not done yet. Take your time lah:"));
     }
 
     @Test

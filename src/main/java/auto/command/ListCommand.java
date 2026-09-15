@@ -9,6 +9,6 @@ public class ListCommand extends Command {
     @Override
     public CommandResult execute(TaskList tasks, Storage storage) {
         return new CommandResult(formatTasks(
-                "Here are the tasks in your list:", tasks.asList(), task -> true));
+                "Here's what you have on your plate:", tasks.asList(), task -> true));
     }
 }

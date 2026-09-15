@@ -30,7 +30,7 @@ class MarkCommandTest extends CommandTestSupport {
 
         assertTrue(task.isCompleted());
         assertTrue(storage.load().tasks().getFirst().isCompleted());
-        assertTrue(result.message().contains("Nice! I've marked this task as done"));
+        assertTrue(result.message().contains("Steady lah! Marked this task as done:"));
     }
 
     @Test

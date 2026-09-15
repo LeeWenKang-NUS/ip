@@ -22,6 +22,6 @@ class ExitCommandTest extends CommandTestSupport {
         CommandResult result = command.execute(tasks, failingStorage(tempDirectory));
 
         assertEquals(0, tasks.size());
-        assertTrue(result.message().contains("Bye. Hope to see you again soon!"));
+        assertTrue(result.message().contains("Okay, bye lah! Go take a kopi break."));
     }
 }

@@ -29,8 +29,8 @@ class AddCommandTest extends CommandTestSupport {
         assertEquals(1, tasks.size());
         assertSame(task, tasks.get(1));
         assertEquals("[T][ ] read book", storage.load().tasks().getFirst().toString());
-        assertTrue(result.message().contains("Got it. I've added this task:"));
-        assertTrue(result.message().contains("Now you have 1 tasks in the list."));
+        assertTrue(result.message().contains("Can! Added this task for you:"));
+        assertTrue(result.message().contains("You now have 1 tasks on your list. Slowly clear, can one."));
     }
 
     @Test
@@ -42,6 +42,6 @@ class AddCommandTest extends CommandTestSupport {
 
         assertEquals(0, tasks.size());
         assertTrue(result.message().contains("Sorry, I couldn't save your tasks."));
-        assertTrue(!result.message().contains("Got it. I've added this task:"));
+        assertTrue(!result.message().contains("Can! Added this task for you:"));
     }
 }

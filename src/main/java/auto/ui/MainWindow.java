@@ -24,8 +24,8 @@ public class MainWindow {
             " / ___ \\ |_| | || (_) |",
             "/_/   \\_\\__,_|\\__\\___/ ");
     private static final String WELCOME_MESSAGE = String.join(System.lineSeparator(),
-            "Hello! I'm Auto, your personal assistant.",
-            "What can I do for you?");
+            "Hello! I'm Auto, your task kaki.",
+            "What you need to settle today?");
 
     private Auto auto;
 
