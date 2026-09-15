@@ -82,6 +82,17 @@ Expected: The previously added task is restored from `data/auto.txt`.
 Expected: The history scrolls automatically so the newest response remains
 visible.
 
+Scroll up using the wheel or scrollbar. Expected: A `↓ Latest message` button
+appears at the bottom-right of the history. Click it: the history scrolls to
+the bottom, the button disappears, and the input field receives focus.
+Scroll up again and manually scroll to the bottom: the button disappears.
+While scrolled up, send `list`: the history automatically jumps to the latest
+reply and the button disappears. Subsequent commands also scroll to their
+latest replies, even if you manually scroll up between commands.
+With a short history that fits entirely in the window, the button is hidden.
+Enlarge the window until the history fits: the button disappears.
+The button must also be reachable with Tab and activatable with Space.
+
 ## TC-08 Exit response
 
 1. Send `bye`.

@@ -3,6 +3,23 @@
     -fx-font-size: 14px;
 }
 
+.latest-message-button {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: white;
+    -fx-background-radius: 18px;
+    -fx-padding: 8px 14px;
+    -fx-cursor: hand;
+}
+
+.latest-message-button:hover {
+    -fx-background-color: #1d4ed8;
+}
+
+.latest-message-button:focused {
+    -fx-border-color: #111827;
+    -fx-border-radius: 18px;
+}
+
 .message-bubble {
     -fx-background-radius: 12px;
     -fx-padding: 8px 12px 10px 12px;

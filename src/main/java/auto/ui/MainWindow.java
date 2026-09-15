@@ -4,6 +4,7 @@ import auto.Auto;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -16,6 +17,7 @@ import javafx.scene.layout.VBox;
 public class MainWindow {
     private static final double MESSAGE_CONTENT_SPACING = 6;
     private static final double MESSAGE_MAX_WIDTH = 320;
+    private static final double SCROLL_BOTTOM_TOLERANCE = 0.05;
     private static final String EXIT_COMMAND = "bye";
     private static final String ASCII_ART = String.join(System.lineSeparator(),
             "    _         _        ",
@@ -38,13 +40,38 @@ public class MainWindow {
     @FXML
     private TextField userInput;
 
+    @FXML
+    private Button latestMessageButton;
+
     /**
-     * Configures the chat history to follow newly added messages.
+     * Always follows new messages and offers a shortcut when manually scrolled up.
      */
     @FXML
     public void initialize() {
-        dialogContainer.heightProperty().addListener(
-                observable -> scrollPane.setVvalue(1.0));
+        scrollPane.vvalueProperty().addListener(observable -> updateLatestMessageButton());
+        scrollPane.viewportBoundsProperty().addListener(observable -> updateLatestMessageButton());
+        dialogContainer.heightProperty().addListener(observable -> {
+            scrollPane.setVvalue(scrollPane.getVmax());
+            updateLatestMessageButton();
+        });
+        updateLatestMessageButton();
+    }
+
+    /**
+     * Shows the shortcut only when scrollable messages remain below the viewport.
+     */
+    private void updateLatestMessageButton() {
+        boolean hasOverflow = dialogContainer.getHeight() > scrollPane.getViewportBounds().getHeight();
+        boolean isAboveBottom = scrollPane.getVvalue() < scrollPane.getVmax() - SCROLL_BOTTOM_TOLERANCE;
+        latestMessageButton.setVisible(hasOverflow && isAboveBottom);
+    }
+
+    /** Returns to the newest message and restores focus to the command input. */
+    @FXML
+    private void scrollToLatestMessage() {
+        scrollPane.setVvalue(scrollPane.getVmax());
+        updateLatestMessageButton();
+        userInput.requestFocus();
     }
 
     /**
@@ -98,9 +125,9 @@ public class MainWindow {
     /**
      * Creates an aligned message bubble with separate sender and content rows.
      *
-     * @param sender Name displayed above the message.
+     * @param sender  Name displayed above the message.
      * @param message Message displayed in the bubble.
-     * @param isUser Whether the bubble represents a user message.
+     * @param isUser  Whether the bubble represents a user message.
      * @return Row containing the configured message bubble.
      */
     private HBox createMessageBox(String sender, String message, boolean isUser) {
