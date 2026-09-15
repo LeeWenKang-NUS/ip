@@ -9,6 +9,19 @@
 
 > Auto is your task kaki. A task chatbot with a Singaporean personality!
 
+## Quick start
+
+1. Install Java 25. Run `java -version` command to confirm the terminal is using Java 25.
+2. Download `auto.jar` from the [Auto releases page](https://github.com/LeeWenKang-NUS/ip/releases).
+3. Place the JAR in a dedicated folder and open a terminal in that folder.
+4. Launch Auto with:
+
+   ```text
+   java -jar auto.jar
+   ```
+
+Launch Auto from the same folder each time so it finds your saved tasks.
+
 ## Features
 
 | No. | Feature                        | Description                                                                                           |
