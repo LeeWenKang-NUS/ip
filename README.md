@@ -43,29 +43,7 @@ directory consistently.
 
 ## Commands
 
-```text
-todo DESCRIPTION
-deadline DESCRIPTION /by dd/MM/yyyy
-event DESCRIPTION /from dd/MM/yyyy /to dd/MM/yyyy
-list
-occur dd/MM/yyyy
-mark TASK_NUMBER
-unmark TASK_NUMBER
-delete TASK_NUMBER
-bye
-```
-
-For example:
-
-```text
-deadline submit report /by 22/08/2026
-event conference /from 22/08/2026 /to 24/08/2026
-occur 23/08/2026
-```
-
-Dates entered by the user use `dd/MM/yyyy`. Auto displays dates using
-`MMM dd yyyy`, such as `Aug 22 2026`. An event's `/to` date cannot be before its
-`/from` date.
+All commands are documented in: [User Guide](https://leewenkang-nus.github.io/ip/)
 
 ## Storage
 

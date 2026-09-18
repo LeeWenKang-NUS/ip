@@ -36,6 +36,7 @@ Launch Auto from the same folder each time so it finds your saved tasks.
 | 8   | Delete task                    | Remove the task from the list                                                                         |
 | 9   | Task reminders (BCD-Extension) | Similar to `Occur on date`, but reminder is displayed on application start and using the current date |
 | 10  | Latest message button          | Scroll to the latest message                                                                          |
+| 11  | Bye                            | Closes the application                                                                                |
 
 ## List tasks
 
@@ -55,7 +56,7 @@ Example: `todo Complete CS2103 iP`
 
 ## Adding deadlines
 
-Adds a deadline task to the application and saves it to the save file. Deadline task require a `/by dd/MM/yyyy` argument to be provided.
+Adds a deadline task to the application and saves it to the save file. Deadline task requires a `/by dd/MM/yyyy` argument to be provided.
 
 Example: `deadline Complete CS2103 iP /by 15/09/2026`
 
@@ -63,7 +64,7 @@ Example: `deadline Complete CS2103 iP /by 15/09/2026`
 
 ## Adding event
 
-Adds a event task to the application and saves it to the save file. Event task require a `/from dd/MM/yyyy /to dd/MM/yyyy` argument to be provided.
+Adds an event task to the application and saves it to the save file. Event task requires a `/from dd/MM/yyyy /to dd/MM/yyyy` argument to be provided.
 
 Example: `event Reading Week /from 21/09/2026 /to 25/09/2026`
 
@@ -92,7 +93,7 @@ Example: `find CS2103`
 
 ## Mark/unmark tasks
 
-Mark and unmark a task as complete or uncomplete. The task's index needs to be specified
+Mark and unmark a task as complete or incomplete. The task's index needs to be specified
 
 Example: `mark 3`
 Example: `unmark 3`
@@ -120,6 +121,10 @@ Appears when the user scrolls to past messages. Disappears when at the latest me
 
 When the button is pressed, the application will scroll to the latest message
 
-Example: `delete 3`
-
 <img src="./feature-screenshot/latest-message-button.png" alt="Latest message button example" width="400">
+
+## Bye
+
+Closes the chat application.
+
+Example: `bye`
