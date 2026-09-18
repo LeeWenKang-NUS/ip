@@ -67,6 +67,15 @@ class ParserTest {
     }
 
     @Test
+    void parse_todoDeadlineEventWithBlankDescription_throwsDescriptionError() {
+        assertAll(
+                () -> assertTaskNeedsDescription(() -> Parser.parse("todo   ")),
+                () -> assertTaskNeedsDescription(() -> Parser.parse("deadline  /by 22/08/2026")),
+                () -> assertTaskNeedsDescription(
+                        () -> Parser.parse("event  /from 21/08/2026 /to 23/08/2026")));
+    }
+
+    @Test
     void parse_wrongCaseOrOuterWhitespace_throwsUnknownCommand() {
         assertUnknownCommand("List");
         assertUnknownCommand("BYE");
@@ -111,10 +120,17 @@ class ParserTest {
     }
 
     @Test
-    void parseToDo_descriptionWithWhitespaceAndSeparators_preservesDescriptionExactly() {
+    void parseToDo_descriptionWithWhitespaceAndSeparators_preservesDescriptionExactly() throws Exception {
         ToDo todo = Parser.parseToDo("  read | book  ");
 
         assertEquals("[T][ ]   read | book  ", todo.toString());
+    }
+
+    @Test
+    void parseToDo_blankDescription_throwsDescriptionError() {
+        assertAll(
+                () -> assertTaskNeedsDescription(() -> Parser.parseToDo("")),
+                () -> assertTaskNeedsDescription(() -> Parser.parseToDo("   ")));
     }
 
     @Test
@@ -122,6 +138,13 @@ class ParserTest {
         Deadline deadline = Parser.parseDeadline("  submit report   /by   22/08/2026  ");
 
         assertEquals("[D][ ] submit report (by: Aug 22 2026)", deadline.toString());
+    }
+
+    @Test
+    void parseDeadline_blankDescription_throwsDescriptionError() {
+        assertAll(
+                () -> assertTaskNeedsDescription(() -> Parser.parseDeadline(" /by 22/08/2026")),
+                () -> assertTaskNeedsDescription(() -> Parser.parseDeadline("    /by 22/08/2026")));
     }
 
     @Test
@@ -153,6 +176,15 @@ class ParserTest {
         Event event = Parser.parseEvent("meeting /from 22/08/2026 /to 22/08/2026");
 
         assertEquals("[E][ ] meeting (from: Aug 22 2026 to: Aug 22 2026)", event.toString());
+    }
+
+    @Test
+    void parseEvent_blankDescription_throwsDescriptionError() {
+        assertAll(
+                () -> assertTaskNeedsDescription(
+                        () -> Parser.parseEvent(" /from 21/08/2026 /to 23/08/2026")),
+                () -> assertTaskNeedsDescription(
+                        () -> Parser.parseEvent("    /from 21/08/2026 /to 23/08/2026")));
     }
 
     @Test
@@ -191,6 +223,10 @@ class ParserTest {
     private void assertUnknownCommand(String input) {
         assertExceptionMessage("Paiseh, I don't understand this command lah.",
                 () -> Parser.parse(input));
+    }
+
+    private void assertTaskNeedsDescription(ThrowingParserCall call) {
+        assertExceptionMessage("Paiseh, description cannot be blank leh. Tell me what the task is.", call);
     }
 
     private void assertDeadlineNeedsBy(String input) {

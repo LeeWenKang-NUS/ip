@@ -68,7 +68,10 @@ public final class Parser {
     }
 
     /** Creates a todo while preserving its description exactly as entered. */
-    public static ToDo parseToDo(String argument) {
+    public static ToDo parseToDo(String argument) throws AutoException {
+        if (argument.trim().isEmpty()) {
+            throw AutoException.taskNeedsDescription();
+        }
         return new ToDo(argument);
     }
 
@@ -78,7 +81,11 @@ public final class Parser {
         if (parts.length < 2) {
             throw AutoException.deadlineNeedsBy();
         }
-        return new Deadline(parts[0].trim(), parseDate(parts[1].trim()));
+        String name = parts[0].trim();
+        if (name.isEmpty()) {
+            throw AutoException.taskNeedsDescription();
+        }
+        return new Deadline(name, parseDate(parts[1].trim()));
     }
 
     /** Parses an event description and its required start and end values. */
@@ -91,12 +98,16 @@ public final class Parser {
         if (fromAndTo.length < 2) {
             throw AutoException.eventNeedsFromAndTo();
         }
+        String name = nameAndTime[0].trim();
+        if (name.isEmpty()) {
+            throw AutoException.taskNeedsDescription();
+        }
         LocalDate from = parseDate(fromAndTo[0].trim());
         LocalDate to = parseDate(fromAndTo[1].trim());
         if (to.isBefore(from)) {
             throw AutoException.eventEndsBeforeItStarts();
         }
-        return new Event(nameAndTime[0].trim(), from, to);
+        return new Event(name, from, to);
     }
 
     private static String argumentAfter(String input, String keyword) {

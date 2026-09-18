@@ -28,6 +28,11 @@ public class AutoException extends Exception {
         return new AutoException("find what ah? Try find book.");
     }
 
+    /** Returns an error for a todo, deadline, or event without a description. */
+    public static AutoException taskNeedsDescription() {
+        return new AutoException("description cannot be blank leh. Tell me what the task is.");
+    }
+
     /** Returns an error for a deadline without its required {@code /by} value. */
     public static AutoException deadlineNeedsBy() {
         return new AutoException("by when ah? Add /by followed by a date in dd/MM/yyyy.");

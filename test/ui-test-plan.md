@@ -170,6 +170,9 @@ exact response. The application must remain usable after each error.
 | `event study session` | `Paiseh, when start, when end? Add /from and /to dates in dd/MM/yyyy.` |
 | `event study /from 19/09/2026 /to 18/09/2026` | `Paiseh, end before start cannot lah. Check your /from and /to dates.` |
 | `occur 31/02/2026` | `Paiseh, '31/02/2026' is not a valid date leh. Use dd/MM/yyyy.` |
+| `todo    ` (todo followed only by spaces) | `Paiseh, description cannot be blank leh. Tell me what the task is.` |
+| `deadline    /by 18/09/2026` (blank description before `/by`) | `Paiseh, description cannot be blank leh. Tell me what the task is.` |
+| `event    /from 18/09/2026 /to 19/09/2026` (blank description before `/from`) | `Paiseh, description cannot be blank leh. Tell me what the task is.` |
 
 Finally send `todo read book`, then `list`. The task is added normally and
 appears as task 1, confirming the invalid commands did not add tasks.
