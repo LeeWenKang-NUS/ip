@@ -1,11 +1,13 @@
 # Auto
 
-Auto is a command-line task manager written in Java. It supports todos,
-deadlines, events, persistent storage, and finding scheduled tasks by date.
+Auto is a task chatbot with a JavaFX graphical interface and a Singaporean
+personality. Type commands in its chat window to manage todos, deadlines, and
+events, search tasks by name or date, and mark tasks as complete. Auto saves
+tasks automatically and shows reminders for today's scheduled tasks at startup.
 
 ## Prerequisites
 
-- JDK 25
+- JDK 25. Run `java -version` to check the version used by your terminal.
 - Command Prompt on Windows for the quickstart command below
 
 ## Build and run the fat JAR
@@ -33,9 +35,9 @@ Run it from the project root with:
 java -jar build\libs\auto.jar
 ```
 
-On macOS or Linux, use `java -jar build/libs/auto.jar`. Running the JAR directly
-shows only Auto's console interface, without Gradle's task-progress output.
-Rebuild the JAR after changing the source code.
+On macOS or Linux, use `java -jar build/libs/auto.jar`. This opens Auto's chat
+window. Enter commands in the input field and press Enter to send them.
+Use `bye` to close the application. Rebuild the JAR after changing the source code.
 
 Auto stores tasks in `data/auto.txt` relative to the directory from which the
 JAR is run. Run it from the project root to use the repository's `data`
@@ -43,7 +45,8 @@ directory consistently.
 
 ## Commands
 
-All commands are documented in: [User Guide](https://leewenkang-nus.github.io/ip/)
+See the [User Guide](https://leewenkang-nus.github.io/ip/) for all commands,
+examples, screenshots, and instructions for downloading a prebuilt JAR.
 
 ## Storage
 
@@ -59,6 +62,8 @@ base `auto` package:
 ```text
 auto
 |-- Auto.java
+|-- Launcher.java
+|-- Main.java
 |-- command
 |-- exception
 |-- parser
@@ -67,6 +72,8 @@ auto
 |-- ui
 `-- util
 ```
+
+JavaFX layouts, styles, and images are stored in `src/main/resources`.
 
 When using IntelliJ IDEA, configure the project to use JDK 25 and mark
 `src/main/java` as the source root.
